@@ -14,26 +14,18 @@ html, body {height: 100%;}
 #wrap {min-height: 100%;}
 
 #main {overflow:auto;
-	padding-bottom: 30px;}  /* must be same height as the footer */
+	padding-bottom: 20px;}  /* must be same height as the footer */
 
 #footer {position: relative;
-	margin-top: -30px; /* negative value of footer height */
-	height: 30px;
+	margin-top: -20px; /* negative value of footer height */
+	height: 20px;
 	clear:both;
-  padding: 5px 2rem;
 }
 
 .logo {
   display: block;
   width: 130px;
   height: 51px;
-}
-
-@media (max-width: 640px) {
-  .logo {
-    margin: 0 auto;
-    margin-bottom: 10px;
-  }
 }
 
 .top-bar-section li:not(.has-form) a:not(.button) {
@@ -67,7 +59,6 @@ html, body {height: 100%;}
 .header a.button.small-icon {
   padding: 0.1rem 0.3rem;
   font-size: 0.9rem;
-  margin-left: 5px;
 }
 
 .header h1, h5, p {
@@ -112,13 +103,13 @@ html, body {height: 100%;}
 .pending .txheader {
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee; */
 }
 
 .pending .txbottom {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #eee;
+  /* border-top: 1px solid #eee; */
   font-size: 12px;
 }
 
@@ -215,10 +206,6 @@ small.has-error {
   }
 }
 
-.new-address {
-  width: 220px;
-}
-
 hr { margin: 2.25rem 0;}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -249,8 +236,7 @@ hr { margin: 2.25rem 0;}
 .m10h {margin:0 10px;}
 .m30a {margin: 30px auto;}
 .br100 {border-radius: 100%;}
-.oh {overflow:hidden;}
-
+.lh {line-height: 0;}
 .signin input.ng-dirty.ng-invalid { 
   border: 2px red solid;
 }
@@ -268,5 +254,44 @@ hr { margin: 2.25rem 0;}
 .offline {
   border: 10px solid gray;
 }
+
+.tx-copayers {
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.box-copayers {
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  float: left;
+}
+
+.box-copayers figure {
+  width: 51px;
+  height: 55px;
+  border-top-left-radius: 4px 4px;
+  border-bottom-left-radius: 4px 4px;
+  overflow: hidden;
+  margin-right: 0.8px;
+}
+
+.box-status {
+  width: 16px;
+  height: 55px;
+  border-top-right-radius: 4px 4px;
+  border-bottom-right-radius: 4px 4px;
+  float: left;
+  overflow: hidden;
+}
+
+.icon-status {
+  background: #2C3E50;
+  width: 16px;
+  float: left;
+  text-align: center;
+  display: block;
+  margin: 0.8px;
+  padding: 2.7px;
+}
+
 
 
