@@ -42,4 +42,5 @@ lib/*
 js/copayBundle.js
 config.js
 webapp
+version.js
 
