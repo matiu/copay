@@ -14,7 +14,6 @@ When friends or company executives join a Copay wallet, more than one person mus
 Please check [Copay Known Issues](https://github.com/bitpay/copay/wiki/Copay-Known-issues) before using Copay
 with real Bitcoins. 
 
-
 ## Installation
 
 ```
