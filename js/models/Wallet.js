@@ -52,8 +52,7 @@ var copayConfig = require('../../config');
  * @param {PrivateKey} opts.privateKey - an instance of {@link PrivateKey}
  * @param {string} opts.version - the version of copay where this wallet was
  *                                created
- * @TODO: figure out if reconnectDelay is set in milliseconds
- * @param {number} opts.reconnectDelay - amount of seconds to wait before
+ * @param {number} opts.reconnectDelay - amount of milliseconds to wait before
  *                                       attempting to reconnect
  * @constructor
  */
@@ -167,12 +166,9 @@ Wallet.COPAYER_PAIR_LIMITS = {
   12: 1,
 };
 
-
-
 Wallet.key = function(str) {
   return 'wallet::' + str;
 };
-
 
 Wallet.any = function(storage, cb) {
   storage.getFirst(Wallet.key(''),  { onlyKey: true}, function(err, v, k) {

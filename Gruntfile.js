@@ -97,6 +97,8 @@ module.exports = function(grunt) {
         },
         src: [
           'test/*.js',
+          'test/persistence/**/*.js',
+          'test/util/*.js'
         ]
       }
     },

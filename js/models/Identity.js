@@ -17,24 +17,30 @@ var Storage = module.exports.Storage = require('./Storage');
 
 /**
  * @desc
- * Identity - stores the state for a wallet in creation
+ * Identity - stores information about the wallets the user has
  *
- * @param {Object} config - configuration for this wallet
- * @param {Object} config.wallet - default configuration for the wallet
+ * @param {string} email - the email of the user
+ * @param {string} password - the password of the user
+ * @param {Object} config - configuration for the wallet
+ * @param {Object} config.network - addresses for the wallet
+ * @param {?} config.network.livenet
+ * @param {?} config.network.testnet
+ * @param {Object*} config.walletDefaults - default configuration for a wallet
+ * @param {Object*} config.storage - a Storage object from where to save and restore Identity state
  * @constructor
  */
 
 function Identity(password, opts) {
   preconditions.checkArgument(opts);
 
-  this.storage = Identity._getStorage(opts, password);
+  this.storage = opts.storage || Identity._getStorage(opts, password);
   this.networkOpts = {
-    'livenet': opts.network.livenet,
-    'testnet': opts.network.testnet,
+    livenet: opts.network.livenet,
+    testnet: opts.network.testnet
   };
   this.blockchainOpts = {
-    'livenet': opts.network.livenet,
-    'testnet': opts.network.testnet,
+    livenet: opts.network.livenet,
+    testnet: opts.network.testnet
   };
 
   this.walletDefaults = opts.walletDefaults || {};
@@ -49,8 +55,6 @@ function Identity(password, opts) {
 Identity._createProfile = function(email, password, storage, cb) {
   Profile.create(email, password, storage, cb);
 };
-
-
 
 Identity._newStorage = function(opts) {
   return new Storage(opts);
@@ -111,7 +115,7 @@ Identity.anyProfile = function(opts, cb) {
 };
 
 /**
- * check if any wallet exists on storage
+ * Check if any wallet exists on storage
  *
  * @param opts.storageOpts
  * @param cb
@@ -122,7 +126,7 @@ Identity.anyWallet = function(opts, cb) {
 };
 
 /**
- * creates and Identity
+ * Creates an Identity
  *
  * @param email
  * @param password
@@ -172,7 +176,6 @@ Identity.prototype.validate = function(authcode, cb) {
   return cb();
 };
 
-
 /**
  * open's an Identity from storage
  *
@@ -207,8 +210,7 @@ Identity.open = function(email, password, opts, cb) {
           wallets.push(w);
         }
         if (--remaining == 0) {
-          var lastFocused = iden.profile.getLastFocusedWallet();
-          return cb(err, iden, lastFocused);
+          return cb(err, iden);
         }
       })
     });
@@ -404,10 +406,8 @@ Identity.prototype.export = function() {
  * @param {PublicKeyRing=} opts.publicKeyRing
  * @param {string} opts.nickname
  * @param {string} opts.password
- * @TODO: Figure out what is this parameter
- * @param {?} opts.spendUnconfirmed this.walletDefaults.spendUnconfirmed ??
- * @TODO: Figure out in what unit is this reconnect delay.
- * @param {number} opts.reconnectDelay milliseconds?
+ * @param {boolean*} opts.spendUnconfirmed - whether unconfirmed outputs can be spend
+ * @param {number} opts.reconnectDelay - milliseconds between reconnection delays
  * @param {number=} opts.version
  * @param {callback} opts.version
  * @return {Wallet}

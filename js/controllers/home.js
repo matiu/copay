@@ -19,18 +19,43 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
       return;
     }
     $scope.loading = true;
-    copay.Identity.open(form.email.$modelValue, form.password.$modelValue, {
+
+    var identity = null;
+    var identityConfig = {
       pluginManager: pluginManager,
       network: config.network,
       networkName: config.networkName,
       walletDefaults: config.wallet,
       passphraseConfig: config.passphraseConfig,
-    }, function(err, iden, lastFocusedWallet) {
-      if (err && !iden) {
-        console.log('Error:' + err)
-        controllerUtils.onErrorDigest(
-          $scope, (err.toString() || '').match('PNOTFOUND') ? 'Profile not found' : 'Unknown error');
+    };
+    var email = form.email.$modelValue;
+    var password = form.password.$modelValue;
+    var identityCallback = function(callback) {
+      return function(err, iden) {
+        if (err) {
+          return callback(err);
+        } else {
+          identity = iden;
+          return callback();
+        }
+      }
+    };
+    async.series([
+      function(callback) {
+        new LocalStorageIdentityStorage().retrieve(
+          username, email, identityConfig, identityCallback(callback)
+        );
+      },
+      function() {
+        new InsightIdentityStorage().retrieve(
+          username, email, identityConfig, identityCallback(callback)
+        );
+      },
+    ], function(err) {
+      if (err) {
+        controllerUtils.onErrorDigest($scope, 'Profile not found');
       } else {
+        var lastFocusedWallet = iden.profile.getLastFocusedWallet();
         controllerUtils.bindProfile($scope, iden, lastFocusedWallet);
       }
     });

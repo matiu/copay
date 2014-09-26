@@ -27,7 +27,6 @@ Profile.key = function(hash) {
   return 'profile::' + hash;
 };
 
-
 Profile.create = function(email, password, storage, cb) {
   preconditions.checkArgument(cb);
   preconditions.checkArgument(storage.setPassword);
