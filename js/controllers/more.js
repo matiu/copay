@@ -2,8 +2,9 @@
 
 angular.module('copayApp.controllers').controller('MoreController',
   function($scope, $rootScope, $location, $filter, backupService, controllerUtils, notification, rateService) {
-    var w = $rootScope.wallet;
+    controllerUtils.redirIfNotComplete();
 
+    var w = $rootScope.wallet;
     $scope.unitOpts = [{
       name: 'Satoshis (100,000,000 satoshis = 1BTC)',
       shortName: 'SAT',
