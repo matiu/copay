@@ -159,10 +159,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill, inpu
 }
 
 .home label,
-.createProfile label,
-.join label, 
-.open label, 
-.setup label {
+.createProfile label {
   font-size: 0.875rem;
   color: #fff;
   font-weight: 100;
@@ -179,10 +176,6 @@ a:hover {
 
 .home input,
 .createProfile input,
-.open input, 
-.join input, 
-.setup input,
-.import input,
 .settings input {
   background: #2C3E50 !important;
   -moz-box-shadow:    inset 0px 0px 3px 0px rgba(0,0,0,0.10) !important;
@@ -193,10 +186,6 @@ a:hover {
 
 .home select,
 .createProfile select,
-.open select, 
-.join select, 
-.setup select,
-.import select,
 .settings select {
   background: #2C3E50 !important;
   border: 0 !important;
@@ -253,7 +242,7 @@ a:hover {
   background-color: #F8F8FB;
 }
 
-.home, .createProfile, .open, .join, .waiting-copayers, .setup, .import, .settings {
+.home, .createProfile, .settings {
   margin-top: 15%;
   color: #fff;
 }
@@ -938,10 +927,6 @@ button.gray:focus,
 .button.gray:focus {
   background-color: #E0E5E5;
   color: #2C3E50;
-}
-
-button, .button, p {
-  margin: 0;
 }
 
 .side-nav {padding: 0;}
