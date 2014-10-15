@@ -171,6 +171,8 @@ Insight.prototype.subscribe = function(addresses) {
 
       s.emit('subscribe', address);
       s.on(address, handler);
+    } else { 
+      log.debug('Already subcribed to: ', address);
     }
   });
 };
