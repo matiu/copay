@@ -197,13 +197,6 @@ ul.side-nav.wallets .avatar-wallet{
   line-height: 24px;
 }
 
-.backup-plain-text {
-  font-size: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
-}
-
 .status {
   font-weight: 700;
   -moz-box-shadow:    inset 0px -1px 1px 0px rgba(159,47,34,0.30);
