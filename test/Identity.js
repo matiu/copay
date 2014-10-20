@@ -4,6 +4,7 @@
 var _ = require('underscore');
 var chai = chai || require('chai');
 var should = chai.should();
+var PluginManager = require('../js/models/PluginManager');
 
 
 var FakeBlockchain = requireMock('FakeBlockchain');
@@ -375,6 +376,14 @@ describe('Identity model', function() {
       _.each([0, 1, 2, 3, 4], function(i) {
         ret.wallets['wid' + i].should.equal('enc' + i);
       });
+    });
+  });
+
+
+  describe('#pluginManager', function() {
+    it('should create a new PluginManager object', function() {
+      var pm = sinon.stub().returns(new PluginManager({plugins: { FakeLocalStorage: true }, pluginsPath: '../../test/mocks/'}));
+      should.exist(pm);
     });
   });
 
