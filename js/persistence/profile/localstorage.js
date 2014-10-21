@@ -42,7 +42,7 @@ function store(profile, opts, callback) {
 }
 
 function any(callback) {
-  storage.getFirst(Profile.key(''), { onlyKey: true }, function(err, _, element) {
+  window.localStorage.getFirst(Profile.key(''), { onlyKey: true }, function(err, _, element) {
     return cb(err, !!element);
   });
 }

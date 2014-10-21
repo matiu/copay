@@ -20,7 +20,7 @@ Persistence.prototype.getInstance = function(type, provider, opts) {
       throw new Error('Invalid type or service received! Requested: ' + name
                       + ', availables: ' + JSON.stringify(_.keys(provider)));
     }
-    this[name] = new providers[name](opts);
+    this[name] = providers[name];
   }
   return this[name];
 };

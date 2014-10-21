@@ -1,13 +1,12 @@
-var        _ = require('underscore'),
-    Identity = require('../Identity');
+var _ = require('underscore');
+var Identity = require('../Identity');
 
 /**
  * Builds an Identity from an extended private key
  */
 function IdentityFactory(opts) {
   opts = opts || {};
-  this.stateProvider = opts.stateProvider || require('../../persistence/state/localstorage');
-  this.listeners = _.clone(opts.listeners || IdentityFactory.listeners || {});
+  throw new Error('Not ready');
 }
 
 IdentityFactory.prototype.create = function (xprivkey, email, passphrase, callback) {

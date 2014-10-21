@@ -4,13 +4,12 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
   controllerUtils.redirIfLogged();
 
   $scope.retreiving = true;
-  persistence.localstorageProfile.doesAnyProfileExist(function(error, exists) {
+  persistence.getInstance('Profile', 'localstorage').doesAnyProfileExist(function(error, exists) {
     $scope.retreiving = false;
     if (!exists) {
       $location.path('/createProfile');
     }
   });
-
 
   $scope.openProfile = function(form) {
     if (form && form.$invalid) {
