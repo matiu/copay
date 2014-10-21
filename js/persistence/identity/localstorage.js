@@ -66,7 +66,7 @@ function store(identity, opts, callback) {
  *
  * @param {Function(boolean)} cb - callback
  */
-function containsAny = function(cb) {
+function containsAny(cb) {
   window.localStorage.getFirst(Profile.key(''), function(err, v, k) {
     return cb(k ? true : false);
   });
@@ -77,7 +77,7 @@ function containsAny = function(cb) {
  *
  * @param {Function(boolean)} cb - callback
  */
-function anyWallet = function(cb) {
+function anyWallet(cb) {
   Wallet.any(window.localStorage, cb);
 }
 

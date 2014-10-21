@@ -25,4 +25,4 @@ Persistence.prototype.getInstance = function(type, provider, opts) {
   return this[name];
 };
 
-angular.module('copayApp.services').service('persistence', new Persistence());
+angular.module('copayApp.services').service('persistence', Persistence);

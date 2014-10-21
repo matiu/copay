@@ -11,7 +11,7 @@ module.exports = LocalStorageStateProvider = {};
  * @param {Identity} identity - the identity for which to retrieve state
  * @param {Function} callback - called when finished with (err, identity)
  */
-LocalStorageStateProvider.retrieve(identity, callback) {
+LocalStorageStateProvider.retrieve = function (identity, callback) {
   identity.setWallets(
     cryptoUtil.decrypt(
       identity.getPassphrase(),
@@ -27,7 +27,7 @@ LocalStorageStateProvider.retrieve(identity, callback) {
  * @param {Identity} identity - the identity to be stored
  * @param {Function} callback - called when finished with (err, identity)
  */
-LocalStorageStateProvider.save(identity, callback) {
+LocalStorageStateProvider.save = function (identity, callback) {
   localStorage.setItem('wallets::' + identity.getEmail(),
     cryptoUtil.encrypt(
       identity.getPassphrase(),

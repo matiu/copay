@@ -16,6 +16,21 @@ function Profile(opts) {
   this.key = Profile.key(this.hash);
 };
 
+Profile.create = function(email, password, storage, cb) {
+  preconditions.checkArgument(cb);
+  preconditions.checkArgument(storage.setPassword);
+
+  preconditions.checkState(storage.hasPassphrase());
+
+  var p = new Profile({
+    email: email,
+    hash: Profile.hash(email, password),
+  }, storage);
+  p.store({}, function(err) {
+    return cb(err, p);
+  });
+};
+
 Profile.hash = function(email, password) {
   return bitcore.util.sha256ripe160(email + password).toString('hex');
 };
