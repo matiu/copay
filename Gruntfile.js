@@ -54,9 +54,8 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: [
-          'js/models/*.js',
+          'js/**/*.js',
           'plugins/*.js',
-          'js/*.js',
           '!js/copayBundle.js',
           '!js/copayMain.js'
         ],
