@@ -4,12 +4,11 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
   controllerUtils.redirIfLogged();
 
   $scope.retreiving = true;
-  copay.Identity.anyProfile({
-    pluginManager: pluginManager,
-  }, function(any) {
+  persistence.localstorageProfile.doesAnyProfileExist(function(error, exists) {
     $scope.retreiving = false;
-    if (!any)
+    if (!exists) {
       $location.path('/createProfile');
+    }
   });
 
 

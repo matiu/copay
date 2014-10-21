@@ -41,7 +41,14 @@ function store(profile, opts, callback) {
   });
 }
 
+function any(callback) {
+  storage.getFirst(Profile.key(''), { onlyKey: true }, function(err, _, element) {
+    return cb(err, !!element);
+  });
+}
+
 module.exports = {
   retrieve: retrieve,
-  store: store
+  store: store,
+  doesAnyProfileExist: any
 };
