@@ -84,25 +84,6 @@ Storage.prototype.setPassword = function(password, config) {
   log.debug('done.')
 }
 
-Storage.prototype._encrypt = function(string) {
-  var encrypted = CryptoJS.AES.encrypt(string, this._getPassphrase());
-  var encryptedBase64 = encrypted.toString();
-  return encryptedBase64;
-};
-
-Storage.prototype._decrypt = function(base64) {
-  var decryptedStr = null;
-  try {
-    var decrypted = CryptoJS.AES.decrypt(base64, this._getPassphrase());
-    if (decrypted)
-      decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
-  } catch (e) {
-    // Error while decrypting
-    log.debug(e.message);
-    return null;
-  }
-  return decryptedStr;
-};
 
 
 Storage.prototype._read = function(k, cb) {
