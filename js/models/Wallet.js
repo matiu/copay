@@ -224,7 +224,9 @@ Wallet.getMaxRequiredCopayers = function(totalCopayers) {
  * @param cb
  * @return {undefined}
  */
-Wallet.delete = function(walletId, storage, cb) {
+// TODO: Deprecate "delete", as it is a reserved keyword, and use "deleteWallet" or "deleteById"
+// TODO: Move this into the "persistence" folder
+Wallet.deleteWallet = Wallet.deleteById = Wallet.delete = function(walletId, storage, cb) {
   preconditions.checkArgument(cb);
   storage.deletePrefix(Wallet.key(walletId), function(err) {
     if (err && err.message != 'not found') return cb(err);

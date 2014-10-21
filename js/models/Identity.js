@@ -230,37 +230,6 @@ Identity.isAvailable = function(email, opts, cb) {
   return cb();
 };
 
-
-/**
- * store
- *
- * @param opts
- * @param cb
- * @return {undefined}
- */
-Identity.prototype.store = function(opts, cb) {
-  preconditions.checkState(this.profile);
-
-  var self = this;
-  self.profile.store(opts, function(err) {
-    if (err) return cb(err);
-
-    var l = self.openWallets.length,
-      i = 0;
-    if (!l) return cb();
-
-    _.each(self.openWallets, function(w) {
-      w.store(function(err) {
-        if (err) return cb(err);
-
-        if (++i == l)
-          return cb();
-      })
-    });
-  });
-};
-
-
 Identity.prototype._cleanUp = function() {
   // NOP
 };
@@ -318,9 +287,6 @@ Identity.prototype.importWallet = function(base64, password, skipFields, cb) {
   this.addWallet(w, function(err) {
     if (err) return cb(err, null);
     self.openWallets.push(w);
-    self.store(null, function(err) {
-      return cb(err, w);
-    });
   });
 };
 

@@ -4,19 +4,16 @@ var _ = require('underscore');
 var log = require('../log');
 var bitcore = require('bitcore');
 
-function Profile(info, storage) {
-  preconditions.checkArgument(info.email);
-  preconditions.checkArgument(info.hash);
-  preconditions.checkArgument(storage);
-  preconditions.checkArgument(storage.setPassword, 'bad storage');
+function Profile(opts) {
+  preconditions.checkArgument(opts.email);
+  preconditions.checkArgument(opts.hash);
 
-  this.hash = info.hash;
-  this.email = info.email;
-  this.extra = info.extra || {};
-  this.walletInfos = info.walletInfos || {};
+  this.hash = opts.hash;
+  this.email = opts.email;
+  this.extra = opts.extra || {};
+  this.walletInfos = opts.walletInfos || {};
 
   this.key = Profile.key(this.hash);
-  this.storage = storage;
 };
 
 Profile.hash = function(email, password) {
@@ -27,41 +24,9 @@ Profile.key = function(hash) {
   return 'profile::' + hash;
 };
 
-Profile.create = function(email, password, storage, cb) {
-  preconditions.checkArgument(cb);
-  preconditions.checkArgument(storage.setPassword);
-
-  preconditions.checkState(storage.hasPassphrase());
-
-  var p = new Profile({
-    email: email,
-    hash: Profile.hash(email, password),
-  }, storage);
-  p.store({}, function(err) {
-    return cb(err, p);
-  });
-};
-
-
 Profile.any = function(storage, cb) {
   storage.getFirst(Profile.key(''), { onlyKey: true}, function(err, v, k) {
     return cb(k ? true : false);
-  });
-};
-
-Profile.open = function(email, password, storage, cb) {
-  preconditions.checkArgument(cb);
-  preconditions.checkState(storage.hasPassphrase());
-
-  var key = Profile.key(Profile.hash(email, password));
-  storage.get(key, function(err, val) {
-    if (err || !val)
-      return cb(new Error('PNOTFOUND: Profile not found'));
-
-    if (!val.email)
-      return cb(new Error('PERROR: Could not open profile'));
-
-    return cb(null, new Profile(val, storage));
   });
 };
 
