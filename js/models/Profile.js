@@ -16,19 +16,12 @@ function Profile(opts) {
   this.key = Profile.key(this.hash);
 };
 
-Profile.create = function(email, password, storage, cb) {
-  preconditions.checkArgument(cb);
-  preconditions.checkArgument(storage.setPassword);
-
-  preconditions.checkState(storage.hasPassphrase());
-
+Profile.create = function(email, password) {
   var p = new Profile({
     email: email,
     hash: Profile.hash(email, password),
-  }, storage);
-  p.store({}, function(err) {
-    return cb(err, p);
   });
+  return p;
 };
 
 Profile.hash = function(email, password) {
@@ -84,9 +77,7 @@ Profile.prototype.deleteWallet = function(walletId, cb) {
     return cb(new Error('WNOEXIST: Wallet not on profile '));
 
   delete this.walletInfos[walletId];
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 Profile.prototype.addToWallet = function(walletId, info, cb) {
@@ -94,10 +85,7 @@ Profile.prototype.addToWallet = function(walletId, info, cb) {
     return cb(new Error('WNOEXIST: Wallet not on profile '));
 
   this.walletInfos[walletId] = _.extend(this.walletInfos[walletId], info);
-
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 
@@ -112,10 +100,7 @@ Profile.prototype.addWallet = function(walletId, info, cb) {
     createdTs: Date.now(),
     id: walletId
   });
-
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 

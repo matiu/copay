@@ -53,7 +53,7 @@ function Identity(password, opts) {
 
 /* for stubbing */
 Identity._createProfile = function(email, password, storage, cb) {
-  Profile.create(email, password, storage, cb);
+  return cb(null, Profile.create(email, password));
 };
 
 Identity._newStorage = function(opts) {
