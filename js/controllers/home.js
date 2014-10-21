@@ -1,13 +1,19 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('HomeController', function($scope, $rootScope, $location, notification, controllerUtils, pluginManager, persistence) {
+angular.module('copayApp.controllers').controller('HomeController', function(
+  $scope, $rootScope, $location,
+  async,
+  notification, controllerUtils, pluginManager,
+  persistence
+) {
   controllerUtils.redirIfLogged();
 
-  $scope.retreiving = true;
+  $scope.retreiving = false;
+
   persistence.getInstance('Profile', 'localstorage').doesAnyProfileExist(function(error, exists) {
     $scope.retreiving = false;
-    if (!exists) {
-      $location.path('/createProfile');
+    if (exists) {
+      alert('Autofill de profile?');
     }
   });
 
@@ -40,7 +46,7 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
     };
     async.series([
       function(callback) {
-        persistence.localstorageIdentity.retrieve(
+        persistence.getInstance('Profile', 'localstorage').retrieve(
           email, password, identityConfig, identityCallback(callback)
         );
       },

@@ -45,6 +45,7 @@ var createBundle = function(opts) {
   b.require('browser-request', {
     expose: 'request'
   });
+  b.require('async');
   b.require('underscore');
   b.require('assert');
   b.require('preconditions');

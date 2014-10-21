@@ -20,26 +20,17 @@ function getFirst(prefix, opts, callback) {
   opts = _.extend({}, opts);
   opts.db = opts.db || window.localStorage;
 
-  opts.db.allKeys(function(allKeys) {
-    var keys = _.filter(allKeys, function(k) {
-      if ((k === prefix) || k.indexOf(prefix) === 0) return true;
-    });
+  for (var key in opts.db) {
+    if (key !== prefix && key.indexOf(prefix) !== 0) continue;
 
-    if (keys.length === 0) {
-      return cb(new Error('not found'));
-    }
-
-    if (opts.onlyKey) {
-      return cb(null, null, keys[0]);
-    }
-
-    read(keys[0], function(error, value) {
+    read(key, function(error, value) {
       if (_.isNull(v)) {
-        return cb(new Error('Could not decrypt data'), null, keys[0]);
+        return callback(new Error('Could not decrypt data'), null, keys[0]);
       }
-      return cb(null, value, keys[0]);
-    })
-  });
+      return callback(null, value, keys[0]);
+    });
+  };
+  return callback(new Error('not found'));
 }
 
 /**
@@ -54,13 +45,13 @@ function read(key, secret, callback) {
   var self = this;
   this.db.getItem(k, function(ret) {
     if (!ret) {
-      return cb(null);
+      return callback(null);
     }
     ret = cryptoUtils.decrypt(secret, ret);
     if (!ret) {
-      return cb(null);
+      return callback(null);
     }
-    return cb(ret);
+    return callback(ret);
   });
 }
 

@@ -84,6 +84,25 @@ Storage.prototype.setPassword = function(password, config) {
   log.debug('done.')
 }
 
+Storage.prototype._encrypt = function(string) {
+  var encrypted = CryptoJS.AES.encrypt(string, this._getPassphrase());
+  var encryptedBase64 = encrypted.toString();
+  return encryptedBase64;
+};
+
+Storage.prototype._decrypt = function(base64) {
+  var decryptedStr = null;
+  try {
+    var decrypted = CryptoJS.AES.decrypt(base64, this._getPassphrase());
+    if (decrypted)
+      decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+  } catch (e) {
+    // Error while decrypting
+    log.debug(e.message);
+    return null;
+  }
+  return decryptedStr;
+};
 
 
 Storage.prototype._read = function(k, cb) {
@@ -211,22 +230,11 @@ Storage.prototype.clearAll = function(cb) {
   this.db.clear(cb);
 };
 
-Storage.prototype.decrypt = function(base64, password, iterations) {
-
-  if (password) {
-    this.savePassphrase();
-    var opts = iterations ? {iterations: iterations} : {};
-
-    this.setPassword(password, opts);
-  }
+Storage.prototype.decrypt = function(base64, password) {
+  // password
 
   var decryptedStr = this._decrypt(base64);
-  var ret =  JSON.parse(decryptedStr);
-
-  if (password)
-    this.restorePassphrase();
-
-  return ret;
+  return JSON.parse(decryptedStr);
 };
 
 Storage.prototype.encrypt = function(obj) {

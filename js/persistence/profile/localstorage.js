@@ -1,4 +1,5 @@
 var Profile = require('../../models/Profile');
+var localstorageUtils = require('../localstorageUtils.js');
 
 function retrieve(email, password, opts, callback) {
 
@@ -7,17 +8,15 @@ function retrieve(email, password, opts, callback) {
   var storage = opts.storage || window.localStorage;
   var key = Profile.key(Profile.hash(email, password));
 
-  storage.get(key, function(err, profileOpts) {
-    if (err) {
-      return cb(new Error('Unexpected error fetching the profile'));
-    }
+  var retrieved = storage.getItem(key);
+  if (!retrieved) {
+    return callback(new Error('Could not open profile'));
+  }
+  if (!retrieved.email) {
+    return callback(new Error('Unable to read profile'));
+  }
 
-    if (profileOpts && !profileOpts.email) {
-      return cb(new Error('Could not open profile'));
-    }
-
-    return cb(null, new Profile(profileOpts));
-  });
+  return callback(null, new Profile(retrieved));
 }
 
 function store(profile, opts, callback) {
@@ -42,8 +41,8 @@ function store(profile, opts, callback) {
 }
 
 function any(callback) {
-  window.localStorage.getFirst(Profile.key(''), { onlyKey: true }, function(err, _, element) {
-    return cb(err, !!element);
+  localstorageUtils.getFirst(Profile.key(''), { onlyKey: true }, function(err, _, element) {
+    return callback(err, !!element);
   });
 }
 
