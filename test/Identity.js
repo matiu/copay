@@ -110,7 +110,7 @@ describe('Identity model', function() {
   describe('#constructors', function() {
     describe('#new', function() {
       it('should create an identity', function() {
-        var iden = new Identity(password, config);
+        var iden = new Identity(email, password, config);
         should.exist(iden);
         iden.walletDefaults.should.deep.equal(config.walletDefaults);
       });
@@ -136,7 +136,6 @@ describe('Identity model', function() {
         profile.listWallets = sinon.stub().returns([{
           id: 'walletid'
         }]);
-        profile.getLastFocusedWallet = sinon.stub().returns(null);
         Identity._openProfile = sinon.stub().callsArgWith(3, null, profile);
         Identity._walletRead = sinon.stub().callsArgWith(2, null, wallet);
       });
@@ -150,7 +149,7 @@ describe('Identity model', function() {
         });
       });
 
-      it('should return last focused wallet', function(done) {
+      it('should return last used wallet', function(done) {
         var wallets = [{
           id: 'wallet1',
           store: sinon.stub().yields(null),
@@ -165,14 +164,13 @@ describe('Identity model', function() {
           netStart: sinon.stub(),
         }];
         profile.listWallets = sinon.stub().returns(wallets);
-        profile.getLastFocusedWallet = sinon.stub().returns(wallets[1]);
         Identity._walletRead = sinon.stub();
         Identity._walletRead.onCall(0).callsArgWith(2, null, wallets[0]);
         Identity._walletRead.onCall(1).callsArgWith(2, null, wallets[1]);
         Identity._walletRead.onCall(2).callsArgWith(2, null, wallets[2]);
 
         Identity.open(email, password, config, function(err, iden, w) {
-          w.id.should.equal('wallet2');
+          w.id.should.equal('wallet1');
           done();
         });
       });
@@ -274,11 +272,12 @@ describe('Identity model', function() {
       Identity._walletRead = sinon.stub().callsArgWith(2, null, wallet);
     });
 
-    it('should return wallet and call .store & .migrateWallet', function(done) {
+    it('should return wallet and call .store, .setLastOpenedTs & .migrateWallet', function(done) {
 
       iden.openWallet('dummy', function(err, w) {
         should.not.exist(err);
         w.store.calledOnce.should.equal(true);
+        iden.profile.setLastOpenedTs.calledTwice.should.equal(true);
         // iden.migrateWallet.calledOnce.should.equal(true);
         done();
       });
@@ -306,11 +305,34 @@ describe('Identity model', function() {
 
       iden.importWallet("encrypted object", "xxx", [], function(err) {
         iden.openWallet('ID123', function(err, w) {
+          iden.storage.savePassphrase.calledOnce.should.equal(true);
+          iden.storage.restorePassphrase.calledOnce.should.equal(true);
           should.not.exist(err);
           should.exist(w);
           done();
         });
       });
+    });
+
+
+    it('should import and update indexes', function() {
+      var wallet = {
+        id: "fake wallet",
+        updateIndexes: function(cb) {
+          cb();
+        }
+      };
+      iden.fromEncryptedObj = sinon.stub().returns(wallet);
+
+      var w = iden.fromEncryptedObj("encrypted", "password");
+
+      should.exist(w);
+      wallet.should.equal(w);
+    });
+    it('should import with a wrong password', function() {
+      iden.fromEncryptedObj = sinon.stub().returns(null);
+      var w = iden.fromEncryptedObj("encrypted", "passwordasdfasdf");
+      should.not.exist(w);
     });
   });
 
@@ -335,84 +357,28 @@ describe('Identity model', function() {
   });
 
 
-  describe('#export', function() {
+  describe('#toEncryptedObj', function() {
 
     beforeEach(function() {
       var ws = [];
       _.each([0, 1, 2, 3, 4], function(i) {
         var w = sinon.stub();
-        w.export = sinon.stub().returns('enc' + i);
+        w.toEncryptedObj = sinon.stub().returns('enc' + i);
         w.getId = sinon.stub().returns('wid' + i);
         ws.push(w);
       });
       iden.openWallets = ws;
-      iden.profile.export = sinon.stub().returns('penc');
       iden.storage.iterations = 13;
     });
 
     it('should create an encrypted object', function() {
-      var ret = JSON.parse(iden.export());
+      var ret = iden.toEncryptedObj();
       ret.iterations.should.equal(13);
-      ret.profile.should.equal('penc');
       _.each([0, 1, 2, 3, 4], function(i) {
         ret.wallets['wid' + i].should.equal('enc' + i);
       });
     });
   });
-
-  describe('#import', function() {
-
-    beforeEach(function() {
-      var ws = [];
-      _.each([0, 1, 2, 3, 4], function(i) {
-        var w = sinon.stub();
-        w.export = sinon.stub().returns('enc' + i);
-        w.getId = sinon.stub().returns('wid' + i);
-        ws.push(w);
-      });
-      iden.openWallets = ws;
-      iden.profile.export = sinon.stub().returns('penc');
-      iden.storage.iterations = 13;
-      iden.storage.decrypt = sinon.stub().returns({
-        email: '1@1.com',
-        hash: 'hash1234'
-      });
-
-    });
-
-
-    it('should check the import string', function(done) {
-      Identity.import(JSON.stringify({
-        profile: '1234'
-      }), '1234', config, function(err, ret) {
-        err.should.contain('BADSTR');
-        done();
-      });
-    });
-
-
-    it('should check the import string 2', function(done) {
-      Identity.import(JSON.stringify({
-        iterations: 10,
-      }), '1234', config, function(err, ret) {
-        err.should.contain('BADSTR');
-        done();
-      });
-    });
-
-    it('should import a simple wallet', function(done) {
-      Identity.import(JSON.stringify({
-        iterations: 10,
-        profile: '1234'
-      }), '1234', config, function(err, iden) {
-        should.not.exist(err);
-        should.exist(iden);
-        iden.profile.email.should.equal('1@1.com');
-        done();
-      });
-    });
-  });
-
 
   describe('#pluginManager', function() {
     it('should create a new PluginManager object', function() {
@@ -426,7 +392,7 @@ describe('Identity model', function() {
       var uri = Insight.setCompleteUrl('http://someurl.bitpay.com:443');
       should.exist(uri);
     });
-  });
+  });  
 
   describe('#joinWallet', function() {
     var opts = {
