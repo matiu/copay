@@ -1,5 +1,5 @@
-var cryptoUtil = require('../../util/crypto'),
-   querystring = require('querystring');
+var cryptoUtil = require('../../util/crypto');
+var querystring = require('querystring');
 
 /**
  * Insight Identity Provider. Can register an email remotely and store/retrieve a master private

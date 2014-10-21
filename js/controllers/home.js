@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('HomeController', function($scope, $rootScope, $location, notification, controllerUtils, pluginManager) {
+angular.module('copayApp.controllers').controller('HomeController', function($scope, $rootScope, $location, notification, controllerUtils, pluginManager, persistence) {
   controllerUtils.redirIfLogged();
 
   $scope.retreiving = true;
@@ -42,14 +42,17 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
     };
     async.series([
       function(callback) {
-        new LocalStorageIdentityStorage().retrieve(
-          username, email, identityConfig, identityCallback(callback)
+        persistence.localstorageIdentity.retrieve(
+          email, password, identityConfig, identityCallback(callback)
         );
       },
-      function() {
-        new InsightIdentityStorage().retrieve(
+      function(callback) {
+        /*
+        persistence.insightIdentity.retrieve(
           username, email, identityConfig, identityCallback(callback)
         );
+        */
+        callback();
       },
     ], function(err) {
       if (err) {

@@ -9,6 +9,7 @@ function retrieve(email, password, opts, callback) {
   var storage = opts.storage || window.LocalStorage;
   var profileProvider = opts.profileProvider || localStorageProfileProvider;
 
+  // FIXME: This looks very bad, refactor it into a factory?
   profileProvider.retrieve(email, password, opts, function(err, profile) {
     if (err) {
       return callback(err);
