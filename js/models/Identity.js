@@ -34,6 +34,7 @@ function Identity(password, opts) {
   preconditions.checkArgument(opts);
 
   this.storage = opts.storage || Identity._getStorage(opts, password);
+  this.password = password;
   this.networkOpts = {
     livenet: opts.network.livenet,
     testnet: opts.network.testnet

@@ -57,7 +57,7 @@ Profile.prototype.export = function() {
  * @return {string} base64 encoded string
  */
 Profile.import = function(str, password, storage) {
-  var obj = storage.decrypt(str,password)
+  var obj = storage.decrypt(str, password)
   return new Profile(obj, storage);
 };
 

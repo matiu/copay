@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('CreateProfileController', function($scope, $rootScope, $location, notification, controllerUtils, pluginManager) {
+angular.module('copayApp.controllers').controller('CreateProfileController', function(
+  $scope, $rootScope, $location,
+  notification, controllerUtils, pluginManager,
+  persistence
+) {
   controllerUtils.redirIfLogged();
   $scope.retreiving = true;
 
@@ -33,6 +37,8 @@ angular.module('copayApp.controllers').controller('CreateProfileController', fun
       passphraseConfig: config.passphraseConfig,
     }, function(err, iden) {
       var firstWallet = iden.profile.getLastFocusedWallet() || iden.openWallets[0];
+      persistence.getInstance('Profile', 'localstorage').
+
       controllerUtils.bindProfile($scope, iden, firstWallet);
     });
   }
