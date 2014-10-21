@@ -39,11 +39,11 @@ function getFirst(prefix, opts, callback) {
  * @param {string} key
  * @param {RetrieveCallback} callback
  */
-function read(key, secret, callback) {
+function read(key, secret, opts, callback) {
   preconditions.checkArgument(callback);
+  var storage = opts.storage || window.localStorage;
 
-  var self = this;
-  this.db.getItem(k, function(ret) {
+  storage.getItem(k, function(ret) {
     if (!ret) {
       return callback(null);
     }
@@ -55,11 +55,22 @@ function read(key, secret, callback) {
   });
 }
 
-function write() {
+function write(key, value, password, opts, callback) {
+
+  var storage = opts.storage || window.localStorage;
+  var cypher = cryptoUtils.encrypt(password, value);
+  if (storage.getItem(key && !opts.overwrite)) {
+    return cb(new Error('PEXISTS: Profile already exists'))
+  }
+  storage.setItem(key, cypher);
+  log.debug('Profile stored');
+  return callback();
 }
 
 module.exports = {
   getFirst: getFirst,
   read: read,
-  write: write
+  write: write,
+  retrieve: read,
+  save: write
 };
