@@ -1,17 +1,21 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('HomeController', function($scope, $rootScope, $location, notification, controllerUtils, pluginManager) {
+angular.module('copayApp.controllers').controller('HomeController', function(
+  $scope, $rootScope, $location,
+  async,
+  notification, controllerUtils, pluginManager,
+  persistence
+) {
   controllerUtils.redirIfLogged();
 
-  $scope.retreiving = true;
-  copay.Identity.anyProfile({
-    pluginManager: pluginManager,
-  }, function(any) {
-    $scope.retreiving = false;
-    if (!any)
-      $location.path('/createProfile');
-  });
+  $scope.retreiving = false;
 
+  persistence.getInstance('Profile', 'localstorage').doesAnyProfileExist(function(error, exists) {
+    $scope.retreiving = false;
+    if (exists) {
+      alert('Autofill de profile?');
+    }
+  });
 
   $scope.openProfile = function(form) {
     if (form && form.$invalid) {
@@ -19,18 +23,46 @@ angular.module('copayApp.controllers').controller('HomeController', function($sc
       return;
     }
     $scope.loading = true;
-    copay.Identity.open(form.email.$modelValue, form.password.$modelValue, {
+
+    var identity = null;
+    var identityConfig = {
       pluginManager: pluginManager,
       network: config.network,
       networkName: config.networkName,
       walletDefaults: config.wallet,
       passphraseConfig: config.passphraseConfig,
-    }, function(err, iden, lastFocusedWallet) {
-      if (err && !iden) {
-        console.log('Error:' + err)
-        controllerUtils.onErrorDigest(
-          $scope, (err.toString() || '').match('PNOTFOUND') ? 'Profile not found' : 'Unknown error');
+    };
+    var email = form.email.$modelValue;
+    var password = form.password.$modelValue;
+    var identityCallback = function(callback) {
+      return function(err, iden) {
+        if (err) {
+          return callback(err);
+        } else {
+          identity = iden;
+          return callback();
+        }
+      }
+    };
+    async.series([
+      function(callback) {
+        persistence.getInstance('Profile', 'localstorage').retrieve(
+          email, password, identityConfig, identityCallback(callback)
+        );
+      },
+      function(callback) {
+        /*
+        persistence.insightIdentity.retrieve(
+          username, email, identityConfig, identityCallback(callback)
+        );
+        */
+        callback();
+      },
+    ], function(err) {
+      if (err) {
+        controllerUtils.onErrorDigest($scope, 'Profile not found');
       } else {
+        var lastFocusedWallet = iden.profile.getLastFocusedWallet();
         controllerUtils.bindProfile($scope, iden, lastFocusedWallet);
       }
     });

@@ -52,8 +52,7 @@ var copayConfig = require('../../config');
  * @param {PrivateKey} opts.privateKey - an instance of {@link PrivateKey}
  * @param {string} opts.version - the version of copay where this wallet was
  *                                created
- * @TODO: figure out if reconnectDelay is set in milliseconds
- * @param {number} opts.reconnectDelay - amount of seconds to wait before
+ * @param {number} opts.reconnectDelay - amount of milliseconds to wait before
  *                                       attempting to reconnect
  * @constructor
  */
@@ -167,12 +166,9 @@ Wallet.COPAYER_PAIR_LIMITS = {
   12: 1,
 };
 
-
-
 Wallet.key = function(str) {
   return 'wallet::' + str;
 };
-
 
 Wallet.any = function(storage, cb) {
   storage.getFirst(Wallet.key(''),  { onlyKey: true}, function(err, v, k) {
@@ -228,7 +224,9 @@ Wallet.getMaxRequiredCopayers = function(totalCopayers) {
  * @param cb
  * @return {undefined}
  */
-Wallet.delete = function(walletId, storage, cb) {
+// TODO: Deprecate "delete", as it is a reserved keyword, and use "deleteWallet" or "deleteById"
+// TODO: Move this into the "persistence" folder
+Wallet.deleteWallet = Wallet.deleteById = Wallet.delete = function(walletId, storage, cb) {
   preconditions.checkArgument(cb);
   storage.deletePrefix(Wallet.key(walletId), function(err) {
     if (err && err.message != 'not found') return cb(err);

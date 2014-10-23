@@ -4,19 +4,24 @@ var _ = require('underscore');
 var log = require('../log');
 var bitcore = require('bitcore');
 
-function Profile(info, storage) {
-  preconditions.checkArgument(info.email);
-  preconditions.checkArgument(info.hash);
-  preconditions.checkArgument(storage);
-  preconditions.checkArgument(storage.setPassword, 'bad storage');
+function Profile(opts) {
+  preconditions.checkArgument(opts.email);
+  preconditions.checkArgument(opts.hash);
 
-  this.hash = info.hash;
-  this.email = info.email;
-  this.extra = info.extra || {};
-  this.walletInfos = info.walletInfos || {};
+  this.hash = opts.hash;
+  this.email = opts.email;
+  this.extra = opts.extra || {};
+  this.walletInfos = opts.walletInfos || {};
 
   this.key = Profile.key(this.hash);
-  this.storage = storage;
+};
+
+Profile.create = function(email, password) {
+  var p = new Profile({
+    email: email,
+    hash: Profile.hash(email, password),
+  });
+  return p;
 };
 
 Profile.hash = function(email, password) {
@@ -27,42 +32,9 @@ Profile.key = function(hash) {
   return 'profile::' + hash;
 };
 
-
-Profile.create = function(email, password, storage, cb) {
-  preconditions.checkArgument(cb);
-  preconditions.checkArgument(storage.setPassword);
-
-  preconditions.checkState(storage.hasPassphrase());
-
-  var p = new Profile({
-    email: email,
-    hash: Profile.hash(email, password),
-  }, storage);
-  p.store({}, function(err) {
-    return cb(err, p);
-  });
-};
-
-
 Profile.any = function(storage, cb) {
   storage.getFirst(Profile.key(''), { onlyKey: true}, function(err, v, k) {
     return cb(k ? true : false);
-  });
-};
-
-Profile.open = function(email, password, storage, cb) {
-  preconditions.checkArgument(cb);
-  preconditions.checkState(storage.hasPassphrase());
-
-  var key = Profile.key(Profile.hash(email, password));
-  storage.get(key, function(err, val) {
-    if (err || !val)
-      return cb(new Error('PNOTFOUND: Profile not found'));
-
-    if (!val.email)
-      return cb(new Error('PERROR: Could not open profile'));
-
-    return cb(null, new Profile(val, storage));
   });
 };
 
@@ -85,7 +57,7 @@ Profile.prototype.export = function() {
  * @return {string} base64 encoded string
  */
 Profile.import = function(str, password, storage) {
-  var obj = storage.decrypt(str,password)
+  var obj = storage.decrypt(str, password)
   return new Profile(obj, storage);
 };
 
@@ -105,9 +77,7 @@ Profile.prototype.deleteWallet = function(walletId, cb) {
     return cb(new Error('WNOEXIST: Wallet not on profile '));
 
   delete this.walletInfos[walletId];
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 Profile.prototype.addToWallet = function(walletId, info, cb) {
@@ -115,10 +85,7 @@ Profile.prototype.addToWallet = function(walletId, info, cb) {
     return cb(new Error('WNOEXIST: Wallet not on profile '));
 
   this.walletInfos[walletId] = _.extend(this.walletInfos[walletId], info);
-
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 
@@ -133,10 +100,7 @@ Profile.prototype.addWallet = function(walletId, info, cb) {
     createdTs: Date.now(),
     id: walletId
   });
-
-  this.store({
-    overwrite: true
-  }, cb);
+  cb(null, this);
 };
 
 

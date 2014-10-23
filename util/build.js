@@ -45,6 +45,7 @@ var createBundle = function(opts) {
   b.require('browser-request', {
     expose: 'request'
   });
+  b.require('async');
   b.require('underscore');
   b.require('assert');
   b.require('preconditions');
@@ -85,6 +86,24 @@ var createBundle = function(opts) {
   });
   b.require('./js/models/PluginManager', {
     expose: '../js/models/PluginManager'
+  });
+  b.require('./js/persistence/identity/localstorage', {
+    expose: '../persistence/identity/localstorage'
+  });
+  b.require('./js/persistence/profile/localstorage', {
+    expose: '../persistence/profile/localstorage'
+  });
+  b.require('./js/persistence/wallet/localstorage', {
+    expose: '../persistence/wallet/localstorage'
+  });
+  b.require('./js/persistence/wallet/insight', {
+    expose: '../persistence/wallet/insight'
+  });
+  b.require('./js/persistence/identity/insight', {
+    expose: '../persistence/identity/insight'
+  });
+  b.require('./js/persistence/profile/insight', {
+    expose: '../persistence/profile/insight'
   });
 
   if (!opts.disablePlugins) {
