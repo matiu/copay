@@ -15,6 +15,7 @@ module.exports.Identity = require('./js/models/Identity');
 module.exports.Wallet = require('./js/models/Wallet');
 module.exports.Compatibility = require('./js/models/Compatibility');
 module.exports.PluginManager = require('./js/models/PluginManager');
+module.exports.cryptoUtils = require('./js/util/crypto');
 module.exports.version = require('./version').version;
 module.exports.commitHash = require('./version').commitHash;
 
