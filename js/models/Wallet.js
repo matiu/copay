@@ -166,12 +166,30 @@ Wallet.COPAYER_PAIR_LIMITS = {
   12: 1,
 };
 
+Wallet.getStoragePrefix = function() {
+  return 'wallet::';
+};
+
 Wallet.getStorageKey = function(str) {
-  return 'wallet::' + str;
+  return Wallet.getStoragePrefix() + str;
 };
 
 Wallet.prototype.getStorageKey = function() {
   return Wallet.getStorageKey(this.getId());
+};
+
+/**
+ * check if any wallet exists on storage
+ * @param opts.storageOpts
+ * @param cb
+ */
+Wallet.checkIfExistsAny = function(opts, cb) {
+  var storage = opts.storage || opts.pluginManager.get('DB');
+  storage.getFirst(Wallet.getStoragePrefix(), {
+    onlyKey: true
+  }, function(err, v, k) {
+    return cb(k ? true : false);
+  });
 };
 
 /* for stubbing */
@@ -245,13 +263,6 @@ Wallet.prototype._newAddresses = function(dontUpdateUx) {
   this.emitAndKeepAlive('newAddresses', dontUpdateUx);
 };
 
-
-Wallet.prototype._publicKeyRingUpdated = function(isComplete) {
-  if (isComplete) {
-    this.subscribeToAddresses();
-  };
-  this.emitAndKeepAlive('publicKeyRingUpdated');
-};
 
 /**
  * @desc Handles an 'indexes' message.
@@ -330,7 +341,7 @@ Wallet.prototype._onPublicKeyRing = function(senderId, data) {
       this._lockIncomming();
     }
 
-    this._publicKeyRingUpdated(this.publicKeyRing.isComplete());
+    this.emitAndKeepAlive('publicKeyRingUpdated');
   }
 };
 
