@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('copayApp.controllers').controller('SettingsController', function($scope, $rootScope, $window, $route, $location, $anchorScroll, notification) {
+angular.module('copayApp.controllers').controller('SettingsController', function($scope, $rootScope, $window, $route, $location, $anchorScroll, notification, applicationService) {
   $scope.title = 'Settings';
   $scope.defaultLanguage = config.defaultLanguage || 'en';
   $scope.insightLivenet = config.network.livenet.url;
@@ -91,16 +91,13 @@ angular.module('copayApp.controllers').controller('SettingsController', function
       }),
     }));
 
-    // Go home reloading the application
-    var hashIndex = window.location.href.indexOf('#!/');
-    window.location = window.location.href.substr(0, hashIndex);
+    applicationService.restart();
   };
 
 
   $scope.reset = function() {
     localStorage.removeItem('config');
-    // Go home reloading the application
-    window.location.reload();
+    applicationService.reload();
   };
 
 });
