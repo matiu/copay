@@ -964,8 +964,9 @@ table tbody tr:last-child td {
   border-bottom: none; 
 }
 
-table tr.deleting {
-  background: #FCD5D5;
+table.manage-wallets tr:hover {
+  background-color: #eee;
+  cursor: pointer;
 }
 
 /* SECONDARY */
