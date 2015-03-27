@@ -168,6 +168,7 @@ angular.module('copayApp.controllers').controller('historyController',
     this.openTxModal = function(btx) {
       var ModalInstanceCtrl = function($scope, $modalInstance) {
         $scope.btx = btx;
+        $scope.settings = config;
 
         $scope.getShortNetworkName = function() {
           var n = fc.network;

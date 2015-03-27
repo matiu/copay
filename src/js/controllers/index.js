@@ -10,7 +10,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   self.pageLoaded = false;
   self.isCordova = isCordova;
 
-
   $rootScope.$on('updateStatus', function(event) {
     var fc = profileService.focusedClient;
     self.pageLoaded = true; // TODO?
@@ -102,6 +101,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.lockedBalanceStr = self.lockedBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' ' + self.unitName;
     self.availableBalanceStr = self.availableBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' ' + self.unitName;
 
+    self.alternativeName = config.alternativeName;
+    self.alternativeIsoCode = config.alternativeIsoCode;
+
     // var availableBalanceNr = safeBalanceSat * satToUnit;
     // r.safeUnspentCount = safeUnspentCount;
 
@@ -115,20 +117,16 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
     rateService.whenAvailable(function() {
 
-      var config = configService.getSync().wallet.settings;
-      self.alternativeName = config.alternativeName;
-      self.alternativeIsoCode = config.alternativeIsoCode;
 
-      var totalBalanceAlternative = rateService.toFiat(self.totalBalance * self.unitToSatoshi, config.alternativeIsoCode);
-      var lockedBalanceAlternative = rateService.toFiat(self.lockedBalance * self.unitToSatoshi, config.alternativeIsoCode);
-      var alternativeConversionRate = rateService.toFiat(100000000, config.alternativeIsoCode);
+      var totalBalanceAlternative = rateService.toFiat(self.totalBalance * self.unitToSatoshi, self.alternativeIsoCode);
+      var lockedBalanceAlternative = rateService.toFiat(self.lockedBalance * self.unitToSatoshi, self.alternativeIsoCode);
+      var alternativeConversionRate = rateService.toFiat(100000000, self.alternativeIsoCode);
 
       self.totalBalanceAlternative = $filter('noFractionNumber')(totalBalanceAlternative, 2);
       self.lockedBalanceAlternative = $filter('noFractionNumber')(lockedBalanceAlternative, 2);
       self.alternativeConversionRate = $filter('noFractionNumber')(alternativeConversionRate, 2);
 
       self.alternativeBalanceAvailable = true;
-      self.alternativeIsoCode = config.alternativeIsoCode;
 
       self.alternativeBalanceAvailable = true;
       self.updatingBalance = false;
