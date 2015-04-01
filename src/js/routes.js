@@ -15,8 +15,6 @@ angular
   .module('copayApp')
   .config(function(localStorageServiceProvider, bwcServiceProvider, $stateProvider, $urlRouterProvider) {
 
-    bwcServiceProvider.setBaseUrl('http://localhost:3001/bws/api');
-
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
@@ -80,7 +78,7 @@ angular
               $scope.goBackToState = 'add';
             }
           }
-        } 
+        }
       })
       .state('import', {
         url: '/import',
@@ -195,22 +193,22 @@ angular
       })
 
     .state('preferences', {
-        url: '/preferences',
-        templateUrl: 'views/preferences.html',
-        walletShouldBeComplete: true,
-        needProfile: true,
-        views: {
-          'main': {
-            templateUrl: 'views/preferences.html'
-          },
-          'topbar': {
-            templateUrl: 'views/includes/topbar.html',
-            controller: function($scope) {
-              $scope.goBackToState = 'walletHome';
-            }
+      url: '/preferences',
+      templateUrl: 'views/preferences.html',
+      walletShouldBeComplete: true,
+      needProfile: true,
+      views: {
+        'main': {
+          templateUrl: 'views/preferences.html'
+        },
+        'topbar': {
+          templateUrl: 'views/includes/topbar.html',
+          controller: function($scope) {
+            $scope.goBackToState = 'walletHome';
           }
         }
-      })
+      }
+    })
       .state('settings', {
         url: '/settings',
         controller: 'settingsController',
