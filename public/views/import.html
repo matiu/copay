@@ -1,7 +1,6 @@
 <div class="import" ng-controller="importController as import">
-    <div class="row">
+    <div class="row m20t">
       <div class="large-12 columns">
-        <div class="panel">
           <form name="importForm" ng-submit="import.import(importForm)" novalidate>
             <div class="box-notification" ng-show="error">
               <div class="box-icon error">
@@ -12,16 +11,16 @@
               </span>
             </div>
 
-            <div ng-show="!import.isSafari && !import.isCordova">
-              <legend for="backupFile" class="m10b">
+            <div ng-show="!import.isSafari && !import.isCordova" class="line-b m10b">
+              <label for="backupFile">
                 <span translate>Choose backup file from your computer</span>  <i class="fi-laptop"></i>
-              </legend>
+              </label>
               <input type="file" class="form-control" placeholder="{{'Select a backup file'|translate}}"
               name="backupFile" ng-model="import.backupFile" ng-file-select>
             </div>
 
             <div ng-show="import.isSafari || import.isCordova">
-              <label for="backupText" class="m10b">
+              <label for="backupText">
                 <span translate>Paste backup plain text code</span>  <i class="fi-clipboard"></i>
               </label>
               <textarea class="form-control" name="backupText" ng-model="import.backupText" rows="5"></textarea>
@@ -33,17 +32,11 @@
               <input type="password" class="form-control" placeholder="{{'Your wallet password'|translate}}"
               name="password" ng-model="import.password">
             </div>
-
-            <div class="line-dashed-h m20b"></div>
-
-            <div class="text-right">
-              <button translate type="submit" class="button expand black m0" 
-                ng-disabled="importForm.$invalid">
-                Import backup
-              </button>
-            </div>
+            <button translate type="submit" class="button radius expand black m0" 
+              ng-disabled="importForm.$invalid">
+              Import backup
+            </button>
           </form>
-        </div>
       </div>
     </div>
 </div>

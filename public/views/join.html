@@ -1,8 +1,7 @@
 <div class="join" ng-controller="joinController as join">
-  <div class="row">
+  <div class="row m20t">
     <div class="large-12 columns">
       <form name="joinForm" ng-submit="join.join(joinForm)" novalidate>
-        <div class="panel">
           <div class="row collapse">
             <label for="secret" class="left"><span translate>Wallet Secret</span> 
               <small translate ng-show="joinForm.secret.$pristine">Required</small>
@@ -32,10 +31,7 @@
             ng-include="'views/includes/scanner.html'">
           </div>
 
-          <div class="line-dashed-h m20b"></div>
-
-          <div class="m20b oh">
-            <a class="button outline light-gray tiny" ng-click="join.hideAdv=!join.hideAdv">
+            <a class="button outline light-gray tiny expand" ng-click="join.hideAdv=!join.hideAdv">
               <i class="fi-widget m3r"></i>
               <span translate ng-hide="!join.hideAdv">Show</span> 
               <span translate ng-hide="join.hideAdv">Hide</span> 
@@ -43,7 +39,6 @@
               <i ng-if="join.hideAdv" class="icon-arrow-down4"></i>
               <i ng-if="!join.hideAdv" class="icon-arrow-up4"></i>
             </a>
-          </div>
           <div ng-hide="join.hideAdv" class="row">
             <div class="large-12 columns">
               <label for="ext-master">Master extended private key
@@ -54,11 +49,7 @@
               </label>
             </div>
           </div>
-
-          <div class="text-right m20t">
-            <button translate type="submit" class="button expand secondary m0" ng-disabled="joinForm.$invalid">Join</button>
-          </div>
-        </div>
+          <button translate type="submit" class="button expand black m0" ng-disabled="joinForm.$invalid">Join</button>
       </form>
     </div>
   </div>

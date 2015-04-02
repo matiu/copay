@@ -1,6 +1,6 @@
 <div class="create" ng-controller="createController as create">
   <form name="setupForm" ng-submit="create.create(setupForm)" novalidate>
-    <div class="row">
+    <div class="row m20t">
       <div class="large-12 columns">
         <div class="box-notification" ng-show="create.error">
           <div class="box-icon error">
@@ -12,7 +12,6 @@
         </div>
 
 
-        <div class="panel">
           <label><span translate>Wallet name</span>
             <div class="input">
               <input type="text" placeholder="{{'Family vacation funds'|translate}}" class="form-control" name="walletName" ng-model="walletName" ng-required="true">
@@ -21,30 +20,20 @@
           <div class="row">
             <div class="large-6 medium-6 columns">
               <label><span translate>Select total number of copayers</span>
-                <select ng-model="totalCopayers" ng-options="totalCopayers as totalCopayers for totalCopayers in create.TCValues">
+                <select class="m10t" ng-model="totalCopayers" ng-options="totalCopayers as totalCopayers for totalCopayers in create.TCValues">
                 </select>
               </label>
             </div>
             <div class="large-6 medium-6 columns">
               <label><span translate>Select required signatures</span>
-                <select ng-model="requiredCopayers" ng-options="requiredCopayers as requiredCopayers for requiredCopayers in create.RCValues" ng-disabled="totalCopayers == 1">
+                <select class="m10t" ng-model="requiredCopayers" ng-options="requiredCopayers as requiredCopayers for requiredCopayers in create.RCValues" ng-disabled="totalCopayers == 1">
                 </select>
               </label>
             </div>
           </div>
-          <div class="box-setup-copayers">
-            <div class="box-setup-copayers p10 oh">
-              <div class="copay-box" ng-class="{'box-setup-copay-required': ($index+1) <= requiredCopayers}"
-                ng-repeat="i in create.getNumber(totalCopayers) track by $index">
-                <span ng-include="'views/includes/photo.html'"></span>
-              </div>
-            </div>
-          </div>
 
-          <div class="line-dashed-h m20b"></div>
-
-          <div class="m20b oh" ng-init="hideAdv=true">
-            <a class="button outline light-gray tiny" ng-click="hideAdv=!hideAdv">
+          <div class="m10t oh" ng-init="hideAdv=true">
+            <a class="button outline light-gray expand tiny" ng-click="hideAdv=!hideAdv">
               <i class="fi-widget m3r"></i>
               <span translate ng-hide="!hideAdv">Show</span> 
               <span translate ng-hide="hideAdv">Hide</span> 
@@ -55,25 +44,25 @@
           </div>
           <div ng-hide="hideAdv" class="row">
             <div class="large-12 columns">
-
-              <label for="network-name">
-                <input id="network-name" type="checkbox" name="networkName" ng-model="networkName" ng-true-value="'testnet'"
-                ng-false-value="'livenet'" class="form-control" ng-checked="create.networkName == 'testnet' ? true : false">
+              <label for="network-name" class="line-b oh">
                 <span translate>Use test network</span>
+                <switch id="network-name" name="networkName" ng-model="networkName" class="green right m5t m10b" ng-true-value="'testnet'"
+                ng-false-value="'livenet'" ng-checked="create.networkName == 'testnet' ? true : false"></switch>
               </label>
 
-              <label for="ext-master">
+
+              <label for="ext-master" class="m10t">
                 <span translate>Master extended private key</span>
                 <input id="ext-master" 
                 type="text" 
                 placeholder="{{'BIP32 master extended private key (hex)'|translate}}" 
                 name="privateKey" ng-model="privateKey">
-              </div>
             </div>
+          </div>
 
 
             <div class="text-right">
-              <button type="submit" class="button primary expand m0" ng-disabled="setupForm.$invalid">
+              <button type="submit" class="button black expand m0" ng-disabled="setupForm.$invalid">
                 <span translate>Create</span> 
                 {{requiredCopayers}}-<span translate>of</span>-{{totalCopayers}} <span translate>wallet</span>
               </button>
