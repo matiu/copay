@@ -18,7 +18,7 @@
           <div class="input">
             <input id="secret" type="text" placeholder="{{'Paste wallet secret here'|translate}}" name="secret" ng-model="secret" wallet-secret required>
             <div ng-hide="showScanner || disableScanner">
-              <a class="postfix button black" ng-click="openScanner()"><i class="fi-camera size-16">&nbsp;</i></a>
+              <a class="postfix" ng-click="openScanner()"><i class="fi-camera size-24">&nbsp;</i></a>
             </div>
             <div ng-show="showScanner">
               <a class="postfix button warning" ng-click="cancelScanner()"><i class="fi-x">&nbsp;</i></a>
