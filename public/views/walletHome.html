@@ -73,8 +73,8 @@
   </div>
 
 
-  <div class="row">
-    <div class="large-12 columns" ng-if="index.isShared">
+  <div class="row" ng-if="index.isShared && index.copayers.length > 1">
+    <div class="large-12 columns">
       <h4 translate>Copayers</h4>
       <div class="panel oh">
         <div ng-include="'views/includes/copayers.html'"></div>
