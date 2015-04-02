@@ -133,7 +133,7 @@ RateService.prototype.whenAvailable = function(callback) {
 
 RateService.prototype.toFiat = function(satoshis, code) {
   if (!this.isAvailable()) {
-    throw new Error(this.UNAVAILABLE_ERROR);
+    return null;
   }
 
   return satoshis * this.SAT_TO_BTC * this.getRate(code);
@@ -150,7 +150,7 @@ RateService.prototype.toFiatHistoric = function(satoshis, code, date, cb) {
 
 RateService.prototype.fromFiat = function(amount, code) {
   if (!this.isAvailable()) {
-    throw new Error(this.UNAVAILABLE_ERROR);
+    return null;
   }
   return amount / this.getRate(code) * this.BTC_TO_SAT;
 };
@@ -158,7 +158,7 @@ RateService.prototype.fromFiat = function(amount, code) {
 RateService.prototype.listAlternatives = function() {
   var self = this;
   if (!this.isAvailable()) {
-    throw new Error(this.UNAVAILABLE_ERROR);
+    return [];
   }
 
   return self.lodash.map(this.getAlternatives(), function(item) {
