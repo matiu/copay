@@ -46,8 +46,7 @@
             <div class="large-12 columns">
               <label for="network-name" class="line-b oh">
                 <span translate>Use test network</span>
-                <switch id="network-name" name="networkName" ng-model="networkName" class="green right m5t m10b" ng-true-value="'testnet'"
-                ng-false-value="'livenet'" ng-checked="create.networkName == 'testnet' ? true : false"></switch>
+                <switch id="network-name" name="isTestnet" ng-model="isTestnet" class="green right m5t m10b"></switch>
               </label>
 
 
@@ -67,9 +66,6 @@
                 {{requiredCopayers}}-<span translate>of</span>-{{totalCopayers}} <span translate>wallet</span>
               </button>
             </div>
-            <div ng-show="create.shouldShowNetwork()"><p class="size-12">
-              <span translate>Using network:</span> 
-              {{create.networkName}} <span translate>at</span> <a href="{{create.networkUrl}}" target="_blank">{{create.networkUrl}}</a></p></div>
           </div>
         </div>
       </div>

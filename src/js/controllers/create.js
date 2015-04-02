@@ -12,7 +12,6 @@ angular.module('copayApp.controllers').controller('createController',
     this.walletPassword = $rootScope.walletPassword;
     this.isMobile = isMobile.any();
     this.hideAdv = true;
-    this.networkName = 'livenet';
     $rootScope.title = 'Create new wallet';
     $rootScope.hideWalletNavigation = true;
     this.isWindowsPhoneApp = isMobile.Windows() && isCordova;
@@ -50,16 +49,7 @@ angular.module('copayApp.controllers').controller('createController',
     });
 
     this.TCValues = lodash.range(1, defaults.limits.totalCopayers + 1);
-
     $scope.totalCopayers = defaults.wallet.totalCopayers;
-    $scope.$watch('networkName', function(tc) {
-      self.networkUrl = defaults.insight[self.networkName].url;
-    });
-
-    this.shouldShowNetwork = function() {
-      return self.networkUrl != defaults.insight[self.networkName].url;
-    };
-
 
     this.create = function(form) {
       if (form && form.$invalid) {
@@ -72,7 +62,7 @@ angular.module('copayApp.controllers').controller('createController',
         n: $scope.totalCopayers,
         name: form.walletName.$modelValue,
         privateKeyHex: form.privateKey.$modelValue,
-        networkName: form.networkName.$modelValue,
+        networkName: form.isTestnet.$modelValue ? 'testnet' : 'livenet',
       };
       $rootScope.starting = true;
 
