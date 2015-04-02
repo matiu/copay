@@ -29,6 +29,8 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.walletName = fc.credentials.walletName;
       self.walletId = fc.credentials.walletId;
       self.isComplete = fc.isComplete;
+      self.txps = [];
+      self.copayers = [];
       $rootScope.$apply();
     });
   };
@@ -46,7 +48,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       else {
         $log.debug('Wallet Status:', walletStatus);
         self.setBalance(walletStatus.balance);
-        self.setPendingTxps(walletStatus.pendingTxps);
+        self.txps = self.setPendingTxps(walletStatus.pendingTxps);
 
         // Status Shortcuts
         self.walletName = walletStatus.wallet.name;
@@ -88,7 +90,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       }
       else {
         $log.debug('Wallet PendingTxps:', txps);
-        self.setPendingTxps(txps);
+        self.txps = self.setPendingTxps(txps);
       }
       self.updatingPendingTxps = false;
       $rootScope.$apply();
@@ -115,6 +117,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         self.pendingTxProposalsCountForUs = self.pendingTxProposalsCountForUs + 1;
       }
     });
+    return txps;
   };
 
   self.setBalance = function(balance) {
