@@ -1,121 +1,110 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('joinController',
-  function($scope, $rootScope, $timeout, go, isMobile, notification, profileService) {
+  function($scope, $rootScope, $timeout, go, isMobile, notification, profileService, isCordova, $modal) {
+
     var self = this;
 
-    self.isMobile = isMobile.any();
-    $rootScope.title = 'Join shared wallet';
+    var modalOpenScanner = function() {
+      var _scope = $scope;
+      var ModalInstanceCtrl = function($scope, $rootScope, $modalInstance) {
+        // QR code Scanner
+        var video;
+        var canvas;
+        var $video;
+        var context;
+        var localMediaStream;
 
-    // QR code Scanner
-    var cameraInput;
-    var video;
-    var canvas;
-    var $video;
-    var context;
-    var localMediaStream;
+        var _scan = function(evt) {
 
-    self.hideAdv = true;
+          if (localMediaStream) {
+            context.drawImage(video, 0, 0, 300, 225);
+            try {
+              qrcode.decode();
+            } catch (e) {
+              //qrcodeError(e);
+            }
+          }
+          $timeout(_scan, 500);
+        };
 
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        var _scanStop = function() {
+          if (localMediaStream && localMediaStream.stop) localMediaStream.stop();
+          localMediaStream = null;
+          video.src = '';
+        };
 
-    if (!window.cordova && !navigator.getUserMedia)
-      self.disableScanner = 1;
+        qrcode.callback = function(data) {
+          _scanStop();
+          $modalInstance.close(data);
+        };
 
-    var _scan = function(evt) {
-      if (localMediaStream) {
-        context.drawImage(video, 0, 0, 300, 225);
+        var _successCallback = function(stream) {
+          video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+          localMediaStream = stream;
+          video.play();
+          $timeout(_scan, 1000);
+        };
 
-        try {
-          qrcode.decode();
-        } catch (e) {
-          //qrcodeError(e);
-        }
-      }
+        var _videoError = function(err) {
+          $scope.cancel();
+        };
 
-      $timeout(_scan, 500);
-    };
+        var setScanner = function() {
 
-    var _successCallback = function(stream) {
-      video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
-      localMediaStream = stream;
-      video.play();
-      $timeout(_scan, 1000);
-    };
+          navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia;
+          window.URL = window.URL || window.webkitURL ||
+            window.mozURL || window.msURL;
+        };
 
-    var _scanStop = function() {
-      self.showScanner = false;
-      if (!self.isMobile) {
-        if (localMediaStream && localMediaStream.stop) localMediaStream.stop();
-        localMediaStream = null;
-        video.src = '';
-      }
-    };
+        $scope.init = function() {
+          setScanner();
+          $timeout(function() {
+            canvas = document.getElementById('qr-canvas');
+            context = canvas.getContext('2d');
 
-    var _videoError = function(err) {
-      _scanStop();
-    };
+            video = document.getElementById('qrcode-scanner-video');
+            $video = angular.element(video);
+            canvas.width = 300;
+            canvas.height = 225;
+            context.clearRect(0, 0, 300, 225);
 
-    qrcode.callback = function(data) {
-      _scanStop();
+            navigator.getUserMedia({
+              video: true
+            }, _successCallback, _videoError);
+          }, 500);
+        };
 
-      $scope.$apply(function() {
-        self.secret = data;
-        self.joinForm.secret.$setViewValue(data);
-        self.joinForm.secret.$render();
+        $scope.cancel = function() {
+          _scanStop();
+          $modalInstance.dismiss('cancel');
+        };
+      };
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/modals/scanner.html',
+        windowClass: 'full',
+        controller: ModalInstanceCtrl,
+        backdrop: 'static',
+        keyboard: false
       });
+      modalInstance.result.then(function(data) {
+        $scope.secret = data;
+        $scope.joinForm.secret.$setViewValue(data);
+        $scope.joinForm.secret.$render();
+      });
+
     };
 
-    self.cancelScanner = function() {
-      _scanStop();
+    this.openScanner = function() {
+      if (isCordova) {
+        cordovaOpenScanner();
+      } else {
+        modalOpenScanner();
+      }
     };
-
-    self.openScanner = function() {
-      if (window.cordova) return self.scannerIntent();
-
-      self.showScanner = true;
-
-      // Wait a moment until the canvas shows
-      $timeout(function() {
-        canvas = document.getElementById('qr-canvas');
-        context = canvas.getContext('2d');
-
-        if (self.isMobile) {
-          cameraInput = document.getElementById('qrcode-camera');
-          cameraInput.addEventListener('change', _scan, false);
-        } else {
-          video = document.getElementById('qrcode-scanner-video');
-          $video = angular.element(video);
-          canvas.width = 300;
-          canvas.height = 225;
-          context.clearRect(0, 0, 300, 225);
-
-          navigator.getUserMedia({
-            video: true
-          }, _successCallback, _videoError);
-        }
-      }, 500);
-    };
-
-    self.scannerIntent = function() {
-      window.ignoreMobilePause = true;
-      cordova.plugins.barcodeScanner.scan(
-        function onSuccess(result) {
-          $timeout(function() {
-            window.ignoreMobilePause = false;
-          }, 100);
-          if (result.cancelled) return;
-
-          self.secret = result.text;
-          $rootScope.$digest();
-        },
-        function onError(error) {
-          $timeout(function() {
-            window.ignoreMobilePause = false;
-          }, 100);
-          alert('Scanning error');
-        });
-    }
 
 
     self.join = function(form) {
