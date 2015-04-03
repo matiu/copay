@@ -41,8 +41,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       if (err) {
         $log.debug('Wallet Status ERROR:', err);
         $scope.$emit('Local/ClientError', err);
-      }
-      else {
+      } else {
         $log.debug('Wallet Status:', walletStatus);
         self.setBalance(walletStatus.balance);
         self.txps = self.setPendingTxps(walletStatus.pendingTxps);
@@ -66,8 +65,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       if (err) {
         $log.debug('Wallet Balance ERROR:', err);
         $scope.$emit('Local/ClientError', err);
-      }
-      else {
+      } else {
         $log.debug('Wallet Balance:', balance);
         self.setBalance(balance);
       }
@@ -84,8 +82,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       if (err) {
         $log.debug('Wallet PendingTxps ERROR:', err);
         $scope.$emit('Local/ClientError', err);
-      }
-      else {
+      } else {
         $log.debug('Wallet PendingTxps:', txps);
         self.txps = self.setPendingTxps(txps);
       }
@@ -102,8 +99,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         if (err) {
           $log.debug('Wallet Open ERROR:', err);
           $scope.$emit('Local/ClientError', err);
-        }
-        else {
+        } else {
           $log.debug('Wallet Opened');
           self.updateAll();
         }
@@ -119,7 +115,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     lodash.each(txps, function(tx) {
       var amount = tx.amount * self.satToUnit;
       tx.amountStr = profileService.formatAmount(tx.amount) + ' ' + config.unitName;
-      tx.alternativeAmount = rateService.toFiat(tx.amount, config.alternativeIsoCode).toFixed(2);
+      tx.alternativeAmount = rateService.toFiat(tx.amount, config.alternativeIsoCode) ? rateService.toFiat(tx.amount, config.alternativeIsoCode).toFixed(2) : 'N/A';
       tx.alternativeAmountStr = tx.alternativeAmount + " " + config.alternativeIsoCode;
       tx.alternativeIsoCode = config.alternativeIsoCode;
 
@@ -252,9 +248,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     $rootScope.$apply();
   });
 
-  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx', 
-              'NewIncomingTx', 'ScanFinished',
-              'Local/NewTxProposal', 'Local/TxProposalAction'], function(eventName) {
+  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx',
+    'NewIncomingTx', 'ScanFinished',
+    'Local/NewTxProposal', 'Local/TxProposalAction'
+  ], function(eventName) {
     $rootScope.$on(eventName, function() {
       self.updateAll();
     });
