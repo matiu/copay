@@ -127,25 +127,28 @@ angular.module('copayApp.controllers').controller('preferencesController',
         controller: ModalInstanceCtrl
       });
       modalInstance.result.then(function(ok) {
-        console.log('[preferences.js:82]', ok); //TODO
+        if (ok) {
+          _deleteWallet();
+        }
       });
     };
 
     var _deleteWallet = function() {
-      this.loading = true;
       $timeout(function() {
-        profileService.deleteWallet(w, function(err) {
-          this.loading = false;
+        var fc = profileService.focusedClient;
+        var walletName = fc.credentials.walletName;
+
+        profileService.deleteWallet({}, function(err) {
           if (err) {
             this.error = err.message || err;
-            copay.logger.warn(err);
+            console.log(err);
             $timeout(function() {
               $scope.$digest();
             });
           } else {
             go.walletHome();
             $timeout(function() {
-              notification.success('Success', 'The wallet "' + (w.name || w.id) + '" was deleted');
+              notification.success('Success', 'The wallet "' + walletName + '" was deleted');
             });
           }
         });

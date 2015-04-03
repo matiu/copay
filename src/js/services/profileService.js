@@ -38,8 +38,10 @@ angular.module('copayApp.services')
       if (!root.focusedClient)
         root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
 
-      if (!root.focusedClient)
-        throw new Error('Profile has not wallets!');
+      if (!root.focusedClient) {
+        $rootScope.$emit('Local/NoWallets');
+        return cb();
+      }
 
       // set if completed
       $rootScope.$emit('Local/NewFocusedWallet');
@@ -173,6 +175,24 @@ angular.module('copayApp.services')
           });
         });
       })
+    };
+
+    root.deleteWallet = function(opts, cb) {
+      var fc = root.focusedClient;
+      $log.debug('Deleting Wallet:', fc.credentials.walletName);
+
+      fc.removeAllListeners();
+      root.profile.credentials = lodash.reject(root.profile.credentials, {
+        walletId: fc.credentials.walletId
+      });
+      root._setWalletClients();
+
+      root.setAndStoreFocus(null, function() {
+        storageService.storeProfile(root.profile, function(err) {
+          $rootScope.$emit('updateWalletList');
+          return cb();
+        });
+      });
     };
 
     root.importWallet = function(str, opts, cb) {
