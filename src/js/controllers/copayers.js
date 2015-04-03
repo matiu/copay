@@ -8,8 +8,8 @@ angular.module('copayApp.controllers').controller('copayersController',
 
     self.init = function() {
 
-      console.log('[copayers.js.10]', fc.isComplete); //TODO
-      if (fc.isComplete) {
+      console.log('[copayers.js.10]', fc.isComplete()); //TODO
+      if (fc.isComplete()) {
         $log.debug('Wallet Complete...redirecting')
         go.walletHome();
         return;
@@ -32,7 +32,7 @@ angular.module('copayApp.controllers').controller('copayersController',
       var w = $rootScope.wallet;
 
       self.copayers = $rootScope.wallet.getRegisteredPeerIds();
-      if (fc.isComplete) {
+      if (fc.isComplete()) {
 
         w.removeListener('publicKeyRingUpdated', self.updateList);
         w.removeListener('ready', self.updateList);

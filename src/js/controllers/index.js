@@ -8,10 +8,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     return (parseFloat(number.toPrecision(12)));
   };
 
-
-
   self.setFocusedWallet = function() {
-
     var fc = profileService.focusedClient;
     if (!fc) return;
 
@@ -19,20 +16,20 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.hasProfile = true;
 
       // Credentials Shortcuts 
-      self.m = fc.m;
-      self.n = fc.n;
-      self.network = fc.network;
-      self.copayerId = fc.copayerId;
+      self.m = fc.credentials.m;
+      self.n = fc.credentials.n;
+      self.network = fc.credentials.network;
+      self.copayerId = fc.credentials.copayerId;
       self.copayerName = fc.credentials.copayerName;
-      self.requiresMultipleSignatures = fc.m > 1;
-      self.isShared = fc.n > 1;
+      self.requiresMultipleSignatures = fc.credentials.m > 1;
+      self.isShared = fc.credentials.n > 1;
       self.walletName = fc.credentials.walletName;
       self.walletId = fc.credentials.walletId;
-      self.isComplete = fc.isComplete;
+      self.isComplete = fc.isComplete();
       self.txps = [];
       self.copayers = [];
-      $rootScope.$apply();
     });
+    self.openWallet();
   };
 
   self.updateAll = function() {
@@ -94,6 +91,25 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       }
       self.updatingPendingTxps = false;
       $rootScope.$apply();
+    });
+  };
+
+  self.openWallet = function() {
+    var fc = profileService.focusedClient;
+    self.openingWallet = true;
+    $timeout(function() {
+      fc.openWallet(function(err) {
+        if (err) {
+          $log.debug('Wallet Open ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
+        }
+        else {
+          $log.debug('Wallet Opened');
+          self.updateAll();
+        }
+        self.openingWallet = false;
+        $rootScope.$apply();
+      });
     });
   };
 
@@ -253,23 +269,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   $rootScope.$on('Local/NewFocusedWallet', function() {
     self.setFocusedWallet();
-    self.updateAll();
   });
 
   lodash.each(['NewCopayer', 'CopayerUpdated'], function(eventName) {
     $rootScope.$on(eventName, function() {
       // Re try to open wallet (will triggers) 
-      var fc = profileService.focusedClient;
-      fc.openWallet(function(err) {
-        if (err) {
-          $log.debug('OpenWallet ERROR:', err);
-          $scope.$emit('Local/ClientError', err);
-        }
-        else {
-          self.setFocusedWallet();
-          self.updateAll();
-        }
-      });
+      self.setFocusedWallet();
     });
   });
 });

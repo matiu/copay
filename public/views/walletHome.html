@@ -3,14 +3,13 @@
         <div class="amount">
           <div class="size-36">
             <strong>
-              <span ng-show="!index.updatingStatus">{{index.totalBalanceStr || 0}} </span>
-              <span ng-show="index.updatingStatus">...</span>
+              <span ng-show="!index.updatingStatus && !index.openingWallet">{{index.totalBalanceStr || 0}} </span>
+              <span ng-show="index.updatingStatus || index.openingWallet">...</span>
             </strong>
           </div>
-          <div class="size-14" ng-show="!index.updatingStatus">
-            <span ng-if="!index.updatingStatus && index.alternativeBalanceAvailable">{{index.totalBalanceAlternative}} {{index.alternativeIsoCode}}</span>
-            <span ng-if="!index.updatingBalance && !index.alternativeBalanceAvailable">N/A</span>
-            <span ng-if="index.updatingBalance"><i class="fi-bitcoin-circle icon-rotate spinner"></i></span>
+          <div class="size-14" ng-show="!index.updatingStatus && !index.openingWallet">
+            <span ng-if="index.alternativeBalanceAvailable">{{index.totalBalanceAlternative}} {{index.alternativeIsoCode}}</span>
+            <span ng-if="!index.alternativeBalanceAvailable">N/A</span>
           </div>
         </div>
         <div class="pr columns line-b">
@@ -82,6 +81,8 @@
     </div>
   </div>
 
+  <div class="text-gray text-center m10t" ng-show="index.openingWallet" translate>Opening wallet...</div>
+  <div class="text-gray text-center m10t" ng-show="index.updatingStatus" translate>Updating balance and status...</div>
 
 </div>
 <div class="extra-margin-bottom"></div>

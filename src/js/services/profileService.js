@@ -13,21 +13,6 @@ angular.module('copayApp.services')
       return bwcService.getUtils();
     };
 
-
-    // Add some convenience shortcuts
-    root.setupFocusedClient = function() {
-      var fc = root.focusedClient;
-      fc.networkName = fc.credentials.network;
-      fc.m = fc.credentials.m;
-      fc.n = fc.credentials.n;
-      fc.network = fc.credentials.network;
-      fc.copayerId = fc.credentials.copayerId;
-      fc.walletId = fc.credentials.walletId;
-      fc.isComplete = fc.credentials.isComplete();
-      $log.debug('Focused Client:', fc); //TODO
-    };
-
-
     root.formatAmount = function(amount) {
       var config = configService.getSync().wallet.settings;
       if (config.unitCode == 'sat') return amount;
@@ -56,11 +41,9 @@ angular.module('copayApp.services')
       if (!root.focusedClient)
         throw new Error('Profile has not wallets!');
 
-      root.setupFocusedClient();
-      root.focusedClient.openWallet(function() {
-        $rootScope.$emit('Local/NewFocusedWallet');
-        return cb();
-      });
+      // set if completed
+      $rootScope.$emit('Local/NewFocusedWallet');
+      return cb();
     };
 
     root.setAndStoreFocus = function(walletId, cb) {
@@ -96,7 +79,6 @@ angular.module('copayApp.services')
 
         client.on('walletCompleted', function() {
           $log.debug('Wallet completed');
-          client.isComplete = true;
 
           var newCredentials = lodash.reject(root.profile.credentials, {
             walletId: client.credentials.walletId

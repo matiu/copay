@@ -14,7 +14,7 @@
   </section>
 
   <section class="middle tab-bar-section" ng-show="!goBackToState">
-    <h1 class="title ellipsis" ng-class="{'animated infinite flash':index.updatingStatus}">
+    <h1 class="title ellipsis" ng-class="{'animated infinite flash':index.updatingStatus || index.openingWallet}">
       {{index.walletName}}
     </h1>
   </section>
