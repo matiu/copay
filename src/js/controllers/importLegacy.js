@@ -30,9 +30,8 @@ angular.module('copayApp.controllers').controller('importLegacyController',
       $log.debug('Scaning: ' + ids)
       var i = 0;
       lodash.each(ids, function(id) {
-        console.log('[importLegacy.js.20:id:]', id); //TODO
         $rootScope.$emit('Local/ImportStatusUpdate',
-          'Scanning funds for wallet ' + id + ' ...  TODO...');
+          'Scanning funds for wallet ' + id + ' ... ');
 
         profileService.scan(id, true, function(err) {
           if (!err) {
