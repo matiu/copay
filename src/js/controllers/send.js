@@ -203,13 +203,13 @@ angular.module('copayApp.controllers').controller('sendController',
                       $scope.$digest();
                     } else {
                       txStatus.notify(btx);
-                      $scope.$emit('Local/NewTxProposal');
+                      $scope.$emit('Local/TxProposalAction');
                       self.resetForm(form);
                     }
                   });
                 } else {
                   txStatus.notify(signedTx);
-                  $scope.$emit('Local/NewTxProposal');
+                  $scope.$emit('Local/TxProposalAction');
                   self.resetForm(form);
                 }
               }

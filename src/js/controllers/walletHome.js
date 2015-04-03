@@ -5,7 +5,6 @@
 angular.module('copayApp.controllers').controller('walletHomeController', function($scope, $rootScope, $timeout, $filter, $modal, notification, txStatus, isCordova, profileService, lodash) {
 
   $scope.openTxModal = function(tx, copayers) {
-    console.log('[walletHome.js:7]', tx); //TODO
     var fc = profileService.focusedClient;
     var ModalInstanceCtrl = function($scope, $modalInstance) {
       $scope.error = null;
@@ -76,7 +75,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
               //if txp has required signatures then broadcast it
               var txpHasRequiredSignatures = txp.status == 'accepted';
               if (txpHasRequiredSignatures) {
-                fc.broadcastTxProposal(txp, function(err) {
+                fc.broadcastTxProposal(txp, function(err, txp) {
                   if (err) {
                     $scope.error = 'Transaction not broadcasted. Please try again.';
                     $scope.$digest();
