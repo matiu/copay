@@ -15,8 +15,19 @@ angular.module('copayApp.services')
       return 'wallet::' + id;
     };
 
+    root._importOne = function(user, pass, walletId, get, cb) {
+      get(root.getKeyForWallet(walletId), function(err, blob) {
+        if (err) {
+          $log.warn('Could not fetch wallet: ' + walletId + ":" + err);
+          return cb('Could not fetch ' + walletId);
+        }
+        profileService.importLegacyWallet(user, pass, blob, cb);
+      });
+    };
+
 
     root._doImport = function(user, pass, get, cb) {
+      var self = this;
       get(root.getKeyForEmail(user), function(err, p) {
         if (err || !p)
           return cb(err || ('Could not find profile for ' + user));
@@ -34,33 +45,23 @@ angular.module('copayApp.services')
         var i = 0;
         var okIds = [];
         lodash.each(ids, function(walletId) {
-
           $timeout(function() {
             $rootScope.$emit('Local/ImportStatusUpdate',
               'Importing wallet ' + walletId + ' ... ');
 
-            get(root.getKeyForWallet(walletId), function(err, blob) {
+            self._importOne(user, pass, walletId, get, function(err) {
               if (err) {
-                $log.warn('Could not fetch wallet: ' + walletId);
-                if (++i == ids.length) {
-                  return cb(null, okIds);
-                }
-                return;
+                $rootScope.$emit('Local/ImportStatusUpdate',
+                  'Failed to import wallet ' + (name || walletId));
+              } else {
+                okIds.push(walletId);
+                $rootScope.$emit('Local/ImportStatusUpdate',
+                  'Wallet ' + name + ' imported successfully');
               }
 
-              profileService.importLegacyWallet(user, pass, blob, function(err, name) {
-                if (err) {
-                  $rootScope.$emit('Local/ImportStatusUpdate',
-                    'Failed to import wallet ' + (name || walletId));
-                } else {
-                  okIds.push(walletId);
-                  $rootScope.$emit('Local/ImportStatusUpdate',
-                    'Wallet ' + name + ' imported successfully');
-                  if (++i == ids.length) {
-                    return cb(null, okIds);
-                  }
-                }
-              })
+              if (++i == ids.length) {
+                return cb(null, okIds);
+              }
             });
           }, 100);
         });
@@ -88,12 +89,12 @@ angular.module('copayApp.services')
         var salt = 'jBbYTj8zTrOt6V';
         var iter = 1000;
         var SEPARATOR = '|';
-        
+
         var kdfb = kdfbinary(pass + SEPARATOR + user, salt, iter);
         var kdfb64 = sjcl.codec.base64.fromBits(kdfb);
 
 
-        var keyBuf  = new bitcore.deps.Buffer(kdfb64);
+        var keyBuf = new bitcore.deps.Buffer(kdfb64);
         var passphrase = bitcore.crypto.Hash.sha256sha256(keyBuf).toString('base64');
         var authHeader = new bitcore.deps.Buffer(user + ':' + passphrase).toString('base64');
         var retrieveUrl = serverURL + '/retrieve';
