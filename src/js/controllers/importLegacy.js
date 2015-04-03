@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('importLegacyController',
-  function($rootScope, $scope, $log, $timeout, notification, legacyImportService, profileService, go, lodash) {
+  function($rootScope, $scope, $log, $timeout, notification, legacyImportService, profileService, go, lodash, bitcore) {
 
     var self = this;
     self.messages = [];
@@ -34,17 +34,24 @@ angular.module('copayApp.controllers').controller('importLegacyController',
         $rootScope.$emit('Local/ImportStatusUpdate',
           'Scanning funds for wallet ' + id + ' ...  TODO...');
 
-        profileService.scan(id, function(err) {
-          $rootScope.$emit('Local/ImportStatusUpdate',
-            '... scan for wallet ' + id + ' finished.');
+        profileService.scan(id, true, function(err) {
+          if (!err) {
+            $rootScope.$emit('Local/ImportStatusUpdate',
+              '... scan for wallet ' + id + ' FAILED');
+          } else {
+            $rootScope.$emit('Local/ImportStatusUpdate',
+              '... scan for wallet ' + id + ' started ...');
+          }
 
           i++;
           if (i == ids.length) {
+            notification.success( i + ' wallets were imported. Funds scanning is still in progress so hold on to see the updated wallet balance.');
             go.walletHome();
           };
         });
       });
     };
+
 
     self.import = function(form) {
       var username = form.username.$modelValue;
@@ -56,10 +63,9 @@ angular.module('copayApp.controllers').controller('importLegacyController',
       self.importing = true;
       $timeout(function() {
         legacyImportService.import(username, password, serverURL, fromCloud, function(err, ids) {
-          if (err || ! ids || !ids.length) {
+          if (err || !ids || !ids.length) {
             self.importing = false;
             self.error = err || 'Failed to import wallets';
-            $rootScope.$apply();
             return;
           }
           self.scan(ids);

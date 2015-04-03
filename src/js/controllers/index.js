@@ -235,7 +235,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     $rootScope.$apply();
   });
 
-  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx', 'NewIncomingTx', 'Local/NewTxProposal', 'Local/TxProposalAction'], function(eventName) {
+  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx', 
+              'NewIncomingTx', 'ScanFinished',
+              'Local/NewTxProposal', 'Local/TxProposalAction'], function(eventName) {
     $rootScope.$on(eventName, function() {
       self.updateAll();
     });

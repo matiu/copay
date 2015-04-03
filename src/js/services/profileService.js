@@ -37,12 +37,11 @@ angular.module('copayApp.services')
     };
 
 
-    root.scan = function(walletId, cb) {
-      // TODO
-      $log.warn('Wallet scanning not YET implemented...');
-      $timeout(cb, 500 * lodash.random(1, 20));
-
-      //      root.walletClients[walletId].scan(cb);
+    root.scan = function(walletId, includeCopayerBranches, cb) {
+      var fc = root.focusedClient;
+      fc.startScan({
+        includeCopayerBranches: includeCopayerBranches 
+      }, cb);
     };
 
     root._setFocus = function(walletId, cb) {
