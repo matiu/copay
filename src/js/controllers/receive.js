@@ -26,6 +26,7 @@ angular.module('copayApp.controllers').controller('receiveController',
           storageService.storeLastAddress(fc.walletId, addr.address, function() {});
         }
         self.generatingAddress = false;
+        $scope.$digest();
       });
     };
 
