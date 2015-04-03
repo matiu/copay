@@ -119,11 +119,23 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       tx.alternativeAmountStr = tx.alternativeAmount + " " + config.alternativeIsoCode;
       tx.alternativeIsoCode = config.alternativeIsoCode;
 
+
+
       var action = lodash.find(tx.actions, {
         copayerId: self.copayerId
       });
-      if (!action && tx.status == 'pending')
+
+      if (!action && tx.status == 'pending') {
         tx.pendingForUs = true;
+      }
+
+      if (action && action.type == 'accept') {
+        tx.statusForUs = 'accepted';
+      } else if (action && action.type == 'reject') {
+        tx.statusForUs = 'rejected';
+      } else {
+        tx.statusForUs = 'pending';
+      }
 
       if (tx.creatorId != self.copayerId) {
         self.pendingTxProposalsCountForUs = self.pendingTxProposalsCountForUs + 1;

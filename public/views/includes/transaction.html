@@ -14,7 +14,7 @@
         <time>{{ (tx.ts || tx.createdTs ) | amTimeAgo}}</time>
       </div>
     </div>
-
+{{tx.statusForUs}}
     <div class="small-4 columns text-right">
       <div class="size-16 text-bold">
           <span ng-if="!$root.updatingBalance">
