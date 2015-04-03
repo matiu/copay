@@ -9,18 +9,23 @@ angular.module('copayApp.controllers').controller('receiveController',
     this.isCordova = isCordova;
     self.addresses = [];
 
+    var newAddrListener = $rootScope.$on('Local/NeedNewAddress', function() {
+      self.getAddress();
+    });
+    $scope.$on('$destroy', newAddrListener);
+
     this.newAddress = function() {
       self.generatingAddress = true;
       fc.createAddress(function(err, addr) {
         if (err) {
           $log.debug('Creating address ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
         }
         else {
           self.addr = addr.address;
           storageService.storeLastAddress(fc.walletId, addr.address, function() {});
         }
         self.generatingAddress = false;
-        $scope.$emit('Local/ClientError', err);
       });
     };
 

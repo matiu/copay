@@ -185,7 +185,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
 
     // Check address
-    self.checkLastAddress(self.walletId, balance.byAddress);
+    self.checkLastAddress(balance.byAddress);
   };
 
   self.checkLastAddress = function(byAddress, cb) {
@@ -195,6 +195,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       });
       if (used) {
         $log.debug('Address ' + addr + ' was used. Cleaning Cache.')
+        $rootScope.$emit('Local/NeedNewAddress', err);
         storageService.clearLastAddress(self.walletId, function(err, addr) {
           if (cb) return cb();
         });
