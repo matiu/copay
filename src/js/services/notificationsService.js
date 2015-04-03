@@ -66,6 +66,7 @@ angular.module('copayApp.services')
         case 'TxProposalFinallyRejected':
           notification.success('[' + walletName + '] Transaction Rejected',
             $filter('translate')('A transaction was finally rejected'));
+          break;
         case 'NewOutgoingTx':
           notification.success('[' + walletName + '] Transaction Sent',
             $filter('translate')('A transaction was broadcasted by') + ' ' + notificationData.creatorId);
