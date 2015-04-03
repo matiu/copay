@@ -25,23 +25,19 @@ angular.module('copayApp.services')
     root.shouldSkip = function(notificationData, last) {
       if (!last) return false;
 
-console.log('[notificationsService.js.24:notificationData:]',notificationData); //TODO
-console.log('[notificationsService.js.24:last:]',last); //TODO
       // rules...
       if (last.type === 'NewTxProposal' && notificationData.type === 'TxProposalAcceptedBy')
         return true;
 
-      if (last.type === 'TxProposalAcceptedBy' && notificationData.type === 'NewOutgoingTx')
+      if (last.type === 'TxProposalFinallyAccepted' && notificationData.type === 'NewOutgoingTx')
         return true;
-      
+
       return false;
     };
 
 
     root.newBWCNotification = function(notificationData, walletId, walletName) {
-
       var last = root.getLast(walletId);
-console.log('[notificationsService.js.35:last:]',last); //TODO
       root.storeLast(notificationData, walletId);
 
       if (root.shouldSkip(notificationData, last))
