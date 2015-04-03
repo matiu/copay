@@ -1003,10 +1003,11 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   height: 250px;
 }
 
-.panel .secret {
+.secret {
   overflow-wrap: break-word;
   word-wrap: break-word;
   text-align: center;
+  font-size: 14px;
 }
 
 .copayer-list-small-height {
