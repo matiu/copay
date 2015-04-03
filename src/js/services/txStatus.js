@@ -14,7 +14,7 @@ angular.module('copayApp.services').factory('txStatus', function($modal, lodash,
     }
     else {
       var action = lodash.find(txp.actions, {
-        copayerId: fc.copayerId
+        copayerId: fc.credentials.copayerId
       });
       if (!action) {
         msg = 'Transaction proposal created';
