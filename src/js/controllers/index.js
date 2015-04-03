@@ -276,6 +276,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   });
 
+  $rootScope.$on('Local/NoWallets', function() {
+    go.addWallet();
+  });
+
   $rootScope.$on('Local/NewFocusedWallet', function() {
     self.setFocusedWallet();
   });

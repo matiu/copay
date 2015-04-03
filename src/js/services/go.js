@@ -62,6 +62,9 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
       root.path('signin');
   };
 
+  root.addWallet = function() {
+    $state.go('add');
+  };
 
   root.send = function() {
     $state.go('send');

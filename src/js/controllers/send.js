@@ -187,36 +187,37 @@ angular.module('copayApp.controllers').controller('sendController',
           }
           self.loading = false;
 
-          if (err) {
-            self.setError(err);
-          } else {
-            fc.signTxProposal(txp, function(err, signedTx) {
-              if (err) {
-                self.setError(err);
-              } else {
-                //if txp has required signatures then broadcast it
-                var txpHasRequiredSignatures = signedTx.status == 'accepted';
-                if (txpHasRequiredSignatures) {
-                  fc.broadcastTxProposal(signedTx, function(err, btx) {
-                    if (err) {
-                      $scope.error = 'Transaction not broadcasted. Please try again.';
-                      $scope.$digest();
-                    } else {
-                      txStatus.notify(btx);
-                      $scope.$emit('Local/TxProposalAction');
-                      self.resetForm(form);
-                    }
-                  });
-                } else {
-                  txStatus.notify(signedTx);
-                  $scope.$emit('Local/TxProposalAction');
-                  self.resetForm(form);
-                }
-              }
-            });
-          }
+          if (err) return self.setError(err);
+
+          self.signAndBroadcast(txp, function(err) {
+            if (err) return self.setError(err);
+            self.resetForm(form);
+          });
         });
       }, 100);
+    };
+
+    this.signAndBroadcast = function(txp, cb) {
+      fc.signTxProposal(txp, function(err, signedTx) {
+        if (err) return cb(err);
+
+        if (signedTx.status == 'accepted') {
+          fc.broadcastTxProposal(signedTx, function(err, btx) {
+            if (err) {
+              $scope.error = 'Transaction not broadcasted. Please try again.';
+              $scope.$digest();
+            } else {
+              txStatus.notify(btx);
+              $scope.$emit('Local/TxProposalAction');
+            }
+            return cb();
+          });
+        } else {
+          txStatus.notify(signedTx);
+          $scope.$emit('Local/TxProposalAction');
+          return cb();
+        }
+      });
     };
 
     this.setTopAmount = function() {
