@@ -18,6 +18,15 @@ angular
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
+      .state('splash', {
+        url: '/splash',
+        needProfile: false,
+        views: {
+          'main': {
+            templateUrl: 'views/splash.html'
+          },
+        }
+      })
       .state('walletHome', {
         url: '/',
         walletShouldBeComplete: true,
@@ -247,6 +256,7 @@ angular
         templateUrl: 'views/warning.html',
         needProfile: false
       })
+
       .state('add', {
         url: '/add',
         needProfile: true,
