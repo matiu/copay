@@ -256,10 +256,6 @@ ul.tx-copayers {
   cursor:pointer;
 }
 
-.last-transactions-content.active {
-  background-color: #F5F7F8;
-}
-
 .sign-action {
   background: #E4E8EC;
   width: 100%;
@@ -557,7 +553,6 @@ input[type=number]::-webkit-outer-spin-button {
   text-overflow: ellipsis;
   white-space: nowrap;
   padding-top: 3px;
-  line-height: 120%;
 }
 
 ul.pagination li.current a {

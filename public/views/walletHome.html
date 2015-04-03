@@ -22,7 +22,7 @@
               <span class="show-for-medium-up" translate>Preferences</span>
             </a>
           </div>
-          <div class="wallet-info m20b">
+          <div class="wallet-info">
               <p class="m0">
               {{index.m}} <span translate>of</span>  {{index.n}}  
               </p>
@@ -36,27 +36,21 @@
   </div>
 
   <div ng-show="index.requiresMultipleSignatures  && index.txps[0]">
-    <div class="row">
-      <div class="large-12 columns">
-        <div class="panel oh">
-          <h2 class="line-b" translate>Spend proposals</h2>
-          <div class="last-transactions pr" ng-repeat="tx in index.txps  | orderBy:'-createdTs'" 
-            ng-include="'views/includes/transaction.html'">
-          </div>
+    <h4 class="title m0" translate>Spend proposals</h2>
+    <div class="last-transactions pr" ng-repeat="tx in index.txps  | orderBy:'-createdTs'" 
+      ng-include="'views/includes/transaction.html'">
+    </div>
 
-          <div class="text-right size-12 line-t p10t" 
-            ng-show="index.lockedBalance && !index.updatingStatus">
-            <span translate>Total Locked Balance</span>:
-            <b>{{index.lockedBalance}} {{index.unitName}} </b> 
-            <span class="text-gray"> {{index.lockedBalanceAlternative}} 
-              {{index.alternativeIsoCode}} </span>
-          </div>
+    <div class="text-gray text-center size-12 p10t" 
+      ng-show="index.lockedBalance && !index.updatingStatus">
+      <span translate>Total Locked Balance</span>:
+      <b>{{index.lockedBalance}} {{index.unitName}} </b> 
+      <span> {{index.lockedBalanceAlternative}} 
+        {{index.alternativeIsoCode}} </span>
+    </div>
 
-          <div class="pr" ng-if="!index.txps[0]">
-            <p translate>No pending spend proposals at the moment.</p>
-          </div>
-        </div>
-      </div>
+    <div class="pr" ng-if="!index.txps[0]">
+      <p translate>No pending spend proposals at the moment.</p>
     </div>
   </div>
 

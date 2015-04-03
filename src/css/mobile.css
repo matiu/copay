@@ -158,6 +158,7 @@ _:-ms-fullscreen, :root .main {
   margin-left: 100px;
   line-height: 110%;
   float: left;
+  margin-bottom: 25px;
 }
 
 .copayers {
