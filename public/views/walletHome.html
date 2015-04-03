@@ -3,12 +3,14 @@
         <div class="amount">
           <div class="size-36">
             <strong>
-              <span ng-show="!index.updatingStatus && !index.openingWallet" ng-class="{'animated pulse':!index.updatingStatus}" >{{index.totalBalanceStr || 0}} </span>
+              <span ng-show="!index.updatingStatus && !index.openingWallet">
+                <span ng-class="{'animated pulse':!index.updatingStatus}">{{index.totalBalanceStr || 0}}</span>
+              </span>
               <span ng-show="index.updatingStatus || index.openingWallet">...</span>
             </strong>
           </div>
           <div class="size-14" ng-show="!index.updatingStatus && !index.openingWallet">
-            <span ng-if="index.alternativeBalanceAvailable"   ng-class="{'animated fadeIn':!index.updatingStatus}">{{index.totalBalanceAlternative}} {{index.alternativeIsoCode}}</span>
+            <span ng-if="index.alternativeBalanceAvailable" ng-class="{'animated fadeIn':!index.updatingStatus}">{{index.totalBalanceAlternative}} {{index.alternativeIsoCode}}</span>
             <span ng-if="!index.alternativeBalanceAvailable">N/A</span>
           </div>
         </div>

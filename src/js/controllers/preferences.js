@@ -200,7 +200,7 @@ angular.module('copayApp.controllers').controller('preferencesController',
         window.ignoreMobilePause = true;
       }
       window.plugins.toast.showShortCenter('Preparing backup...');
-      var name = (fc.walletName || fc.walletId);
+      var name = (fc.credentials.walletName || fc.credentials.walletId);
       var ew = backupService.walletExport();
       var properties = {
         subject: 'Copay Wallet Backup: ' + name,

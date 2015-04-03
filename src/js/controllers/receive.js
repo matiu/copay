@@ -23,7 +23,7 @@ angular.module('copayApp.controllers').controller('receiveController',
         }
         else {
           self.addr = addr.address;
-          storageService.storeLastAddress(fc.walletId, addr.address, function() {});
+          storageService.storeLastAddress(fc.credentials.walletId, addr.address, function() {});
         }
         self.generatingAddress = false;
         $scope.$digest();
@@ -32,7 +32,7 @@ angular.module('copayApp.controllers').controller('receiveController',
 
     this.getAddress = function() {
       $timeout(function() {
-        storageService.getLastAddress(fc.walletId, function(err, addr) {
+        storageService.getLastAddress(fc.credentials.walletId, function(err, addr) {
           if (addr) {
             self.addr = addr;
           } else {

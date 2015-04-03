@@ -40,8 +40,6 @@ angular.module('copayApp.controllers').controller('importController',
     };
 
     this.import = function(form) {
-      var fc = profileService.focusedClient;
-
       if (form.$invalid) {
         this.error = 'There is an error in the form';
         return;

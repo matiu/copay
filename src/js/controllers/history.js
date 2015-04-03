@@ -15,7 +15,6 @@ angular.module('copayApp.controllers').controller('historyController',
     this.unitName = config.unitName;
     this.alternativeIsoCode = config.alternativeIsoCode;
 
-    this.isShared = fc.n > 1;
     this.skip = 0;
     this.limit = 10;
 
@@ -86,7 +85,7 @@ angular.module('copayApp.controllers').controller('historyController',
         };
 
         $scope.getShortNetworkName = function() {
-          var n = fc.network;
+          var n = fc.credentials.network;
           return n.substring(0, 4);
         };
 
