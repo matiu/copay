@@ -3,10 +3,12 @@ angular.module('copayApp.services')
   .factory('applicationService', function($rootScope, $timeout, isCordova) {
     var root = {};
 
-    root.restart = function() {
+    root.restart = function(hard) {
       if (isCordova) {
         $rootScope.iden = $rootScope.wallet = undefined;
-        // TODO        go.path('/');
+        if (hard) {
+          location.reload();
+        }
         $timeout(function() {
           $rootScope.$digest();
         }, 1);

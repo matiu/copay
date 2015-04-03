@@ -95,7 +95,8 @@ angular.module('copayApp.controllers').controller('preferencesController',
 
       configService.set(opts, function(err) {
         if (err) console.log(err);
-        applicationService.restart();
+        var hardRestart = !$scope.settingsForm.bwsurl.$pristine;
+        applicationService.restart(hardRestart);
         go.walletHome();
         $scope.$emit('Local/ConfigurationUpdated');
         notification.success('Success', $filter('translate')('settings successfully updated'));
