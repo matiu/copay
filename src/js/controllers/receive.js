@@ -5,7 +5,7 @@ angular.module('copayApp.controllers').controller('receiveController',
     var self = this;
     var fc = profileService.focusedClient;
 
-    this.showAll = false;
+
     this.isCordova = isCordova;
     self.addresses = [];
 
@@ -20,8 +20,7 @@ angular.module('copayApp.controllers').controller('receiveController',
         if (err) {
           $log.debug('Creating address ERROR:', err);
           $scope.$emit('Local/ClientError', err);
-        }
-        else {
+        } else {
           self.addr = addr.address;
           storageService.storeLastAddress(fc.credentials.walletId, addr.address, function() {});
         }
@@ -82,34 +81,6 @@ angular.module('copayApp.controllers').controller('receiveController',
           }
         }
       });
-    };
-
-    this.toggleShowAll = function() {
-      this.setAddressList();
-    };
-
-    this.setAddressList = function() {
-      var self = this;
-      self.loadingAddresses = true;
-      $timeout(function() {
-        if (!self.addresses[0]) {
-          fc.getMainAddresses({
-            doNotVerify: true
-          }, function(err, addrs) {
-            if (err) {
-              $log.debug('Getting addresses ERROR:', err);
-            }
-            else {
-              self.addresses = addrs;
-            }
-            self.loadingAddresses = false;
-            $scope.$emit('Local/ClientError', err);
-          });
-        } else {
-          self.loadingAddresses = false;
-          self.addresses = [];
-        }
-      }, 10);
     };
 
   }
