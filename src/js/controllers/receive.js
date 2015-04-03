@@ -93,7 +93,9 @@ angular.module('copayApp.controllers').controller('receiveController',
       self.loadingAddresses = true;
       $timeout(function() {
         if (!self.addresses[0]) {
-          fc.getMainAddresses({}, function(err, addrs) {
+          fc.getMainAddresses({
+            doNotVerify: true
+          }, function(err, addrs) {
             if (err) {
               $log.debug('Getting addresses ERROR:', err);
             }

@@ -327,7 +327,7 @@ angular
         });
       }
 
-      if (profileService.focusedClient && !profileService.focusedClient.isComplete && toState.walletShouldBeComplete) {
+      if (profileService.focusedClient && !profileService.focusedClient.isComplete() && toState.walletShouldBeComplete) {
         $state.transitionTo('copayers');
         event.preventDefault();
       }
