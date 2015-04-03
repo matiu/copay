@@ -5,6 +5,31 @@ angular.module('copayApp.controllers').controller('joinController',
 
     var self = this;
 
+    //TODO : make one function - this was copied from topbar.js
+    var cordovaOpenScanner = function() {
+      window.ignoreMobilePause = true;
+      cordova.plugins.barcodeScanner.scan(
+        function onSuccess(result) {
+          $timeout(function() {
+            window.ignoreMobilePause = false;
+          }, 100);
+          if (result.cancelled) return;
+
+          $timeout(function() {
+            var data = result.text;
+            $scope.secret = data;
+            $scope.joinForm.secret.$setViewValue(data);
+            $scope.joinForm.secret.$render();
+          }, 1000);
+        },
+        function onError(error) {
+          $timeout(function() {
+            window.ignoreMobilePause = false;
+          }, 100);
+          alert('Scanning error');
+        });
+    };
+
     var modalOpenScanner = function() {
       var _scope = $scope;
       var ModalInstanceCtrl = function($scope, $rootScope, $modalInstance) {
