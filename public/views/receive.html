@@ -29,42 +29,12 @@
           </div>
       </div>
     </div>
-    <div class="row" ng-show="receive.addr && !index.isOffLine && !index.clientError">
-      <div class="large-12 columns" ng-if="receive.addresses[0]">
-        <div ng-repeat="addr in receive.addresses" ng-click="receive.openAddressModal(addr)" class="pointer">
-          <div class="panel">
-            <div class="row">
-              <div class="large-3 medium-4 small-5 columns">
-                <div class="size-12 ellipsis">{{::addr.address}}</div>
-              </div>
-              <div class="large-1 medium-1 small-2 columns">
-                <span translate class="text-secondary size-10" ng-show="::addr.isChange">change</span>
-              </div>
-              <div class="large-8 medium-7 small-5 columns text-right">
-                <span class="size-12" ng-show="!$root.updatingBalance">
-                  <b>{{addr.balance || '0'}} {{index.unitName}}</b>
-                </span>
-              </div>
-            </div>
-            <!-- end of panel mobile -->
-          </div>
-        </div>
-      </div>
-      <div class="large-12 columns">
-        <div class="row">
-          <div class="large-6 medium-6 small-6 columns text-left">
-            <button class="button secondary tiny" ng-click="receive.toggleShowAll()" ng-disabled="receive.loadingAddresses">
-              <span ng-show="!receive.addresses[0]" translate>Show all my addresses</span>
-              <span ng-show="receive.addresses[0]" translate>Hide them</span>
-            </button>
-          </div>
-          <div class="large-6 medium-6 small-6 columns text-right">
-            <a class="button secondary tiny" ng-click="receive.newAddress()" translate>
+    <div class="row m20t" ng-show="receive.addr && !index.isOffLine && !index.clientError">
+          <div class="large-12 columns">
+            <a class="button primary expand" ng-click="receive.newAddress()" translate>
               Generate new address
             </a>
           </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
