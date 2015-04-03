@@ -44,7 +44,6 @@ angular.module('copayApp.controllers').controller('importLegacyController',
 
           i++;
           if (i == ids.length) {
-            notification.success( i + ' wallets were imported. Funds scanning is still in progress so hold on to see the updated wallet balance.');
             go.walletHome();
           };
         });
@@ -61,13 +60,15 @@ angular.module('copayApp.controllers').controller('importLegacyController',
       self.error = null;
       self.importing = true;
       $timeout(function() {
-        legacyImportService.import(username, password, serverURL, fromCloud, function(err, ids) {
+        legacyImportService.import(username, password, serverURL, fromCloud, function(err, ids, toScanIds) {
           if (err || !ids || !ids.length) {
             self.importing = false;
             self.error = err || 'Failed to import wallets';
             return;
           }
-          self.scan(ids);
+
+          notification.success( ids.length + ' wallets imported. Funds scanning in progress. Hold on to see updated balance.');
+          self.scan(toScanIds);
         });
       }, 100);
     };

@@ -44,23 +44,29 @@ angular.module('copayApp.services')
 
         var i = 0;
         var okIds = [];
+        var toScanIds = [];
         lodash.each(ids, function(walletId) {
           $timeout(function() {
             $rootScope.$emit('Local/ImportStatusUpdate',
               'Importing wallet ' + walletId + ' ... ');
 
-            self._importOne(user, pass, walletId, get, function(err) {
+            self._importOne(user, pass, walletId, get, function(err, id, name, existed) {
               if (err) {
                 $rootScope.$emit('Local/ImportStatusUpdate',
                   'Failed to import wallet ' + (name || walletId));
               } else {
                 okIds.push(walletId);
                 $rootScope.$emit('Local/ImportStatusUpdate',
-                  'Wallet ' + name + ' imported successfully');
+                  'Wallet ' + id + '[' + name + '] imported successfully');
+
+                if (!existed) {
+                  $log.info('Wallet ' + walletId + ' was created. need to be scanned');
+                  toScanIds.push(id);
+                }
               }
 
               if (++i == ids.length) {
-                return cb(null, okIds);
+                return cb(null, okIds, toScanIds);
               }
             });
           }, 100);
@@ -110,7 +116,7 @@ angular.module('copayApp.services')
         $http(getParams)
           .success(function(data) {
             data = JSON.stringify(data);
-            $log.info('Fetch from insight OK:', data);
+            $log.info('Fetch from insight OK:' + getParams.url);
             return cb(null, data);
           })
           .error(function() {

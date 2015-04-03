@@ -55,16 +55,21 @@ angular.module('copayApp.services')
     };
 
     root._setWalletClients = function() {
-      root.walletClients = {};
       lodash.each(root.profile.credentials, function(credentials) {
+
+        if (root.walletClients[credentials.walletId]) {
+          // wallet already initialized.
+          return;
+        }
 
         var client = bwcService.getClient(JSON.stringify(credentials));
 
-        client.removeAllListeners();
-
         client.initNotifications(function(err) {
-          if (err) console.log('*** [profileService.js ln58] Could not init notifications err:', err); // TODO
+          if (err) 
+            $log.error('Could not init notifications err:', err);
         });
+
+        client.removeAllListeners();
 
         client.on('notification', function(notification) {
           $log.debug('BWC Notification:', notification);
@@ -94,6 +99,7 @@ angular.module('copayApp.services')
 
         root.walletClients[credentials.walletId] = client;
       });
+
       $rootScope.$emit('updateWalletList');
     };
 
@@ -240,15 +246,15 @@ angular.module('copayApp.services')
     root.importLegacyWallet = function(username, password, blob, cb) {
       var walletClient = bwcService.getClient();
 
-      walletClient.createWalletFromOldCopay(username, password, blob, function(err) {
+      walletClient.createWalletFromOldCopay(username, password, blob, function(err, existed) {
         if (err) return cb('Error importing wallet: ' + err);
 
-        $log.debug('Creating Wallet:', walletClient.credentials);
+        $log.debug('Creating Wallet:', walletClient.credentials.walletName);
         root.profile.credentials.push(JSON.parse(walletClient.export()));
         root._setWalletClients();
         root.setAndStoreFocus(walletClient.credentials.walletId, function() {
           storageService.storeProfile(root.profile, function(err) {
-            return cb(null, walletClient.credentials.walletName);
+            return cb(null, walletClient.credentials.walletId, walletClient.credentials.walletName, existed);
           });
         });
       });
