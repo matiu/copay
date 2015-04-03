@@ -12,7 +12,7 @@ angular.module('copayApp.controllers').controller('topbarController', function($
 
         $timeout(function() {
           var data = result.text;
-          $scope.$emit('dataScanned', data); 
+          $rootScope.$emit('dataScanned', data); 
         }, 1000);
       },
       function onError(error) {
@@ -110,7 +110,7 @@ angular.module('copayApp.controllers').controller('topbarController', function($
       keyboard: false
     });
     modalInstance.result.then(function(data) {
-      _scope.$emit('dataScanned', data); 
+      $rootScope.$emit('dataScanned', data); 
     });
 
   };
