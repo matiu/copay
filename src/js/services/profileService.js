@@ -25,7 +25,7 @@ angular.module('copayApp.services')
     root.scan = function(walletId, includeCopayerBranches, cb) {
       var fc = root.focusedClient;
       fc.startScan({
-        includeCopayerBranches: includeCopayerBranches 
+        includeCopayerBranches: includeCopayerBranches
       }, cb);
     };
 
@@ -66,10 +66,9 @@ angular.module('copayApp.services')
 
         client.on('notification', function(notification) {
           $log.debug('BWC Notification:', notification);
-          notificationService.newBWCNotification(notification, {
-            walletId: client.credentials.walletId,
-            walletName: client.credentials.walletName
-          });
+          notificationService.newBWCNotification(notification,
+            client.credentials.walletId, client.credentials.walletName);
+
           if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
             $rootScope.$emit(notification.type);
           } else {
