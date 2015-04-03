@@ -84,7 +84,7 @@ angular.module('copayApp.services').factory('configService', function(localStora
       } else {
         configCache = defaultConfig;
       };
-      bwcService.setBaseUrl(configCache.bws.url);
+
       return cb(err, configCache);
     });
   };
@@ -117,6 +117,11 @@ angular.module('copayApp.services').factory('configService', function(localStora
   root.getDefaults = function() {
     return defaultConfig;
   };
+
+  root.get(function(err, c) {
+    if (err) throw Error(err);
+    bwcService.setBaseUrl(c.bws.url);
+  });
 
   return root;
 });
