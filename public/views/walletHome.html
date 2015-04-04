@@ -22,7 +22,7 @@
               <span class="show-for-medium-up" translate>Preferences</span>
             </a>
           </div>
-          <div class="wallet-info">
+          <div class="wallet-info" ng-click="openCopayersModal(index.copayers, index.copayerId)">
               <p class="m0">
               {{index.m}} <span translate>of</span>  {{index.n}}  
               </p>
@@ -67,15 +67,6 @@
     </div>
   </div>
 
-
-  <!-- <div class="row" ng-if="index.isShared && index.copayers.length > 1">
-    <div class="large-12 columns">
-      <h4 translate>Copayers</h4>
-      <div class="panel oh">
-        <div ng-include="'views/includes/copayers.html'"></div>
-      </div>
-    </div>
-  </div> -->
 
   <div class="text-gray text-center m10t" ng-show="index.openingWallet" translate>Opening wallet...</div>
   <div class="text-gray text-center m10t" ng-show="index.updatingStatus" translate>Updating balance and status...</div>

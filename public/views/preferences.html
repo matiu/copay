@@ -29,40 +29,6 @@
     </div>
   </form>
 
-  <div ng-if="!index.isOffLine && !index.clientError">
-    <div class="row">
-      <div class="large-12 columns">
-        <h4 translate>Wallet info</h4>
-        <table>
-          <tr>
-            <td><strong translate>Name:</strong></td>
-            <td>{{index.walletName}}</td>
-          </tr>
-          <tr>
-            <td><strong translate>Status:</strong></td>
-            <td>{{index.walletStatus == 'complete' ? 'Complete' : 'Waiting for copayers...'}}</td>
-          </tr>
-          <tr>
-            <td><strong translate>Type:</strong></td>
-            <td>{{index.m}} of {{index.n}} - {{index.network}}</td>
-          </tr>
-          <tr>
-            <td><strong translate>Balance:</strong></td>
-            <td><span ng-if="index.walletStatus == 'complete'">
-                {{index.totalBalanceStr}}
-            </span></td>
-          </tr>
-        </table> 
-      </div>
-    </div>
-    <div class="row">
-      <div class="large-12 columns" ng-if="index.isShared">
-        <h4 translate>Copayers</h4>
-        <div class="panel oh">
-          <div ng-include="'views/includes/copayers.html'"></div>
-        </div>
-      </div>
-    </div>
 
     <div class="row" ng-show="!preferences.backupWalletPlainText && !preferences.error">
       <div class="large-12 columns">

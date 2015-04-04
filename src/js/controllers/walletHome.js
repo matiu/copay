@@ -4,6 +4,24 @@
 // TODO rateService
 angular.module('copayApp.controllers').controller('walletHomeController', function($scope, $rootScope, $timeout, $filter, $modal, notification, txStatus, isCordova, profileService, lodash) {
 
+
+  $scope.openCopayersModal = function(copayers, copayerId) {
+    var ModalInstanceCtrl = function($scope, $modalInstance) {
+      $scope.copayers= copayers;
+      $scope.copayerId = copayerId;
+      $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+      };
+    };
+    $modal.open({
+      templateUrl: 'views/modals/copayers.html',
+      windowClass: 'full',
+      controller: ModalInstanceCtrl,
+    });
+  };
+
+
+
   $scope.openTxModal = function(tx, copayers) {
     var fc = profileService.focusedClient;
     var ModalInstanceCtrl = function($scope, $modalInstance) {
