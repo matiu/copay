@@ -3,9 +3,25 @@
 angular.module('copayApp.controllers').controller('indexController', function($rootScope, $scope, $log, $filter, $timeout, lodash, go, profileService, configService, isCordova, rateService, storageService) {
   var self = this;
   self.isCordova = isCordova;
+  self.onGoingProcess = {};
 
   function strip(number) {
     return (parseFloat(number.toPrecision(12)));
+  };
+
+
+  self.setOngoingProcess = function(processName, isOn) {
+    self[processName] = isOn;
+    self.onGoingProcess[processName] = isOn;
+
+    var name;
+    self.anyOnGoingProcess = lodash.any(self.onGoingProcess, function(isOn, processName) {
+      if (isOn)
+        name = name || processName;
+      return isOn;
+    });
+    // The first one
+    self.onGoingProcessName = name;
   };
 
   self.setFocusedWallet = function() {
@@ -14,6 +30,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
     $timeout(function() {
       self.hasProfile = true;
+      self.onGoingProcess = {};
 
       // Credentials Shortcuts 
       self.m = fc.credentials.m;
@@ -28,6 +45,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.isComplete = fc.isComplete();
       self.txps = [];
       self.copayers = [];
+      self.setOngoingProcess('scanning', fc.scanning);
     });
     self.openWallet();
   };
@@ -35,9 +53,11 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   self.updateAll = function() {
     var fc = profileService.focusedClient;
     if (!fc) return;
-    self.updatingStatus = true;
+
+    self.setOngoingProcess('updatingStatus', true);
     $log.debug('Updating Status:', fc);
     fc.getStatus(function(err, walletStatus) {
+      self.setOngoingProcess('updatingStatus', false);
       if (err) {
         $log.debug('Wallet Status ERROR:', err);
         $scope.$emit('Local/ClientError', err);
@@ -52,16 +72,16 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         self.walletStatus = walletStatus.wallet.status;
         self.copayers = walletStatus.wallet.copayers;
       }
-      self.updatingStatus = false;
       $rootScope.$apply();
     });
   };
 
   self.updateBalance = function() {
     var fc = profileService.focusedClient;
-    self.updatingBalance = true;
+    self.setOngoingProcess('updatingBalance', true);
     $log.debug('Updating Balance');
     fc.getBalance(function(err, balance) {
+      self.setOngoingProcess('updatingBalance', false);
       if (err) {
         $log.debug('Wallet Balance ERROR:', err);
         $scope.$emit('Local/ClientError', err);
@@ -69,16 +89,16 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         $log.debug('Wallet Balance:', balance);
         self.setBalance(balance);
       }
-      self.updatingBalance = false;
       $rootScope.$apply();
     });
   };
 
   self.updatePendingTxps = function() {
     var fc = profileService.focusedClient;
-    self.updatingPendingTxps = true;
+    self.setOngoingProcess('updatingPendingTxps', true);
     $log.debug('Updating PendingTxps');
     fc.getTxProposals({}, function(err, txps) {
+      self.setOngoingProcess('updatingPendingTxps', false);
       if (err) {
         $log.debug('Wallet PendingTxps ERROR:', err);
         $scope.$emit('Local/ClientError', err);
@@ -86,16 +106,16 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         $log.debug('Wallet PendingTxps:', txps);
         self.txps = self.setPendingTxps(txps);
       }
-      self.updatingPendingTxps = false;
       $rootScope.$apply();
     });
   };
 
   self.openWallet = function() {
     var fc = profileService.focusedClient;
-    self.openingWallet = true;
+    self.setOngoingProcess('openingWallet', true);
     $timeout(function() {
       fc.openWallet(function(err) {
+        self.setOngoingProcess('openingWallet', false);
         if (err) {
           $log.debug('Wallet Open ERROR:', err);
           $scope.$emit('Local/ClientError', err);
@@ -103,7 +123,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
           $log.debug('Wallet Opened');
           self.updateAll();
         }
-        self.openingWallet = false;
         $rootScope.$apply();
       });
     });
@@ -229,15 +248,35 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   self.openMenu = function() {
     go.swipe(true);
-  }
+  };
 
   self.closeMenu = function() {
     go.swipe();
-  }
+  };
 
+  self.startScan = function() {
+    var fc = profileService.focusedClient;
+    self.setOngoingProcess('scanning', true);
+
+    //since scanning takes a lot of time, we also store scanning status on fc
+    fc.scanning = true; 
+
+    fc.startScan({
+      includeCopayerBranches: true,
+    }, function(err) {
+      if (err) return cb(err);
+
+      fc.on('notification', function(notification) {
+        if (notification.type == 'ScanFinished') {
+          self.setOngoingProcess('scanning', false);
+          fc.scanning= false;
+        }
+      });
+      return cb();
+    });
+  };
 
   // UX event handlers
-
   $rootScope.$on('Local/ConfigurationUpdated', function(event) {
     self.updateAll();
   });
@@ -258,6 +297,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   $rootScope.$on('Local/ClientError', function(event, err) {
     self.clientError = err;
     $rootScope.$apply();
+  });
+
+  $rootScope.$on('Local/WalletImported', function(event) {
+    self.startScan();
   });
 
   lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx',

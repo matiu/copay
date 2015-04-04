@@ -21,14 +21,6 @@ angular.module('copayApp.services')
       return this.getUtils().formatAmount(amount, config.unitCode);
     };
 
-
-    root.scan = function(walletId, includeCopayerBranches, cb) {
-      var fc = root.focusedClient;
-      fc.startScan({
-        includeCopayerBranches: includeCopayerBranches
-      }, cb);
-    };
-
     root._setFocus = function(walletId, cb) {
       $log.debug('Set focus:', walletId);
 
@@ -65,7 +57,7 @@ angular.module('copayApp.services')
         var client = bwcService.getClient(JSON.stringify(credentials));
 
         client.initNotifications(function(err) {
-          if (err) 
+          if (err)
             $log.error('Could not init notifications err:', err);
         });
 

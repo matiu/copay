@@ -68,9 +68,15 @@
   </div>
 
 
-  <div class="text-gray text-center m10t" ng-show="index.openingWallet" translate>Opening wallet...</div>
-  <div class="text-gray text-center m10t" ng-show="index.updatingStatus" translate>Updating balance and status...</div>
+  <div class="text-gray text-center m10t animated infinite flash" ng-show="index.anyOnGoingProcess" > 
+    <span translate ng-show="index.onGoingProcessName == 'openingWallet'">Opening Wallet...</span>
+    <span translate ng-show="index.onGoingProcessName == 'updatingStatus'">Updating Status...</span>
+    <span translate ng-show="index.onGoingProcessName == 'updatingBalance'">Updating Balance...</span>
+    <span translate ng-show="index.onGoingProcessName == 'updatingPendingTxps'">Updating Pending Transactions...</span>
+    <span translate ng-show="index.onGoingProcessName == 'scanning'">Scanning Wallet funds...</span>
+</div>
 
+ 
 </div>
 <div class="extra-margin-bottom"></div>
 

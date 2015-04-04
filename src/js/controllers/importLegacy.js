@@ -30,23 +30,10 @@ angular.module('copayApp.controllers').controller('importLegacyController',
       $log.debug('### Scaning: ' + ids)
       var i = 0;
       lodash.each(ids, function(id) {
-        $rootScope.$emit('Local/ImportStatusUpdate',
-          'Scanning funds for wallet ' + id + ' ... ');
-
-        profileService.scan(id, true, function(err) {
-          if (!err) {
-            $rootScope.$emit('Local/ImportStatusUpdate',
-              '... scan for wallet ' + id + ' FAILED');
-          } else {
-            $rootScope.$emit('Local/ImportStatusUpdate',
-              '... scan for wallet ' + id + ' started ...');
-          }
-
-          i++;
-          if (i == ids.length) {
-            go.walletHome();
-          };
-        });
+        $rootScope.$emit('Local/WalletImported', id);
+        if (++i == ids.length) {
+          go.walletHome();
+        };
       });
     };
 
