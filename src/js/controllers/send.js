@@ -11,7 +11,7 @@ angular.module('copayApp.controllers').controller('sendController',
       $rootScope.wpInputFocused = false;
 
       $rootScope.title = fc.credentials.m > 1 ? 'Send Proposal' : 'Send';
-      this.loading = false;
+      this.blockUx = false;
       this.error = this.success = null;
 
       this.isRateAvailable = false;
@@ -130,20 +130,6 @@ angular.module('copayApp.controllers').controller('sendController',
 
     this.setError = function(err) {
       $log.warn(err);
-
-      // TODO
-      // if (err.code('BIG'))
-      //   msg = 'The transaction have too many inputs. Try creating many transactions  for smaller amounts'
-      //
-      // if (msg.code('totalNeededAmount') || msg.code('unspent not set'))
-      //   msg = 'Insufficient funds'
-      //
-      // if (msg.code('expired'))
-      //   msg = 'The payment request has expired';
-      //
-      // if (msg.code('XMLHttpRequest'))
-      //   msg = 'Error when sending to the blockchain. Resend it from Home';
-      //
       var errMessage = 'The transaction' + (fc.credentials.m > 1 ? ' proposal' : '') +
 
         ' could not be created: ' + (err.message ? err.message : err);
@@ -162,7 +148,8 @@ angular.module('copayApp.controllers').controller('sendController',
         this.error = 'Unable to send transaction proposal';
         return;
       }
-      self.loading = true;
+      self.blockUx = true;
+      self.sending = true;
 
       if (isCordova) {
         window.plugins.spinnerDialog.show(null, 'Creating transaction...', true);
@@ -182,10 +169,11 @@ angular.module('copayApp.controllers').controller('sendController',
           message: comment,
           payProUrl: paypro ? paypro.url : null,
         }, function(err, txp) {
+          self.sending = false;
           if (isCordova) {
             window.plugins.spinnerDialog.hide();
           }
-          self.loading = false;
+          self.blockUx = false;
 
           if (err) return self.setError(err);
 
@@ -311,7 +299,7 @@ angular.module('copayApp.controllers').controller('sendController',
 
       var satToUnit = 1 / this.unitToSatoshi;
       this.fetchingURL = uri;
-      this.loading = true;
+      this.blockUx = true;
       var self = this;
 
       $log.debug('Fetch PayPro Request...', uri);
@@ -319,7 +307,7 @@ angular.module('copayApp.controllers').controller('sendController',
         payProUrl: uri,
       }, function(err, paypro) {
         $log.debug(paypro);
-        self.loading = false;
+        self.blockUx = false;
         self.fetchingURL = null;
 
         if (err) {
@@ -435,7 +423,7 @@ angular.module('copayApp.controllers').controller('sendController',
             if (form.$invalid) {
               return;
             }
-            $scope.loading = true;
+            $scope.blockUx = true;
             $timeout(function() {
               var errorMsg;
               var entry = {
@@ -456,7 +444,7 @@ angular.module('copayApp.controllers').controller('sendController',
                 $scope.toggleForm();
                 notification.success('Entry created', 'New addressbook entry created')
               }
-              $scope.loading = false;
+              $scope.blockUx = false;
               $rootScope.$digest();
             }, 100);
             return;
