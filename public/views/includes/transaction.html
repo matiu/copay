@@ -14,13 +14,12 @@
         <time>{{ (tx.ts || tx.createdTs ) | amTimeAgo}}</time>
       </div>
     </div>
-{{tx.statusForUs}}
+
     <div class="small-4 columns text-right">
-      <div class="size-16 text-bold">
-          <span ng-if="!$root.updatingBalance">
-            {{tx.amountStr}}
-          </span>
-      </div>
+      <span class="db text-bold size-16" ng-if="!$root.updatingBalance">
+        {{tx.amountStr}}
+      </span>
+      <span ng-class="'text-primary':tx.statusForUs == aceppted"></span>{{tx.statusForUs}}
     </div>
   </div>
 </div>
