@@ -1,17 +1,19 @@
 <nav class="tab-bar">
   <section class="left-small">
-    <a class="p10" 
-      ng-click="cancel()"><i class="fi-arrow-left size-24"></i> 
+    <a ng-click="cancel()"><i class="icon-arrow-left3 icon-back"></i>
+      <span class="text-back" translate>Back</span>
     </a>
+  </section>
+  <section class="middle tab-bar-section">
+    <h1 class="title ellipsis" translate>
+      Payment protocol request
+    </h1>
   </section>
 </nav>
 
 <div class="row p60t">
   <div class="large-12 columns">
     <div class="text-center">
-      <div class="size-12">
-        Payment Protocol Request
-      </div>
       <div class="size-48">
         {{unitTotal}}  {{unitName}}
       </div>

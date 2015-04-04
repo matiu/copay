@@ -133,6 +133,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Join shared wallet';
               $scope.goBackToState = 'add';
             }
           }
@@ -148,6 +149,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Import wallet';
               $scope.goBackToState = 'add';
             }
           }
@@ -168,6 +170,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Import legacy wallet';
               $scope.goBackToState = 'add';
             }
           }
@@ -185,6 +188,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Create new wallet';
               $scope.goBackToState = 'add';
             }
           }
@@ -277,6 +281,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Preferences';
               $scope.goBackToState = 'walletHome';
             }
           }
@@ -305,6 +310,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
+              $scope.titleSection = 'Add wallet';
               $scope.goBackToState = 'walletHome';
             }
           }

@@ -19,7 +19,10 @@
       <span class="db text-bold size-16" ng-if="!$root.updatingBalance">
         {{tx.amountStr}}
       </span>
-      <span ng-class="'text-primary':tx.statusForUs == aceppted"></span>{{tx.statusForUs}}
+      <span 
+        ng-class="{'text-primary':tx.statusForUs == 'accepted', 
+        'text-warning':tx.statusForUs == 'rejected',
+        'text-gray':tx.statusForUs == 'pending'}">{{tx.statusForUs}}</span>
     </div>
   </div>
 </div>
