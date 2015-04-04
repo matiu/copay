@@ -55,66 +55,72 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     var fc = profileService.focusedClient;
     if (!fc) return;
 
-    self.setOngoingProcess('updatingStatus', true);
-    $log.debug('Updating Status:', fc);
-    fc.getStatus(function(err, walletStatus) {
-      self.setOngoingProcess('updatingStatus', false);
-      if (err) {
-        $log.debug('Wallet Status ERROR:', err);
-        $scope.$emit('Local/ClientError', err);
-      } else {
-        $log.debug('Wallet Status:', walletStatus);
-        self.setBalance(walletStatus.balance);
-        self.txps = self.setPendingTxps(walletStatus.pendingTxps);
+    $timeout(function() {
+      self.setOngoingProcess('updatingStatus', true);
+      $log.debug('Updating Status:', fc);
+      fc.getStatus(function(err, walletStatus) {
+        self.setOngoingProcess('updatingStatus', false);
+        if (err) {
+          $log.debug('Wallet Status ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
+        } else {
+          $log.debug('Wallet Status:', walletStatus);
+          self.setBalance(walletStatus.balance);
+          self.txps = self.setPendingTxps(walletStatus.pendingTxps);
 
-        // Status Shortcuts
-        self.walletName = walletStatus.wallet.name;
-        self.walletSecret = walletStatus.wallet.secret;
-        self.walletStatus = walletStatus.wallet.status;
-        self.copayers = walletStatus.wallet.copayers;
-      }
-      $rootScope.$apply();
+          // Status Shortcuts
+          self.walletName = walletStatus.wallet.name;
+          self.walletSecret = walletStatus.wallet.secret;
+          self.walletStatus = walletStatus.wallet.status;
+          self.copayers = walletStatus.wallet.copayers;
+        }
+        $rootScope.$apply();
+      });
     });
   };
 
   self.updateBalance = function() {
     var fc = profileService.focusedClient;
-    self.setOngoingProcess('updatingBalance', true);
-    $log.debug('Updating Balance');
-    fc.getBalance(function(err, balance) {
-      self.setOngoingProcess('updatingBalance', false);
-      if (err) {
-        $log.debug('Wallet Balance ERROR:', err);
-        $scope.$emit('Local/ClientError', err);
-      } else {
-        $log.debug('Wallet Balance:', balance);
-        self.setBalance(balance);
-      }
-      $rootScope.$apply();
+    $timeout(function() {
+      self.setOngoingProcess('updatingBalance', true);
+      $log.debug('Updating Balance');
+      fc.getBalance(function(err, balance) {
+        self.setOngoingProcess('updatingBalance', false);
+        if (err) {
+          $log.debug('Wallet Balance ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
+        } else {
+          $log.debug('Wallet Balance:', balance);
+          self.setBalance(balance);
+        }
+        $rootScope.$apply();
+      });
     });
   };
 
   self.updatePendingTxps = function() {
     var fc = profileService.focusedClient;
-    self.setOngoingProcess('updatingPendingTxps', true);
-    $log.debug('Updating PendingTxps');
-    fc.getTxProposals({}, function(err, txps) {
-      self.setOngoingProcess('updatingPendingTxps', false);
-      if (err) {
-        $log.debug('Wallet PendingTxps ERROR:', err);
-        $scope.$emit('Local/ClientError', err);
-      } else {
-        $log.debug('Wallet PendingTxps:', txps);
-        self.txps = self.setPendingTxps(txps);
-      }
-      $rootScope.$apply();
+    $timeout(function() {
+      self.setOngoingProcess('updatingPendingTxps', true);
+      $log.debug('Updating PendingTxps');
+      fc.getTxProposals({}, function(err, txps) {
+        self.setOngoingProcess('updatingPendingTxps', false);
+        if (err) {
+          $log.debug('Wallet PendingTxps ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
+        } else {
+          $log.debug('Wallet PendingTxps:', txps);
+          self.txps = self.setPendingTxps(txps);
+        }
+        $rootScope.$apply();
+      });
     });
   };
 
   self.openWallet = function() {
     var fc = profileService.focusedClient;
-    self.setOngoingProcess('openingWallet', true);
     $timeout(function() {
+      self.setOngoingProcess('openingWallet', true);
       fc.openWallet(function(err) {
         self.setOngoingProcess('openingWallet', false);
         if (err) {
