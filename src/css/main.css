@@ -998,6 +998,19 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   height: 250px;
 }
 
+.tour {
+  text-align: center;
+  height: 100%;
+}
+
+.tour5 {
+  width: 90%;
+  position: absolute;
+  bottom: 10%;
+  margin: 0 auto;
+  margin-left: 5%;
+}
+
 .secret {
   overflow-wrap: break-word;
   word-wrap: break-word;
