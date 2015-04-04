@@ -46,6 +46,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.txps = [];
       self.copayers = [];
       self.setOngoingProcess('scanning', fc.scanning);
+      self.lockedBalance = null;
     });
     self.openWallet();
   };

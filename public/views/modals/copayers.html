@@ -1,25 +1,28 @@
-<div class="m20tp">
-<h1 translate>Copayers</h1>
-<div class="row">
-    <div class="large-12 columns">
-      <div class="panel oh">
-        <ul class="no-bullet m0">
-          <li class="" ng-repeat="copayer in copayers">
-          <span class="size-12" ng-show="copayer.id == copayerId">
-            <i class="fi-check m5r"></i> {{copayer.name}} ({{'Me'|translate}})
-          </span>
-          <span class="size-12 text-gray" ng-show="copayer.id != copayerId">
-            <i class="fi-check m5r"></i> {{copayer.name}}
-          </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-</div>
-<div class="text-center m10v">
-  <a class="button primary" ng-click="cancel()" translate>Close</a>
-</div>
-</div>
+<nav class="tab-bar">
+  <section class="left-small">
+    <a ng-click="cancel()"><i class="icon-arrow-left3 icon-back"></i>
+      <span class="text-back" translate>Back</span>
+    </a>
+  </section>
+  <section class="middle tab-bar-section">
+    <h1 class="title ellipsis" translate>
+      Copayers
+    </h1>
+  </section>
+</nav>
 
-
+<div class="row p60t">
+  <div class="large-12 columns">
+    <ul class="no-bullet">
+      <li class="" ng-repeat="copayer in copayers">
+      <span class="size-12" ng-show="copayer.id == copayerId">
+        <i class="fi-check m5r"></i> {{copayer.name}} ({{'Me'|translate}})
+      </span>
+      <span class="size-12 text-gray" ng-show="copayer.id != copayerId">
+        <i class="fi-check m5r"></i> {{copayer.name}}
+      </span>
+      </li>
+    </ul>
+  </div>
+</div>
 

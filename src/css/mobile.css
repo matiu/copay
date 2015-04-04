@@ -90,7 +90,6 @@ _:-ms-fullscreen, :root .main {
   position: fixed;
   width: 100%;
   z-index: 5;
-  height: 3.2rem;
   line-height: 3.2rem;
 }
 
@@ -98,6 +97,30 @@ _:-ms-fullscreen, :root .main {
   color: #1ABC9C;
   font-weight: 500;
   font-size: 14px;
+}
+
+.tab-bar-section.middle {
+  left: 5.8125rem;
+  right: 5.8125rem;
+}
+
+.left-small {
+  width: 5.8125rem;
+}
+
+.right-small {
+  width: 5.8125rem;
+  text-align: right;
+}
+
+.tab-bar .icon-back {
+  font-size: 47px;
+  position: absolute;
+  line-height: 52px;
+} 
+
+.tab-bar .text-back {
+  margin-left: 35px;
 }
 
 .bottom-bar {
@@ -418,7 +441,7 @@ a.pin-button:active {
 }
 
 .dr-notification-container.top {
-  top: 3.2rem;
+  top: 45px;
 }
 
 .dr-notification-container.center {
@@ -434,13 +457,13 @@ a.pin-button:active {
 
 .dr-notification-wrapper.offline {
   position: absolute;
-  top: 51px;
+  top: 45px;
   z-index: 11;
 }
 
 .dr-notification-wrapper.client-error {
   position: absolute;
-  top: 51px;
+  top: 45px;
   z-index: 11;
 }
 

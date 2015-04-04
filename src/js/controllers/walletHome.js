@@ -165,7 +165,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
     });
 
     modalInstance.result.then(function(txp) {
-console.log('[walletHome.js:149]',txp); //TODO
       txStatus.notify(txp);
       $scope.$emit('Local/TxProposalAction');
     });

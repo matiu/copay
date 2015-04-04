@@ -1,5 +1,5 @@
 <div class="history" ng-controller="historyController as history" ng-init="history.getTxHistory()">
-  <div class="row" ng-show="history.updatingTxHistory || !history.txHistory[0]">
+  <div class="row m20t" ng-show="history.updatingTxHistory || !history.txHistory[0]">
     <div class="large-12 columns">
       <div class="oh text-center">
         <span ng-if="history.updatingTxHistory" class="text-gray" translate>Getting transactions...</span>
