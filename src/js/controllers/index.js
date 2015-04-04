@@ -51,14 +51,22 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.openWallet();
   };
 
-  self.updateAll = function() {
+  self.updateAll = function(walletStatus) {
+
+    var get = function(cb) {
+      if (walletStatus)
+        return cb(null, walletStatus);
+      else 
+        return fc.getStatus(cb);
+    };
+
     var fc = profileService.focusedClient;
     if (!fc) return;
 
     $timeout(function() {
       self.setOngoingProcess('updatingStatus', true);
       $log.debug('Updating Status:', fc);
-      fc.getStatus(function(err, walletStatus) {
+      get(function(err, walletStatus) {
         self.setOngoingProcess('updatingStatus', false);
         if (err) {
           $log.debug('Wallet Status ERROR:', err);
@@ -121,14 +129,14 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     var fc = profileService.focusedClient;
     $timeout(function() {
       self.setOngoingProcess('openingWallet', true);
-      fc.openWallet(function(err) {
+      fc.openWallet(function(err, walletStatus) {
         self.setOngoingProcess('openingWallet', false);
         if (err) {
           $log.debug('Wallet Open ERROR:', err);
           $scope.$emit('Local/ClientError', err);
         } else {
           $log.debug('Wallet Opened');
-          self.updateAll();
+          self.updateAll(walletStatus);
         }
         $rootScope.$apply();
       });
