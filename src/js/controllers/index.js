@@ -75,18 +75,17 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         if (err) {
           $log.debug('Wallet Status ERROR:', err);
           $scope.$emit('Local/ClientError', err);
-        } else {
-          $log.debug('Wallet Status:', walletStatus);
-          self.setBalance(walletStatus.balance);
-          self.txps = self.setPendingTxps(walletStatus.pendingTxps);
+          return;
+        } 
+        $log.debug('Wallet Status:', walletStatus);
+        self.txps = self.setPendingTxps(walletStatus.pendingTxps);
 
-          // Status Shortcuts
-          self.walletName = walletStatus.wallet.name;
-          self.walletSecret = walletStatus.wallet.secret;
-          self.walletStatus = walletStatus.wallet.status;
-          self.copayers = walletStatus.wallet.copayers;
-        }
-        $rootScope.$apply();
+        // Status Shortcuts
+        self.walletName = walletStatus.wallet.name;
+        self.walletSecret = walletStatus.wallet.secret;
+        self.walletStatus = walletStatus.wallet.status;
+        self.copayers = walletStatus.wallet.copayers;
+        self.setBalance(walletStatus.balance);
       });
     });
   };
@@ -101,11 +100,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         if (err) {
           $log.debug('Wallet Balance ERROR:', err);
           $scope.$emit('Local/ClientError', err);
-        } else {
-          $log.debug('Wallet Balance:', balance);
-          self.setBalance(balance);
+          return;
         }
-        $rootScope.$apply();
+        $log.debug('Wallet Balance:', balance);
+        self.setBalance(balance);
       });
     });
   };
@@ -218,6 +216,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.alternativeName = config.alternativeName;
     self.alternativeIsoCode = config.alternativeIsoCode;
 
+    // Check address
+    self.checkLastAddress(balance.byAddress);
+
     rateService.whenAvailable(function() {
 
       var totalBalanceAlternative = rateService.toFiat(self.totalBalance * self.unitToSatoshi, self.alternativeIsoCode);
@@ -237,8 +238,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       $rootScope.$apply();
     });
 
-    // Check address
-    self.checkLastAddress(balance.byAddress);
+    if(!rateService.isAvailable()) {
+      $rootScope.$apply();
+    }
   };
 
   self.checkLastAddress = function(byAddress, cb) {

@@ -140,13 +140,13 @@
             </div>
           </div>
 
-  <div class="text-gray text-center m10t animated infinite flash" ng-show="send.sending" > 
-    <span translate>Sending...</span>
+  <div class="text-gray text-center m10t animated infinite flash" ng-show="send.onGoingProcess" > 
+    <span translate>{{send.onGoingProcess}}...</span>
   </div>
 
 
 
-          <div class="row" ng-show="!send.sending">
+          <div class="row" ng-show="!send.onGoingProcess">
             <div class="large-6 medium-6 small-12 columns">
               <button type="submit" class="button primary expand" ng-disabled="sendForm.$invalid || send.blockUx" translate>
                 Send

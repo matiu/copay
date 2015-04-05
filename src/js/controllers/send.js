@@ -141,6 +141,15 @@ angular.module('copayApp.controllers').controller('sendController',
       }, 1);
     };
 
+
+    this.setOngoingProcess = function(name) {
+      var self = this;
+      $timeout(function() {
+        self.onGoingProcess = name;
+        $rootScope.$apply();
+      })
+    };
+
     this.submitForm = function(form) {
       var unitToSat = this.unitToSatoshi;
 
@@ -149,7 +158,7 @@ angular.module('copayApp.controllers').controller('sendController',
         return;
       }
       self.blockUx = true;
-      self.sending = true;
+      self.setOngoingProcess('Sending');
 
       if (isCordova) {
         window.plugins.spinnerDialog.show(null, 'Creating transaction...', true);
@@ -169,7 +178,7 @@ angular.module('copayApp.controllers').controller('sendController',
           message: comment,
           payProUrl: paypro ? paypro.url : null,
         }, function(err, txp) {
-          self.sending = false;
+          self.setOngoingProcess();
           if (isCordova) {
             window.plugins.spinnerDialog.hide();
           }
@@ -178,6 +187,7 @@ angular.module('copayApp.controllers').controller('sendController',
           if (err) return self.setError(err);
 
           self.signAndBroadcast(txp, function(err) {
+            self.setOngoingProcess();
             if (err) return self.setError(err);
             self.resetForm(form);
           });
@@ -186,11 +196,15 @@ angular.module('copayApp.controllers').controller('sendController',
     };
 
     this.signAndBroadcast = function(txp, cb) {
+      self.setOngoingProcess('Signing');
       fc.signTxProposal(txp, function(err, signedTx) {
+        self.setOngoingProcess();
         if (err) return cb(err);
 
         if (signedTx.status == 'accepted') {
+          self.setOngoingProcess('Broadcasting');
           fc.broadcastTxProposal(signedTx, function(err, btx) {
+            self.setOngoingProcess();
             if (err) {
               $scope.error = 'Transaction not broadcasted. Please try again.';
               $scope.$digest();
