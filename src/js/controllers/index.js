@@ -11,8 +11,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
 
   self.setOngoingProcess = function(processName, isOn) {
+    $log.debug('onGoingProcess', processName, isOn);
     self[processName] = isOn;
     self.onGoingProcess[processName] = isOn;
+
+    // derived rules
+    self.hideBalance = self.updatingBalance || self.updatingStatus || self.openingWallet;
 
     var name;
     self.anyOnGoingProcess = lodash.any(self.onGoingProcess, function(isOn, processName) {
@@ -214,17 +218,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.alternativeName = config.alternativeName;
     self.alternativeIsoCode = config.alternativeIsoCode;
 
-    // var availableBalanceNr = safeBalanceSat * satToUnit;
-    // r.safeUnspentCount = safeUnspentCount;
-
-    // if (r.safeUnspentCount) {
-    //   var estimatedFee = copay.Wallet.estimatedFee(r.safeUnspentCount);
-    //   r.topAmount = (((availableBalanceNr * w.settings.unitToSatoshi).toFixed(0) - estimatedFee) / w.settings.unitToSatoshi);
-    // }
-    //
-
     rateService.whenAvailable(function() {
-
 
       var totalBalanceAlternative = rateService.toFiat(self.totalBalance * self.unitToSatoshi, self.alternativeIsoCode);
       var lockedBalanceAlternative = rateService.toFiat(self.lockedBalance * self.unitToSatoshi, self.alternativeIsoCode);
@@ -319,8 +313,14 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.startScan();
   });
 
-  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected', 'NewOutgoingTx',
-    'NewIncomingTx', 'ScanFinished',
+  lodash.each(['NewOutgoingTx', 'NewIncomingTx', 'ScanFinished'], function(eventName) {
+    $rootScope.$on(eventName, function() {
+      self.updateBalance();
+    });
+  });
+
+
+  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected',
     'Local/NewTxProposal', 'Local/TxProposalAction'
   ], function(eventName) {
     $rootScope.$on(eventName, function() {
