@@ -11,18 +11,14 @@
   </section>
 </nav>
 
-<div class="row p60t">
-  <div class="large-12 columns">
-    <ul class="no-bullet">
-      <li class="" ng-repeat="copayer in copayers">
-      <span class="size-12" ng-show="copayer.id == copayerId">
-        <i class="fi-check m5r"></i> {{copayer.name}} ({{'Me'|translate}})
-      </span>
-      <span class="size-12 text-gray" ng-show="copayer.id != copayerId">
-        <i class="fi-check m5r"></i> {{copayer.name}}
-      </span>
-      </li>
-    </ul>
-  </div>
-</div>
+<ul class="no-bullet p60t">
+  <li class="line-b p10" ng-repeat="copayer in copayers">
+  <span class="size-12" ng-show="copayer.id == copayerId">
+     <i class="icon-contact size-24 m10r"></i> {{copayer.name}} ({{'Me'|translate}}) <i class="fi-check m5r right"></i>
+  </span>
+  <span class="size-12 text-gray" ng-show="copayer.id != copayerId">
+    <i class="icon-contact size-24 m10r"></i> {{copayer.name}}<i class="fi-check m5r right"></i>
+  </span>
+  </li>
+</ul>
 

@@ -1,29 +1,25 @@
 <div class="last-transactions-content line-b" 
-  ng-class="{'line-b':!$last}" 
+  ng-class="{'text-gray':!pendingForUs}" 
   ng-click="openTxModal(tx, index.copayers)">
+  <div class="m5b size-12 text-gray">
+    <time>{{ (tx.ts || tx.createdTs ) | amTimeAgo}}</time>
+  </div>
   <div class="row collapse">
-    <div class="ellipsis small-8 columns  size-14">
+    <div class="ellipsis small-8 columns size-14">
+        
         <span translate>To</span>:
         <span ng-if="tx.merchant">
           <span ng-show="tx.merchant.pr.ca"><i class="fi-lock"></i> {{tx.merchant.domain}}</span>
           <span ng-show="!tx.merchant.pr.ca"><i class="fi-unlock"></i> {{tx.merchant.domain}}</span>
         </span>
         <contact address="{{tx.toAddress}}" ng-hide="tx.merchant"> </contact>
-{{tx.toAddress}}
-      <div class="m5t size-12 text-gray">
-        <time>{{ (tx.ts || tx.createdTs ) | amTimeAgo}}</time>
-      </div>
+        {{tx.toAddress}}
     </div>
 
     <div class="small-4 columns text-right">
-      <span class="db text-bold size-16" ng-if="!$root.updatingBalance">
+      <span class="text-bold size-16" ng-if="!$root.updatingBalance">
         {{tx.amountStr}}
       </span>
-      <span 
-        ng-class="{'text-primary':tx.statusForUs == 'accepted', 
-        'text-warning':tx.statusForUs == 'rejected',
-        'text-gray':tx.statusForUs == 'pending'}">{{tx.statusForUs}}</span>
     </div>
   </div>
 </div>
-
