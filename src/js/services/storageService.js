@@ -44,6 +44,13 @@ angular.module('copayApp.services')
       localStorageService.remove('lastAddress-' + walletId, cb);
     };
 
+    root.setBackupFlag = function(walletId, cb) {
+      localStorageService.set('backup-' + walletId, Date.now(), cb);
+    };
+
+    root.getBackupFlag = function(walletId, cb) {
+      localStorageService.get('backup-' + walletId, cb);
+    };
 
     return root;
   });

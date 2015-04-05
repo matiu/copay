@@ -23,7 +23,6 @@ Profile.fromObj = function(obj) {
   var x = new Profile();
   x.createdOn = obj.createdOn;
   x.credentials = obj.credentials;
-  console.log('[profile.js.25:obj:]', obj); //TODO
   if (x.credentials[0] && typeof x.credentials[0] != 'object')
     throw ("credentials should be an object");
   return x;

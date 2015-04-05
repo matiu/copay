@@ -1,10 +1,10 @@
 'use strict';
 angular.module('copayApp.services')
-  .factory('backupService', function backupServiceFactory($log, $timeout, notification, profileService, sjcl) {
+  .factory('backupService', function backupServiceFactory($log, $timeout, profileService, sjcl) {
 
     var root = {};
 
-    var _download = function(ew, filename) {
+    var _download = function(ew, filename, cb) {
       var NewBlob = function(data, datatype) {
         var out;
 
@@ -50,13 +50,12 @@ angular.module('copayApp.services')
       $timeout(function() {
         window.URL.revokeObjectURL(url);
       }, 250);
-      notification.success('Backup created', 'Encrypted backup file saved');
+      return cb();
     };
 
     root.walletExport = function(password) {
       if (!password) {
-        notification.error('Backup needs a password');
-        throw ('Needs password');
+        return null;
       }
       var fc = profileService.focusedClient;
       try {
@@ -67,15 +66,18 @@ angular.module('copayApp.services')
         return e;
       } catch (err) {
         $log.debug('Error exporting wallet: ', err);
+        return null;
       };
     };
 
-    root.walletDownload = function(password) {
+    root.walletDownload = function(password, cb) {
       var fc = profileService.focusedClient;
       var ew = root.walletExport(password);
+      if (!ew) return cb('Could not create backup');
+
       var walletName = fc.credentials.walletName;
       var filename = walletName + '-Copaybackup.aes.json';
-      _download(ew, filename)
+      _download(ew, filename, cb)
     };
     return root;
   });

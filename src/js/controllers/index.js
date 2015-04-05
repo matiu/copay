@@ -51,8 +51,11 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.copayers = [];
       self.setOngoingProcess('scanning', fc.scanning);
       self.lockedBalance = null;
+      storageService.getBackupFlag(self.walletId, function(err, val) {
+        self.needsBackup = !val;
+        self.openWallet();
+      });
     });
-    self.openWallet();
   };
 
   self.updateAll = function(walletStatus) {
@@ -76,7 +79,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
           $log.debug('Wallet Status ERROR:', err);
           $scope.$emit('Local/ClientError', err);
           return;
-        } 
+        }
         $log.debug('Wallet Status:', walletStatus);
         self.txps = self.setPendingTxps(walletStatus.pendingTxps);
 
@@ -238,7 +241,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       $rootScope.$apply();
     });
 
-    if(!rateService.isAvailable()) {
+    if (!rateService.isAvailable()) {
       $rootScope.$apply();
     }
   };
@@ -305,6 +308,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   $rootScope.$on('Local/OffLine', function(event) {
     self.isOffLine = true;
   });
+
+  $rootScope.$on('Local/BackupDone', function(event) {
+    self.needsBackup = false;
+    storageService.setBackupFlag(self.walletId, function() {});
+  });
+
 
   $rootScope.$on('Local/ClientError', function(event, err) {
     self.clientError = err;

@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('backupController',
-  function($scope, $timeout, backupService, profileService, isMobile, isCordova) {
+  function($rootScope, $scope, $timeout, backupService, profileService, isMobile, isCordova, notification, go) {
     this.isSafari = isMobile.Safari();
     this.isCordova = isCordova;
     this.error = null;
@@ -16,11 +16,15 @@ angular.module('copayApp.controllers').controller('backupController',
     };
 
     this.downloadWalletBackup = function() {
-      backupService.walletDownload(this.password);
+      backupService.walletDownload(this.password, function() {
+        $rootScope.$emit('Local/BackupDone');
+        notification.success('Backup created', 'Encrypted backup file saved');
+        go.walletHome();
+      });
     };
 
     this.getBackup = function() {
-      var b = backupService.walletExport(this.password);
+      return backupService.walletExport(this.password);
     };
 
     this.viewWalletBackup = function() {
@@ -28,6 +32,7 @@ angular.module('copayApp.controllers').controller('backupController',
       this.loading = true;
       $timeout(function() {
         self.backupWalletPlainText = self.getBackup();
+        $rootScope.$emit('Local/BackupDone');
       }, 100);
     };
 
@@ -35,6 +40,7 @@ angular.module('copayApp.controllers').controller('backupController',
       var ew = this.getBackup();
       window.cordova.plugins.clipboard.copy(ew);
       window.plugins.toast.showShortCenter('Copied to clipboard');
+      $rootScope.$emit('Local/BackupDone');
     };
 
     this.sendWalletBackup = function() {
@@ -50,6 +56,7 @@ angular.module('copayApp.controllers').controller('backupController',
         body: 'Here is the encrypted backup of the wallet ' + name + ': \n\n' + ew + '\n\n To import this backup, copy all text between {...}, including the symbols {}',
         isHtml: false
       };
+      $rootScope.$emit('Local/BackupDone');
       window.plugin.email.open(properties);
     };
 
