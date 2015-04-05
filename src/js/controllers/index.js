@@ -56,7 +56,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     var get = function(cb) {
       if (walletStatus)
         return cb(null, walletStatus);
-      else 
+      else
         return fc.getStatus(cb);
     };
 
@@ -136,7 +136,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
           $scope.$emit('Local/ClientError', err);
         } else {
           $log.debug('Wallet Opened');
-          self.updateAll(walletStatus);
+          self.updateAll(lodash.isObject(walletStatus) ? walletStatus : null);
         }
         $rootScope.$apply();
       });
@@ -179,6 +179,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   };
 
   self.setBalance = function(balance) {
+    if (!balance) return;
     var config = configService.getSync().wallet.settings;
     var COIN = 1e8;
 
@@ -274,7 +275,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.setOngoingProcess('scanning', true);
 
     //since scanning takes a lot of time, we also store scanning status on fc
-    fc.scanning = true; 
+    fc.scanning = true;
 
     fc.startScan({
       includeCopayerBranches: true,
@@ -284,7 +285,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       fc.on('notification', function(notification) {
         if (notification.type == 'ScanFinished') {
           self.setOngoingProcess('scanning', false);
-          fc.scanning= false;
+          fc.scanning = false;
         }
       });
       return cb();
