@@ -38,6 +38,27 @@
         </div>
   </div>
 
+
+  <div ng-show="index.notAuthorized"> 
+  <div class="text-center text-warning"> 
+      <i class="fi-alert"></i>
+<span translate>
+      WARNING: Wallet not registed
+</span>
+  </div>
+  <div class="text-center text-gray m15r m15l" translate>
+This wallet is not registered at the given Bitcore Wallet Service (BWS). 
+You can recreate it from the local information.
+  </div>
+  <div class="text-center m10t ">
+    <span class="button outline dark-gray tiny" 
+      ng-click="index.recreate()"
+      <span translate>Recreate</span>
+    </span>
+ </div>
+  </div>
+
+
   <div ng-show="index.requiresMultipleSignatures  && index.txps[0]">
     <h4 class="title m0" translate>Spend proposals</h4>
     <div class="last-transactions pr" ng-repeat="tx in index.txps  | orderBy:'-createdTs'" 
@@ -77,6 +98,7 @@
     <span translate ng-show="index.onGoingProcessName == 'updatingBalance'">Updating Balance...</span>
     <span translate ng-show="index.onGoingProcessName == 'updatingPendingTxps'">Updating Pending Transactions...</span>
     <span translate ng-show="index.onGoingProcessName == 'scanning'">Scanning Wallet funds...</span>
+    <span translate ng-show="index.onGoingProcessName == 'recreating'">Recreating Wallet on BWS...</span>
   </div>
 
 

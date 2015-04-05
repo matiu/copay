@@ -46,63 +46,62 @@ angular.module('copayApp.services')
       });
     };
 
-    root._setWalletClients = function() {
+    root.setWalletClients = function() {
       lodash.each(root.profile.credentials, function(credentials) {
 
-        if (root.walletClients[credentials.walletId]) {
-          // wallet already initialized.
+        if (root.walletClients[credentials.walletId] &&
+          root.walletClients[credentials.walletId].started) {
           return;
         }
 
         var client = bwcService.getClient(JSON.stringify(credentials));
+        root.walletClients[credentials.walletId] = client;
 
         client.initNotifications(function(err) {
-          if (err)
+          if (err) {
             $log.error('Could not init notifications err:', err);
-        });
-
-        client.removeAllListeners();
-
-        client.on('notification', function(notification) {
-          $log.debug('BWC Notification:', notification);
-          notificationService.newBWCNotification(notification,
-            client.credentials.walletId, client.credentials.walletName);
-
-          if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
-            $rootScope.$emit(notification.type);
-          } else {
-            $rootScope.$apply();
+            return;
           }
-        });
 
-        client.on('walletCompleted', function() {
-          $log.debug('Wallet completed');
+          client.removeAllListeners();
+          client.on('notification', function(notification) {
+            $log.debug('BWC Notification:', notification);
+            notificationService.newBWCNotification(notification,
+              client.credentials.walletId, client.credentials.walletName);
 
-          var newCredentials = lodash.reject(root.profile.credentials, {
-            walletId: client.credentials.walletId
+            if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
+              $rootScope.$emit(notification.type);
+            } else {
+              $rootScope.$apply();
+            }
           });
-          newCredentials.push(JSON.parse(client.export()));
-          root.profile.credentials = newCredentials;
 
-          storageService.storeProfile(root.profile, function(err) {
-            $rootScope.$emit('Local/WalletCompleted')
+          client.on('walletCompleted', function() {
+            $log.debug('Wallet completed');
+
+            var newCredentials = lodash.reject(root.profile.credentials, {
+              walletId: client.credentials.walletId
+            });
+            newCredentials.push(JSON.parse(client.export()));
+            root.profile.credentials = newCredentials;
+
+            storageService.storeProfile(root.profile, function(err) {
+              $rootScope.$emit('Local/WalletCompleted')
+            });
           });
+          root.walletClients[credentials.walletId].started = true;
         });
-
-        root.walletClients[credentials.walletId] = client;
       });
-
       $rootScope.$emit('updateWalletList');
     };
 
 
     root.bindProfile = function(profile, cb) {
-      console.log('[profileService.js.54] SET Profile', profile); //TODO
       root.profile = profile;
 
       configService.get(function(err) {
         if (err) return cb(err);
-        root._setWalletClients();
+        root.setWalletClients();
         storageService.getFocusedWalletId(function(err, focusedWalletId) {
           root._setFocus(focusedWalletId, cb);
         });
@@ -145,7 +144,7 @@ angular.module('copayApp.services')
         if (err) return cb('Error creating wallet');
 
         root.profile.credentials.push(JSON.parse(walletClient.export()));
-        root._setWalletClients();
+        root.setWalletClients();
 
         root.setAndStoreFocus(walletClient.credentials.walletId, function() {
           storageService.storeProfile(root.profile, function(err) {
@@ -165,7 +164,7 @@ angular.module('copayApp.services')
         if (err) return cb('Error joining wallet' + err);
 
         root.profile.credentials.push(JSON.parse(walletClient.export()));
-        root._setWalletClients();
+        root.setWalletClients();
 
         root.setAndStoreFocus(walletClient.credentials.walletId, function() {
           storageService.storeProfile(root.profile, function(err) {
@@ -183,7 +182,7 @@ angular.module('copayApp.services')
       root.profile.credentials = lodash.reject(root.profile.credentials, {
         walletId: fc.credentials.walletId
       });
-      root._setWalletClients();
+      root.setWalletClients();
 
       root.setAndStoreFocus(null, function() {
         storageService.storeProfile(root.profile, function(err) {
@@ -215,14 +214,17 @@ angular.module('copayApp.services')
       }
 
       root.profile.credentials.push(JSON.parse(walletClient.export()));
-      root._setWalletClients();
+      root.setWalletClients();
 
       root.setAndStoreFocus(walletId, function() {
         storageService.storeProfile(root.profile, function(err) {
-          return cb(null);
+          $rootScope.$emit('Local/WalletImported', walletId);
+          return cb(null, walletId);
         });
       });
     };
+
+
 
     root.create = function(pin, cb) {
       root._createNewProfile(pin, function(err, p) {
@@ -243,7 +245,7 @@ angular.module('copayApp.services')
 
         $log.debug('Creating Wallet:', walletClient.credentials.walletName);
         root.profile.credentials.push(JSON.parse(walletClient.export()));
-        root._setWalletClients();
+        root.setWalletClients();
         root.setAndStoreFocus(walletClient.credentials.walletId, function() {
           storageService.storeProfile(root.profile, function(err) {
             return cb(null, walletClient.credentials.walletId, walletClient.credentials.walletName, existed);

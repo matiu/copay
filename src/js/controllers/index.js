@@ -51,6 +51,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.copayers = [];
       self.setOngoingProcess('scanning', fc.scanning);
       self.lockedBalance = null;
+      self.notAuthorized = false;
       storageService.getBackupFlag(self.walletId, function(err, val) {
         self.needsBackup = !val;
         self.openWallet();
@@ -76,8 +77,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       get(function(err, walletStatus) {
         self.setOngoingProcess('updatingStatus', false);
         if (err) {
-          $log.debug('Wallet Status ERROR:', err);
-          $scope.$emit('Local/ClientError', err);
+          self.handleError(err);
           return;
         }
         $log.debug('Wallet Status:', walletStatus);
@@ -130,6 +130,14 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   };
 
+  self.handleError = function(err) {
+    $log.debug('ERROR:', err);
+    if (err.code === 'NOTAUTHORIZED') {
+      $scope.$emit('Local/NotAuthorized');
+    } else {
+      $scope.$emit('Local/ClientError', err);
+    }
+  };
   self.openWallet = function() {
     var fc = profileService.focusedClient;
     $timeout(function() {
@@ -137,12 +145,11 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       fc.openWallet(function(err, walletStatus) {
         self.setOngoingProcess('openingWallet', false);
         if (err) {
-          $log.debug('Wallet Open ERROR:', err);
-          $scope.$emit('Local/ClientError', err);
-        } else {
-          $log.debug('Wallet Opened');
-          self.updateAll(lodash.isObject(walletStatus) ? walletStatus : null);
+          self.handleError(err);
+          return;
         }
+        $log.debug('Wallet Opened');
+        self.updateAll(lodash.isObject(walletStatus) ? walletStatus : null);
         $rootScope.$apply();
       });
     });
@@ -261,6 +268,22 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   };
 
+
+
+  self.recreate = function(cb) {
+    var fc = profileService.focusedClient;
+    self.setOngoingProcess('recreating', true);
+    fc.recreateWallet(function(err) {
+      self.notAuthorized = false;
+      self.setOngoingProcess('recreating', false);
+
+      profileService.setWalletClients();
+      $timeout(function() {
+        $rootScope.$emit('Local/WalletImported', self.walletId);
+      }, 100);
+    });
+  };
+
   self.openMenu = function() {
     go.swipe(true);
   };
@@ -269,25 +292,21 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     go.swipe();
   };
 
-  self.startScan = function() {
-    var fc = profileService.focusedClient;
-    self.setOngoingProcess('scanning', true);
+  self.startScan = function(walletId) {
+    var c = profileService.walletClients[walletId];
+    c.scanning = true;
 
-    //since scanning takes a lot of time, we also store scanning status on fc
-    fc.scanning = true;
+    if (self.walletId == walletId)
+      self.setOngoingProcess('scanning', true);
 
-    fc.startScan({
+    c.startScan({
       includeCopayerBranches: true,
     }, function(err) {
-      if (err) return cb(err);
-
-      fc.on('notification', function(notification) {
-        if (notification.type == 'ScanFinished') {
+      if (err) {
+        c.scanning = false;
+        if (self.walletId == walletId)
           self.setOngoingProcess('scanning', false);
-          fc.scanning = false;
-        }
-      });
-      return cb();
+      }
     });
   };
 
@@ -314,18 +333,28 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     storageService.setBackupFlag(self.walletId, function() {});
   });
 
+  $rootScope.$on('Local/NotAuthorized', function(event) {
+    self.notAuthorized = true;
+    $rootScope.$apply();
+  });
+
 
   $rootScope.$on('Local/ClientError', function(event, err) {
     self.clientError = err;
     $rootScope.$apply();
   });
 
-  $rootScope.$on('Local/WalletImported', function(event) {
-    self.startScan();
+  $rootScope.$on('Local/WalletImported', function(event, walletId) {
+    self.startScan(walletId);
   });
 
   lodash.each(['NewOutgoingTx', 'NewIncomingTx', 'ScanFinished'], function(eventName) {
     $rootScope.$on(eventName, function() {
+      if (eventName == 'ScanFinished') {
+        var fc = profileService.focusedClient;
+        self.setOngoingProcess('scanning', false);
+        fc.scanning = false;
+      }
       self.updateBalance();
     });
   });

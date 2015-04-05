@@ -30,15 +30,14 @@ angular.module('copayApp.controllers').controller('importController',
       profileService.importWallet(str2, {
         compressed: null,
         password: null
-      }, function(err) {
+      }, function(err, walletId) {
         if (err) {
           self.error = err;
           $scope.$apply();
+          return;
         }
-        else {
-          go.walletHome();
-          notification.success('Success', 'Your wallet has been imported correctly');
-        }
+        go.walletHome();
+        notification.success('Success', 'Your wallet has been imported correctly');
       });
     };
 
