@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('importController',
-  function($scope, $rootScope, $location, $timeout, profileService, notification, go, isMobile, isCordova) {
+  function($scope, $rootScope, $location, $timeout, $log, profileService, notification, go, isMobile, isCordova, sjcl) {
+
+    var self = this;
 
     this.isSafari = isMobile.Safari();
     this.isCordova = isCordova;
@@ -15,12 +17,22 @@ angular.module('copayApp.controllers').controller('importController',
     });
 
     var _import = function(str, opts) {
-      profileService.importWallet(str, {
+      var str2;
+      try {
+       str2 = sjcl.decrypt(self.password, str);
+      } catch (e) {
+        self.error = 'Could not decrypt file, check your password';
+        $log.warn(e);
+        $scope.$apply();
+        return;
+      };
+
+      profileService.importWallet(str2, {
         compressed: null,
         password: null
       }, function(err) {
         if (err) {
-          $scope.error = err;
+          self.error = err;
           $scope.$apply();
         }
         else {
@@ -42,6 +54,7 @@ angular.module('copayApp.controllers').controller('importController',
     this.import = function(form) {
       if (form.$invalid) {
         this.error = 'There is an error in the form';
+        $scope.$apply();
         return;
       }
 
@@ -51,6 +64,7 @@ angular.module('copayApp.controllers').controller('importController',
 
       if (!backupFile && !backupText) {
         this.error = 'Please, select your backup file';
+        $scope.$apply();
         return;
       }
 

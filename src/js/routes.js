@@ -287,6 +287,24 @@ angular
           }
         }
       })
+      .state('backup', {
+        url: '/backup',
+        templateUrl: 'views/backup.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/backup.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Backup';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
       .state('settings', {
         url: '/settings',
         controller: 'settingsController',

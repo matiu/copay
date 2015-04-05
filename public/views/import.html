@@ -2,12 +2,12 @@
     <div class="row m20t">
       <div class="large-12 columns">
           <form name="importForm" ng-submit="import.import(importForm)" novalidate>
-            <div class="box-notification" ng-show="error">
+            <div class="box-notification" ng-show="import.error">
               <div class="box-icon error">
                 <i class="fi-x size-24"></i>
               </div>
               <span class="text-warning size-14">
-                {{error|translate}}
+                {{import.error|translate}}
               </span>
             </div>
 
@@ -29,11 +29,11 @@
             <label for="password"><span translate>Password</span>  <small translate>Required</small>
             </label>
             <div class="input">
-              <input type="password" class="form-control" placeholder="{{'Your wallet password'|translate}}"
+              <input type="password" class="form-control" placeholder="{{'Your backup password'|translate}}"
               name="password" ng-model="import.password">
             </div>
             <button translate type="submit" class="button radius expand black m0" 
-              ng-disabled="importForm.$invalid">
+              ng-disabled="importForm.$invalid || !import.password">
               Import backup
             </button>
           </form>
