@@ -17,6 +17,11 @@
               <input type="text" placeholder="{{'Family vacation funds'|translate}}" class="form-control" name="walletName" ng-model="walletName" ng-required="true">
             </div>
           </label>
+          <label><span translate>Your name</span>
+            <div class="input">
+              <input type="text" placeholder="{{'John Doe'|translate}}" class="form-control" name="myName" ng-model="myName" ng-required="true" ng-disabled="totalCopayers == 1">
+            </div>
+          </label>
           <div class="row">
             <div class="large-6 medium-6 columns">
               <label><span translate>Select total number of copayers</span>

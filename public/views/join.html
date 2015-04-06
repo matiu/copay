@@ -2,6 +2,25 @@
   <div class="row m20t">
     <div class="large-12 columns">
       <form name="joinForm" ng-submit="join.join(joinForm)" novalidate>
+            <div class="row collapse">
+            <label for="name" class="left"><span translate>Your name</span> 
+              <small translate ng-show="joinForm.name.$pristine">Required</small>
+            </label>
+            <span class="has-error right size-12" ng-show="joinForm.name.$invalid
+              && !joinForm.name.$pristine">
+              <span class="icon-input"><i class="fi-x"></i></span>
+              <span translate>You must enter you name</span>
+            </span>
+            <small class="icon-input right" ng-show="joinForm.name.$valid
+              && !joinForm.name.$pristine"><i class="fi-check"></i></small>
+          </div>
+
+          <div class="input">
+            <input id="name" type="text" placeholder="{{'Entre your name here'|translate}}" name="name" ng-model="name" required>
+          </div>
+
+
+
           <div class="row collapse">
             <label for="secret" class="left"><span translate>Wallet Secret</span> 
               <small translate ng-show="joinForm.secret.$pristine">Required</small>

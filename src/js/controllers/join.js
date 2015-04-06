@@ -138,16 +138,16 @@ angular.module('copayApp.controllers').controller('joinController',
         return;
       }
 
-      // TODO Priv key, nickname
+      // TODO Priv key
       profileService.joinWallet({
         secret: form.secret.$modelValue,
-        //        nickname: form.nickname.$modelValue,
         extendedPrivateKey: form.privateKey.$modelValue,
+        myName: form.name.$modelValue,
       }, function(err) {
         if (err) {
           notification.error(err);
           return;
-        } 
+        }
         go.walletHome();
       });
     }
