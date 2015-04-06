@@ -6,35 +6,41 @@
 		</a>
 	</div>
 
-  <form name="settingsForm" ng-submit="preferences.save()">
+
     <div class="row m20t">
       <div class="large-6 medium-6 columns">
         <label translate>Wallet Unit</label>
-        <select class="form-control"
-          ng-model="preferences.selectedUnit"
-          ng-options="o.name for o in preferences.unitOpts">
-        </select>
+        <div class="m10">
+            <a  ng-click="$root.go('preferencesUnit')">
+              <i class="icon-arrow-right3 size-18 right m5t"></i>
+            </a>
+            {{preferences.unitName}}
+        </div>
+
       </div>
       <div class="large-6 medium-6 columns">
         <label translate>Alternative Currency</label>
-        <select class="form-control"
-          ng-model="preferences.selectedAlternative"
-          ng-options="alternative.name for alternative in preferences.alternativeOpts">
-        </select>
+         <div class="m10">
+            <a  ng-click="$root.go('preferencesAltCurrency')">
+              <i class="icon-arrow-right3 size-18 right m5t"></i>
+            </a>
+            {{preferences.selectedAlternative.name}}
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="large-12 columns">
         <label translate>BWS url</label>
-        <input type="text" id="bwsurl" type="text" name="bwsurl" ng-model="preferences.bwsurl">
+        <div class="m10">
+            <a  ng-click="$root.go('preferencesBwsUrl')">
+              <i class="icon-arrow-right3 size-18 right m5t"></i>
+            </a>
+            {{preferences.bwsurl}}
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="large-12 columns">
-        <input type="submit" class="button expand black radius" value="{{'Save'|translate}}">
-      </div>
-    </div>
-  </form>
+
+
 
   <div class="row">
     <div class="columns text-center">

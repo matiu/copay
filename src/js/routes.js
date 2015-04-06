@@ -287,6 +287,60 @@ angular
           }
         }
       })
+      .state('preferencesUnit', {
+        url: '/preferencesUnit',
+        templateUrl: 'views/preferencesUnit.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesUnit.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Preferences Unit';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
+      .state('preferencesAltCurrency', {
+        url: '/preferencesAltCurrency',
+        templateUrl: 'views/preferencesAltCurrency.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesAltCurrency.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Preferences Alternative Currency';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
+      .state('preferencesBwsUrl', {
+        url: '/preferencesBwsUrl',
+        templateUrl: 'views/preferencesBwsUrl.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesBwsUrl.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Preferences Bws Url';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
       .state('backup', {
         url: '/backup',
         templateUrl: 'views/backup.html',
@@ -318,28 +372,28 @@ angular
         needProfile: false
       })
 
-      .state('add', {
-        url: '/add',
-        needProfile: true,
-        views: {
-          'main': {
-            templateUrl: 'views/add.html'
-          },
-          'topbar': {
-            templateUrl: 'views/includes/topbar.html',
-            controller: function($scope) {
-              $scope.titleSection = 'Add wallet';
-              $scope.goBackToState = 'walletHome';
-            }
+    .state('add', {
+      url: '/add',
+      needProfile: true,
+      views: {
+        'main': {
+          templateUrl: 'views/add.html'
+        },
+        'topbar': {
+          templateUrl: 'views/includes/topbar.html',
+          controller: function($scope) {
+            $scope.titleSection = 'Add wallet';
+            $scope.goBackToState = 'walletHome';
           }
         }
-      })
+      }
+    })
       .state('network', {
         url: '/network/:status',
         views: {
           'main': {
             controller: function($scope, $stateParams, go) {
-              switch($stateParams.status) {
+              switch ($stateParams.status) {
                 case 'online':
                   $scope.$emit('Local/OnLine');
                   break;

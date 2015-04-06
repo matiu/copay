@@ -1,0 +1,13 @@
+<div class="preferences" ng-controller="preferencesAltCurrencyController as prefAltCurrency">
+  <div ng-repeat="altCurrency in prefAltCurrency.alternativeOpts" ng-click="prefAltCurrency.save(altCurrency)" ng-class="{'line-b':!$last}" class="row last-transactions-content">
+      <div class="large-5 medium-5 small-5 columns">
+            <span class="size-18">
+              {{altCurrency.name}}
+            </span>
+      </div>
+          <div class="large-3 medium-3 small-3 columns">
+            <span class="label tu success" ng-show="altCurrency.name == prefAltCurrency.selectedAlternative.name">SELECTED</span>
+          </div> 
+  </div>
+</div>
+<div class="extra-margin-bottom"></div>
