@@ -9,7 +9,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     return (parseFloat(number.toPrecision(12)));
   };
 
-
   self.setOngoingProcess = function(processName, isOn) {
     $log.debug('onGoingProcess', processName, isOn);
     self[processName] = isOn;
@@ -34,6 +33,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
     $timeout(function() {
       self.hasProfile = true;
+      self.noFocusedWallet = false;
       self.onGoingProcess = {};
 
       // Credentials Shortcuts 
@@ -52,6 +52,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.setOngoingProcess('scanning', fc.scanning);
       self.lockedBalance = null;
       self.notAuthorized = false;
+      self.clientError = null;
       storageService.getBackupFlag(self.walletId, function(err, val) {
         self.needsBackup = !val;
         self.openWallet();
@@ -375,8 +376,15 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   });
 
-  $rootScope.$on('Local/NoWallets', function() {
-    go.addWallet();
+  $rootScope.$on('Local/NoWallets', function(event) {
+    $timeout(function() {
+      self.hasProfile = true;
+      self.noFocusedWallet = true;
+      self.clientError = null;
+      self.isComplete = null;
+      self.walletName = null;
+      go.addWallet();
+    });
   });
 
   $rootScope.$on('Local/NewFocusedWallet', function() {

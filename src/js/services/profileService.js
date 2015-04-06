@@ -8,7 +8,6 @@ angular.module('copayApp.services')
     root.focusedClient = null;
     root.walletClients = {};
 
-
     root.getUtils = function() {
       return bwcService.getUtils();
     };
@@ -27,16 +26,19 @@ angular.module('copayApp.services')
       // Set local object
       root.focusedClient = root.walletClients[walletId];
 
-      if (!root.focusedClient)
+      if (lodash.isEmpty(root.focusedClient)) {
         root.focusedClient = root.walletClients[lodash.keys(root.walletClients)[0]];
+      }
 
-      if (!root.focusedClient) {
+      if (lodash.isEmpty(root.focusedClient)) {
         $rootScope.$emit('Local/NoWallets');
-        return cb();
       }
 
       // set if completed
-      $rootScope.$emit('Local/NewFocusedWallet');
+      if (!lodash.isEmpty(root.focusedClient)) {
+        $rootScope.$emit('Local/NewFocusedWallet');
+      }
+
       return cb();
     };
 
@@ -103,6 +105,7 @@ angular.module('copayApp.services')
         if (err) return cb(err);
         root.setWalletClients();
         storageService.getFocusedWalletId(function(err, focusedWalletId) {
+          if (err) return cb(err);
           root._setFocus(focusedWalletId, cb);
         });
       });
@@ -182,12 +185,17 @@ angular.module('copayApp.services')
       root.profile.credentials = lodash.reject(root.profile.credentials, {
         walletId: fc.credentials.walletId
       });
-      root.setWalletClients();
-
-      root.setAndStoreFocus(null, function() {
-        storageService.storeProfile(root.profile, function(err) {
-          $rootScope.$emit('updateWalletList');
-          return cb();
+     
+      delete root.walletClients[fc.credentials.walletId];
+      root.focusedClient = null;
+      
+      $timeout(function() {
+        root._setWalletClients();
+        root.setAndStoreFocus(null, function() {
+          storageService.storeProfile(root.profile, function(err) {
+            if (err) return cb(err);
+            return cb();
+          });
         });
       });
     };

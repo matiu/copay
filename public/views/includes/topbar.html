@@ -1,6 +1,6 @@
 <nav ng-controller="topbarController as topbar" class="tab-bar">
   <section class="left-small">
-    <a class="p10" ng-show="!goBackToState" 
+    <a class="p10" ng-show="!goBackToState && !index.noFocusedWallet" 
       ng-click="index.openMenu()"><i class="fi-list size-24"></i>
     </a>
     <a ng-show="goBackToState"

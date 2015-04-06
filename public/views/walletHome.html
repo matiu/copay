@@ -1,5 +1,5 @@
 <div class="home-wallet" ng-controller="walletHomeController as home" ng-init="home.init()">
-  <div class="row">
+  <div class="row" ng-show="!index.noFocusedWallet">
         <div class="amount">
           <div class="size-36">
             <strong>
@@ -91,6 +91,12 @@ You can recreate it from the local information.
     </div>
   </div>
 
+  <div class="row columns m20tp" ng-show="index.noFocusedWallet">
+    <div class="text-center text-warning m20b">
+      <i class="fi-alert"></i> <span translate>You do not have any wallet</span>
+    </div>
+    <button class="button black expand" ng-click="$root.go('add')" translate>Create</button>
+  </div>
 
   <div class="text-gray text-center m10t animated infinite flash" ng-show="index.anyOnGoingProcess" > 
     <span translate ng-show="index.onGoingProcessName == 'openingWallet'">Opening Wallet...</span>
