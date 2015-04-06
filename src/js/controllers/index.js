@@ -349,7 +349,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.startScan(walletId);
   });
 
-  lodash.each(['NewOutgoingTx', 'NewIncomingTx', 'ScanFinished'], function(eventName) {
+  lodash.each(['NewIncomingTx', 'ScanFinished'], function(eventName) {
     $rootScope.$on(eventName, function() {
       if (eventName == 'ScanFinished') {
         self.setOngoingProcess('scanning', false);
@@ -359,7 +359,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   });
 
 
-  lodash.each(['NewTxProposal', 'TxProposalFinallyRejected',
+  lodash.each(['NewOutgoingTx', 'NewTxProposal', 'TxProposalFinallyRejected',
     'Local/NewTxProposal', 'Local/TxProposalAction'
   ], function(eventName) {
     $rootScope.$on(eventName, function() {
