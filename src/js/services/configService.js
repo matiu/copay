@@ -102,7 +102,7 @@ angular.module('copayApp.services').factory('configService', function(localStora
         newOpts = JSON.parse(newOpts);
       }
 
-      lodash.assign(config, oldOpts, newOpts);
+      lodash.merge(config, oldOpts, newOpts);
 
       configCache = config;
 

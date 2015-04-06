@@ -15,97 +15,56 @@ angular.module('copayApp.controllers').controller('preferencesController',
     this.unitName = config.wallet.settings.unitName;
     this.bwsurl = config.bws.url;
 
-    this.unitOpts = [
-      // TODO : add Satoshis to bitcore-wallet-client formatAmount()
-      // {
-      //     name: 'Satoshis (100,000,000 satoshis = 1BTC)',
-      //     shortName: 'SAT',
-      //     value: 1,
-      //     decimals: 0,
-      //     code: 'sat',
-      //   }, 
-      {
-        name: 'bits (1,000,000 bits = 1BTC)',
-        shortName: 'bits',
-        value: 100,
-        decimals: 2,
-        code: 'bit',
-      }
-      // TODO : add mBTC to bitcore-wallet-client formatAmount()
-      // ,{
-      //   name: 'mBTC (1,000 mBTC = 1BTC)',
-      //   shortName: 'mBTC',
-      //   value: 100000,
-      //   decimals: 5,
-      //   code: 'mbtc',
-      // }
-      , {
-        name: 'BTC',
-        shortName: 'BTC',
-        value: 100000000,
-        decimals: 8,
-        code: 'btc',
-      }
-    ];
-
-    for (var ii in this.unitOpts) {
-      if (this.unitName === this.unitOpts[ii].shortName) {
-        this.selectedUnit = this.unitOpts[ii];
-        break;
-      }
-    }
 
     this.selectedAlternative = {
       name: config.wallet.settings.alternativeName,
       isoCode: config.wallet.settings.alternativeIsoCode
     };
-    this.alternativeOpts = rateService.isAvailable() ?
-      rateService.listAlternatives() : [this.selectedAlternative];
 
-
-    var self = this;
-    rateService.whenAvailable(function() {
-      self.alternativeOpts = rateService.listAlternatives();
-      for (var ii in self.alternativeOpts) {
-        if (config.wallet.settings.alternativeIsoCode === self.alternativeOpts[ii].isoCode) {
-          self.selectedAlternative = self.alternativeOpts[ii];
-        }
-      }
-      $scope.$digest();
-    });
+    console.log('this.unitName ', this.unitName);
+    console.log('this.selectedAlternative  ', this.selectedAlternative);
 
 
 
-    this.save = function() {
-      var opts = {
-        wallet: {
-          settings: {
-            unitName: this.selectedUnit.shortName,
-            unitToSatoshi: this.selectedUnit.value,
-            unitDecimals: this.selectedUnit.decimals,
-            unitCode: this.selectedUnit.code,
-            alternativeName: this.selectedAlternative.name,
-            alternativeIsoCode: this.selectedAlternative.isoCode,
-          }
-        },
-        bws: {
-          url: this.bwsurl,
-        }
-      };
 
-      configService.set(opts, function(err) {
-        if (err) console.log(err);
-        var hardRestart = !$scope.settingsForm.bwsurl.$pristine;
-        applicationService.restart(hardRestart);
-        go.walletHome();
-        $scope.$emit('Local/ConfigurationUpdated');
-        notification.success('Success', $filter('translate')('settings successfully updated'));
-      });
+    // var self = this;
+    // rateService.whenAvailable(function() {
+    //   self.alternativeOpts = rateService.listAlternatives();
+    //   for (var ii in self.alternativeOpts) {
+    //     if (config.wallet.settings.alternativeIsoCode === self.alternativeOpts[ii].isoCode) {
+    //       self.selectedAlternative = self.alternativeOpts[ii];
+    //     }
+    //   }
+    //   $scope.$digest();
+    // });
 
 
+    // this.save = function() {
+    //   var opts = {
+    //     wallet: {
+    //       settings: {
+    //         unitName: this.selectedUnit.shortName,
+    //         unitToSatoshi: this.selectedUnit.value,
+    //         unitDecimals: this.selectedUnit.decimals,
+    //         unitCode: this.selectedUnit.code,
+    //         alternativeName: this.selectedAlternative.name,
+    //         alternativeIsoCode: this.selectedAlternative.isoCode,
+    //       }
+    //     },
+    //     bws: {
+    //       url: this.bwsurl,
+    //     }
+    //   };
 
-      // notification.success('Success', $filter('translate')('settings successfully updated'));
-    };
+    //   configService.set(opts, function(err) {
+    //     if (err) console.log(err);
+    //     var hardRestart = !$scope.settingsForm.bwsurl.$pristine;
+    //     applicationService.restart(hardRestart);
+    //     go.walletHome();
+    //     $scope.$emit('Local/ConfigurationUpdated');
+    //     notification.success('Success', $filter('translate')('settings successfully updated'));
+    //   });
+    // };
 
     var _modalDeleteWallet = function() {
       var ModalInstanceCtrl = function($scope, $modalInstance) {

@@ -70,6 +70,10 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
     $state.go('send');
   };
 
+  root.preferences = function() {
+    $state.go('preferences');
+  };
+
   root.reload = function() {
     $state.reload();
   };
