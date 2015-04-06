@@ -352,9 +352,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   lodash.each(['NewOutgoingTx', 'NewIncomingTx', 'ScanFinished'], function(eventName) {
     $rootScope.$on(eventName, function() {
       if (eventName == 'ScanFinished') {
-        var fc = profileService.focusedClient;
         self.setOngoingProcess('scanning', false);
-        fc.scanning = false;
       }
       self.updateBalance();
     });

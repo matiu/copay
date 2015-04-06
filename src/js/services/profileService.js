@@ -71,6 +71,11 @@ angular.module('copayApp.services')
             notificationService.newBWCNotification(notification,
               client.credentials.walletId, client.credentials.walletName);
 
+            // Actions for both focuses and unfocuses wallets...
+            if (notification.type == 'ScanFinished') {
+              client.scanning = false;
+            }
+
             if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
               $rootScope.$emit(notification.type);
             } else {
