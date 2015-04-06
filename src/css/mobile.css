@@ -100,27 +100,30 @@ _:-ms-fullscreen, :root .main {
 }
 
 .tab-bar-section.middle {
-  left: 5.8125rem;
-  right: 5.8125rem;
+  left: 3.8125rem;
+  right: 3.8125rem;
 }
 
 .left-small {
-  width: 5.8125rem;
+  width: 3.8125rem;
 }
 
 .right-small {
-  width: 5.8125rem;
+  width: 3.8125rem;
   text-align: right;
 }
 
 .tab-bar .icon-back {
-  font-size: 47px;
+  font-size: 32px;
   position: absolute;
   line-height: 52px;
+  left: -3px;
+  height: 45px;
 } 
 
 .tab-bar .text-back {
-  margin-left: 35px;
+  margin-left: 22px;
+  font-size: 14px;
 }
 
 .bottom-bar {
