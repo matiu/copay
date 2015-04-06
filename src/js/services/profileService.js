@@ -172,15 +172,13 @@ angular.module('copayApp.services')
     root.joinWallet = function(opts, cb) {
       var walletClient = bwcService.getClient();
       $log.debug('Joining Wallet:', opts);
-
       if (opts.extendedPrivateKey) {
         try {
           walletClient.seedFromExtendedPrivateKey(opts.extendedPrivateKey);
         } catch (ex) {
-          return cb('Could not create using the specified extended private key');
+          return cb('Could not join using the specified extended private key');
         }
       }
-
       // TODO name
       walletClient.joinWallet(opts.secret, opts.myName || 'me', function(err) {
         // TODO: err
