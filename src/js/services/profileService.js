@@ -190,7 +190,7 @@ angular.module('copayApp.services')
       root.focusedClient = null;
       
       $timeout(function() {
-        root._setWalletClients();
+        root.setWalletClients();
         root.setAndStoreFocus(null, function() {
           storageService.storeProfile(root.profile, function(err) {
             if (err) return cb(err);
