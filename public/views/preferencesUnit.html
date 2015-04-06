@@ -1,13 +1,7 @@
 <div class="preferences" ng-controller="preferencesUnitController as prefUnit">
-  <div ng-repeat="unit in prefUnit.unitOpts" ng-click="prefUnit.save(unit)" ng-class="{'line-b':!$last}" class="row last-transactions-content">
-      <div class="large-5 medium-5 small-5 columns">
-            <span class="size-18">
-              {{unit.shortName}}
-            </span>
-      </div>
-          <div class="large-3 medium-3 small-3 columns">
-            <span class="label tu success" ng-show="prefUnit.unitName == unit.shortName">SELECTED</span>
-          </div>
+  <div ng-repeat="unit in prefUnit.unitOpts" ng-click="prefUnit.save(unit)" class="line-b p20 size-14">
+    <span>{{unit.shortName}}</span>
+    <i class="fi-check size-16 right" ng-show="prefUnit.unitName == unit.shortName"></i>
   </div>
 </div>
 <div class="extra-margin-bottom"></div>

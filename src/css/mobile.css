@@ -140,7 +140,7 @@ _:-ms-fullscreen, :root .main {
   width: 100%;
   text-align: center;
   padding: 3rem 1rem;
-  margin-bottom: 15px;
+  margin-bottom: 11px;
   color: #fff;
 }
 
@@ -164,27 +164,27 @@ _:-ms-fullscreen, :root .main {
 }
 
 .home-wallet .avatar-wallet {
-  padding: 1.7rem;
-  width: 90px;
-  height: 90px;
+  padding: 1.5rem;
+  width: 75px;
+  height: 75px;
   position: absolute;
-  top: -43px;
+  top: -33px;
   font-size: 35px;
   border: 3px solid #fff;
   background: #1ABC9C;
   margin: 0;
   color: #FFF;
   font-weight: 700;
-  line-height: 24px;
+  line-height: 15px;
   text-align: center;
   border-radius: 5px;
 }
 
 .home-wallet .wallet-info {
-  margin-left: 100px;
+  margin-left: 85px;
   line-height: 110%;
   float: left;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .copayers {
