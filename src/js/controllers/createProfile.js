@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('createProfileController', function($rootScope, $scope, $log, $timeout, profileService, go) {
-
-  var _credentials;
   var self = this;
 
   if (profileService.profile)
     go.walletHome();
 
-  $rootScope.$on('pin', function(event, pin) {
+  var pin='';
+  // $rootScope.$on('pin', function(event, pin) {
     self.creatingProfile = true;
+
     $timeout(function() {
       profileService.create(pin, function(err) {
         if (err) {
@@ -21,9 +21,9 @@ angular.module('copayApp.controllers').controller('createProfileController', fun
             go.reload();
           }, 3000);
         } else {
-          go.walletHome();
+          go.path('splash');
         }
       });
-    }, 100);
-  });
+     }, 100);
+  // });
 });
