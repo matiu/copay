@@ -1,50 +1,38 @@
 <div class="preferences" ng-controller="preferencesController as preferences">
-	<div class="m10 line-b">
-		<a  ng-click="$root.go('backup')">
-			<i class="icon-arrow-right3 size-18 right m5t"></i>  
-			<span translate>Backup wallet</span>
-		</a>
-	</div>
+
+  <ul class="no-bullet m0 size-14">
+    <li class="line-b p20" ng-click="$root.go('preferencesUnit')">
+      <span translate>Wallet Unit</span>
+      <span class="right text-gray">
+        <i class="icon-arrow-right3 size-24 right"></i>
+        {{preferences.unitName}}
+      </span>      
+    </li>
+      
+    <li class="line-b p20" ng-click="$root.go('preferencesAltCurrency')">
+      <span translate>Alternative Currency</span>
+      <span class="right text-gray">
+        <i class="icon-arrow-right3 size-24 right"></i>
+        {{preferences.selectedAlternative.name}}
+      </span>
+    </li>
+    
+    <li class="line-b p20" ng-click="$root.go('preferencesBwsUrl')">
+      <span translate>BWS url</span>
+        <span class="text-gray right">
+          <i class="icon-arrow-right3 size-24 right"></i>
+          {{preferences.bwsurl}}
+        </span>
+    </li>
+
+    <li class="line-b p20" ng-click="$root.go('backup')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>  
+      <span translate>Backup wallet</span>
+    </li>
+  </ul>
 
 
-    <div class="row m20t">
-      <div class="large-6 medium-6 columns">
-        <label translate>Wallet Unit</label>
-        <div class="m10">
-            <a  ng-click="$root.go('preferencesUnit')">
-              <i class="icon-arrow-right3 size-18 right m5t"></i>
-            </a>
-            {{preferences.unitName}}
-        </div>
-
-      </div>
-      <div class="large-6 medium-6 columns">
-        <label translate>Alternative Currency</label>
-         <div class="m10">
-            <a  ng-click="$root.go('preferencesAltCurrency')">
-              <i class="icon-arrow-right3 size-18 right m5t"></i>
-            </a>
-            {{preferences.selectedAlternative.name}}
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="large-12 columns">
-        <label translate>BWS url</label>
-        <div class="m10">
-            <a  ng-click="$root.go('preferencesBwsUrl')">
-              <i class="icon-arrow-right3 size-18 right m5t"></i>
-            </a>
-            {{preferences.bwsurl}}
-        </div>
-      </div>
-    </div>
-
-
-
-  <div class="row">
-    <div class="columns text-center">
-      <h3 class="text-warning"> <strong translate> Warning! </strong></h3>
+      <h4 class="title text-center m0" translate> Warning! </h4>
       <div class="box-notification" ng-show="preferences.error">
         <div class="box-icon error">
           <i class="fi-x size-24"></i>
@@ -53,11 +41,11 @@
           {{preferences.error|translate}}
         </span>
       </div>
-      <p translate class="size-12 text-gray">Permanently delete this wallet. WARNING: this action cannot be reversed.</p>
-      <button class="button expand warning" ng-click="preferences.deleteWallet()">
-        Delete wallet
-      </button>
-    </div>
-  </div>
+      <div class="columns text-center m10t">
+        <p translate class="size-12 text-gray">Permanently delete this wallet. WARNING: this action cannot be reversed.</p>
+        <button class="button expand warning" ng-click="preferences.deleteWallet()">
+          Delete wallet
+        </button>
+      </div>
 </div>
 <div class="extra-margin-bottom"></div>
