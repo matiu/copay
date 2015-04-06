@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('copayersController',
-  function($scope, $rootScope, $timeout, $log, profileService, go, notification, isCordova) {
+  function($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, isCordova) {
     var self = this;
     var fc = profileService.focusedClient;
 
@@ -43,25 +43,69 @@ angular.module('copayApp.controllers').controller('copayersController',
       }, 1);
     };
 
-    self.deleteWallet = function() {
+    var _modalDeleteWallet = function() {
+      var ModalInstanceCtrl = function($scope, $modalInstance) {
+        $scope.title = 'Are you sure you want to delete this wallet?';
+        $scope.loading = false;
+
+        $scope.ok = function() {
+          $scope.loading = true;
+          $modalInstance.close('ok');
+
+        };
+        $scope.cancel = function() {
+          $modalInstance.dismiss('cancel');
+        };
+      };
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/modals/confirmation.html',
+        windowClass: 'full',
+        controller: ModalInstanceCtrl
+      });
+      modalInstance.result.then(function(ok) {
+        if (ok) {
+          _deleteWallet();
+        }
+      });
+    };
+
+    var _deleteWallet = function() {
       $timeout(function() {
-        identityService.deleteWallet(w, function(err) {
+        var fc = profileService.focusedClient;
+        var walletName = fc.credentials.walletName;
+
+        profileService.deleteWallet({}, function(err) {
           if (err) {
-            self.error = err.message || err;
-            copay.logger.warn(err);
+            this.error = err.message || err;
+            console.log(err);
             $timeout(function() {
-              self.$digest();
+              $scope.$digest();
             });
           } else {
-            if ($rootScope.wallet) {
-              go.walletHome();
-            }
+            go.walletHome();
             $timeout(function() {
-              notification.success('Success', 'The wallet "' + (w.name || w.id) + '" was deleted');
+              notification.success('Success', 'The wallet "' + walletName + '" was deleted');
             });
           }
         });
       }, 100);
+    };
+
+    self.deleteWallet = function() {
+      if (isCordova) {
+        navigator.notification.confirm(
+          'Are you sure you want to delete this wallet?',
+          function(buttonIndex) {
+            if (buttonIndex == 2) {
+              _deleteWallet();
+            }
+          },
+          'Confirm', ['Cancel', 'OK']
+        );
+      } else {
+        _modalDeleteWallet();
+      }
     };
 
     self.copySecret = function(secret) {
