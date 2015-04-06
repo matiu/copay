@@ -370,7 +370,13 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   lodash.each(['TxProposalRejectedBy', 'TxProposalAcceptedBy'], function(eventName) {
     $rootScope.$on(eventName, function() {
-      self.updatePendingTxps();
+      var f = function() {
+        if (self.updatingStatus) {
+          return $timeout(f, 200);
+        };
+        self.updatePendingTxps();
+      };
+      f();
     });
   });
 
