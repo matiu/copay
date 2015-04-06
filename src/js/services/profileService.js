@@ -146,6 +146,13 @@ angular.module('copayApp.services')
       var walletClient = bwcService.getClient();
       $log.debug('Creating Wallet:', opts);
 
+      if (opts.extendedPrivateKey) {
+        try {
+          walletClient.seedFromExtendedPrivateKey(opts.extendedPrivateKey);
+        } catch (ex) {
+          return cb('Could not create using the specified extended private key');
+        }
+      }
       walletClient.createWallet(opts.name, opts.myName || 'me', opts.m, opts.n, {
         network: opts.networkName
       }, function(err, secret) {
@@ -190,10 +197,10 @@ angular.module('copayApp.services')
       root.profile.credentials = lodash.reject(root.profile.credentials, {
         walletId: fc.credentials.walletId
       });
-     
+
       delete root.walletClients[fc.credentials.walletId];
       root.focusedClient = null;
-      
+
       $timeout(function() {
         root.setWalletClients();
         root.setAndStoreFocus(null, function() {
