@@ -161,7 +161,6 @@ angular.module('copayApp.controllers').controller('preferencesController',
         navigator.notification.confirm(
           'Are you sure you want to delete this wallet?',
           function(buttonIndex) {
-            console.log('[preferences.js:67]', buttonIndex); //TODO
             if (buttonIndex == 2) {
               _deleteWallet();
             }
