@@ -51,6 +51,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.copayers = [];
       self.setOngoingProcess('scanning', fc.scanning);
       self.lockedBalance = null;
+      self.totalBalanceStr = null;
       self.notAuthorized = false;
       self.clientError = null;
       storageService.getBackupFlag(self.walletId, function(err, val) {
@@ -147,10 +148,11 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         self.setOngoingProcess('openingWallet', false);
         if (err) {
           self.handleError(err);
-          return;
         }
-        $log.debug('Wallet Opened');
-        self.updateAll(lodash.isObject(walletStatus) ? walletStatus : null);
+        else {
+          $log.debug('Wallet Opened');
+          self.updateAll(lodash.isObject(walletStatus) ? walletStatus : null);
+        }
         $rootScope.$apply();
       });
     });
