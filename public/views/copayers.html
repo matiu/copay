@@ -38,23 +38,9 @@
   <!-- end of row -->
   <div class="row">
     <div class="large-12 columns">
-      <button class="small warning expand" ng-show="!confirmDelete" ng-click="confirmDelete=!confirmDelete">
+      <button class="small warning expand" ng-click="copayers.deleteWallet()">
         <i class="fi-trash"></i> <span translate>Cancel</span>
       </button>
-      <div class="text-center" ng-show="confirmDelete">
-        <h2 translate>Are you sure you want to cancel and delete this wallet</h2>
-        <div class="row">
-          <div class="large-6 medium-6 small-6 columns">
-            <button class="gray radius expand" ng-disabled="loading" 
-              ng-click="confirmDelete=!confirmDelete" translate>No</button>
-          </div>
-          <div class="large-6 medium-6 small-6 columns">
-            <button class="warning expand" ng-disabled="loading" ng-click="copayers.deleteWallet(); confirmDelete = !confirmDelete">
-              <i class="fi-trash"></i> <span translate>Yes</span>
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

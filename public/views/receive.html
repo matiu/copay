@@ -1,27 +1,23 @@
 <div class="receive" ng-controller="receiveController as receive" ng-init="receive.getAddress()">
 
-  <div ng-show="index.needsBackup && !receive.skipBackup" style="margin-top:60px"> 
-  <div class="text-center text-warning"> 
+  <div ng-show="index.needsBackup && !receive.skipBackup" class="m20tp"> 
+    <div class="text-center text-warning"> 
       <i class="fi-alert"></i>
-<span translate>
-      WARNING: Backup needed
-</span>
-  </div>
+      <span translate>
+        WARNING: Backup needed
+      </span>
+    </div>
   <div class="text-center text-gray m15r m15l" translate>
-Before receiving funds, it is highly recommended you backup your wallet keys.
+    Before receiving funds, it is highly recommended you backup your wallet keys.
   </div>
   <div class="text-center m10t ">
     <span class="button outline dark-gray tiny" 
-      ng-click="$root.go('backup')"
-      <span translate>Backup now</span>
-    </span>
+      ng-click="$root.go('backup')" translate>Backup now</span>
  </div>
  
   <div class="text-center m10t">
     <span class="button outline dark-gray tiny" 
-      ng-click="receive.skipBackup = true"
-      <span translate>Skip backup</span>
-    </span>
+      ng-click="receive.skipBackup = true" translate>Skip backup</span>
  </div>
 
 
