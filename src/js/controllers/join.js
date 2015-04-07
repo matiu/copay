@@ -143,13 +143,13 @@ angular.module('copayApp.controllers').controller('joinController',
         profileService.joinWallet({
           secret: form.secret.$modelValue,
           extendedPrivateKey: form.privateKey.$modelValue,
-          myName: form.myName.$modelValue,
+          myName: form.myName.$modelValue
         }, function(err) {
           self.loading = false;
           if (err) {
             notification.error(err);
           }
-          esle {
+          else {
             go.walletHome();
           }
         });
