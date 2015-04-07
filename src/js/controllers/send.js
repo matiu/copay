@@ -177,15 +177,20 @@ angular.module('copayApp.controllers').controller('sendController',
           payProUrl: paypro ? paypro.url : null,
         }, function(err, txp) {
           self.setOngoingProcess();
-          if (isCordova) {
-            window.plugins.spinnerDialog.hide();
+          if (err) { 
+            if (isCordova) {
+              window.plugins.spinnerDialog.hide();
+            }
+            self.blockUx = false;
+            return self.setError(err);
           }
-          self.blockUx = false;
-
-          if (err) return self.setError(err);
 
           self.signAndBroadcast(txp, function(err) {
             self.setOngoingProcess();
+            if (isCordova) {
+              window.plugins.spinnerDialog.hide();
+            }
+            self.blockUx = false;
             if (err) return self.setError(err);
             self.resetForm(form);
           });
