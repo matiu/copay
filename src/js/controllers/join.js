@@ -132,22 +132,27 @@ angular.module('copayApp.controllers').controller('joinController',
     };
 
 
-    self.join = function(form) {
+    this.join = function(form) {
       if (form && form.$invalid) {
         notification.error('Error', 'Please enter the required fields');
         return;
       }
+      self.loading = true;
 
-      profileService.joinWallet({
-        secret: form.secret.$modelValue,
-        extendedPrivateKey: form.privateKey.$modelValue,
-        myName: form.myName.$modelValue,
-      }, function(err) {
-        if (err) {
-          notification.error(err);
-          return;
-        }
-        go.walletHome();
-      });
+      $timeout(function() {
+        profileService.joinWallet({
+          secret: form.secret.$modelValue,
+          extendedPrivateKey: form.privateKey.$modelValue,
+          myName: form.myName.$modelValue,
+        }, function(err) {
+          self.loading = false;
+          if (err) {
+            notification.error(err);
+          }
+          esle {
+            go.walletHome();
+          }
+        });
+      }, 100);
     }
   });

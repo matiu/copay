@@ -16,14 +16,6 @@ angular.module('copayApp.controllers').controller('copayersController',
       self.isCordova = isCordova;
     };
 
-    $rootScope.$on('Local/WalletUpdated', function() {
-      var fc = profileService.focusedClient;
-      if (fc.isComplete()) {
-        $log.debug('Wallet Completed...redirecting')
-        go.walletHome();
-      }
-    });
-
     var _modalDeleteWallet = function() {
       var ModalInstanceCtrl = function($scope, $modalInstance) {
         $scope.title = 'Are you sure you want to delete this wallet?';
