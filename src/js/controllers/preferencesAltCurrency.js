@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesAltCurrencyController',
-  function($scope, $rootScope, $filter, $timeout, $modal, balanceService, notification, backupService, profileService, configService, isMobile, isCordova, go, rateService, applicationService, bwcService) {
+  function($scope, $rootScope, $filter, $timeout, $modal, balanceService, notification, backupService, profileService, configService, isMobile, isCordova, go, rateService, applicationService, bwcService, lodash) {
     this.isSafari = isMobile.Safari();
     this.isCordova = isCordova;
     this.hideAdv = true;
@@ -17,12 +17,15 @@ angular.module('copayApp.controllers').controller('preferencesAltCurrencyControl
       isoCode: config.wallet.settings.alternativeIsoCode
     };
 
-    this.alternativeOpts = rateService.isAvailable() ?
-      rateService.listAlternatives() : [this.selectedAlternative];
+    this.alternativeOpts = [this.selectedAlternative]; //default value
 
     var self = this;
     rateService.whenAvailable(function() {
       self.alternativeOpts = rateService.listAlternatives();
+      lodash.remove(self.alternativeOpts, function(n) {
+        return n.isoCode == 'BTC';
+      });
+
       for (var ii in self.alternativeOpts) {
         if (config.wallet.settings.alternativeIsoCode === self.alternativeOpts[ii].isoCode) {
           self.selectedAlternative = self.alternativeOpts[ii];
