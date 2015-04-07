@@ -58,45 +58,46 @@ angular.module('copayApp.services')
 
         var client = bwcService.getClient(JSON.stringify(credentials));
         root.walletClients[credentials.walletId] = client;
+        client.removeAllListeners();
 
+        client.on('notification', function(notification) {
+          $log.debug('BWC Notification:', notification);
+          notificationService.newBWCNotification(notification,
+            client.credentials.walletId, client.credentials.walletName);
+
+          // Actions for both focuses and unfocuses wallets...
+          if (notification.type == 'ScanFinished') {
+            client.scanning = false;
+          }
+
+          if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
+            $rootScope.$emit(notification.type);
+          } else {
+            $rootScope.$apply();
+          }
+        });
+
+        client.on('walletCompleted', function() {
+          $log.debug('Wallet completed');
+
+          var newCredentials = lodash.reject(root.profile.credentials, {
+            walletId: client.credentials.walletId
+          });
+          newCredentials.push(JSON.parse(client.export()));
+          root.profile.credentials = newCredentials;
+
+          storageService.storeProfile(root.profile, function(err) {
+            $rootScope.$emit('Local/WalletCompleted')
+          });
+        });
+
+        root.walletClients[credentials.walletId].started = true;
         client.initNotifications(function(err) {
           if (err) {
             $log.error('Could not init notifications err:', err);
+            root.walletClients[credentials.walletId].started = false;
             return;
           }
-
-          client.removeAllListeners();
-          client.on('notification', function(notification) {
-            $log.debug('BWC Notification:', notification);
-            notificationService.newBWCNotification(notification,
-              client.credentials.walletId, client.credentials.walletName);
-
-            // Actions for both focuses and unfocuses wallets...
-            if (notification.type == 'ScanFinished') {
-              client.scanning = false;
-            }
-
-            if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
-              $rootScope.$emit(notification.type);
-            } else {
-              $rootScope.$apply();
-            }
-          });
-
-          client.on('walletCompleted', function() {
-            $log.debug('Wallet completed');
-
-            var newCredentials = lodash.reject(root.profile.credentials, {
-              walletId: client.credentials.walletId
-            });
-            newCredentials.push(JSON.parse(client.export()));
-            root.profile.credentials = newCredentials;
-
-            storageService.storeProfile(root.profile, function(err) {
-              $rootScope.$emit('Local/WalletCompleted')
-            });
-          });
-          root.walletClients[credentials.walletId].started = true;
         });
       });
       $rootScope.$emit('updateWalletList');
