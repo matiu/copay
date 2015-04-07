@@ -90,7 +90,7 @@
             </div>
           </div>
 
-          <div class="row" ng-init="showAlternative = false"   ng-hide="send.hideAmount">
+          <div class="row" ng-init="showAlternative = false" ng-hide="send.hideAmount">
             <div class="large-12 medium-12 columns">
               <div class="m5b right" ng-hide="sendForm.amount.$pristine">
                 <span class="has-error right size-12" ng-show="sendForm.amount.$invalid">
@@ -115,7 +115,7 @@
                 <label for="alternative"><span translate>Amount in</span> {{ send.alternativeName }}
                 </label>
                 <div class="input">
-                  <input type="number" id="alternative" ng-disabled="send.blockUx || !isRateAvailable || send.lockAmount" name="alternative" placeholder="{{'Amount'|translate}}" ng-model="_alternative" requiredautocomplete="off"  ng-focus="send.formFocus('amount')" ng-blur="send.formFocus(false)">
+                  <input type="number" id="alternative" ng-disabled="send.blockUx || !send.isRateAvailable || send.lockAmount" name="alternative" placeholder="{{'Amount'|translate}}" ng-model="_alternative" requiredautocomplete="off"  ng-focus="send.formFocus('amount')" ng-blur="send.formFocus(false)">
                   <a class="postfix" ng-click="showAlternative = false"> {{ send.alternativeIsoCode }}</a>
                 </div>
               </div>
