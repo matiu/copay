@@ -1,20 +1,10 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('createController',
-  function($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isMobile, isCordova) {
+  function($scope, $rootScope, $location, $timeout, $log, lodash, go, profileService, configService, isCordova) {
 
     var self = this;
-
     var defaults = configService.getDefaults();
-    $rootScope.fromSetup = true;
-
-    this.loading = false;
-    this.walletPassword = $rootScope.walletPassword;
-    this.isMobile = isMobile.any();
-    this.hideAdv = true;
-    $rootScope.title = 'Create new wallet';
-    $rootScope.hideWalletNavigation = true;
-    this.isWindowsPhoneApp = isMobile.Windows() && isCordova;
 
     /* For compressed keys, m*73 + n*34 <= 496 */
     var COPAYER_PAIR_LIMITS = {
@@ -37,7 +27,6 @@ angular.module('copayApp.controllers').controller('createController',
       return new Array(num);
     }
 
-
     var updateRCSelect = function(n) {
       var maxReq = COPAYER_PAIR_LIMITS[n];
       self.RCValues = lodash.range(1, maxReq + 1);
@@ -56,7 +45,6 @@ angular.module('copayApp.controllers').controller('createController',
         this.error = 'Please enter the required fields';
         return;
       }
-      console.log('[create.js.72:form:]', form); //TODO
       var opts = {
         m: $scope.requiredCopayers,
         n: $scope.totalCopayers,
@@ -65,19 +53,20 @@ angular.module('copayApp.controllers').controller('createController',
         myName: $scope.totalCopayers > 1 ? form.myName.$modelValue : null,
         networkName: form.isTestnet.$modelValue ? 'testnet' : 'livenet',
       };
-      $rootScope.starting = true;
+      self.loading = true;
 
-      profileService.createWallet(opts, function(err, secret) {
-        $rootScope.starting = false;
-        if (err) {
-          $log.debug(err);
-          self.error = 'Could not create wallet: ' + err;
-        }
-        go.walletHome();
-        $timeout(function() {
-          $rootScope.$apply();
-        }, 1);
-      });
+      $timeout(function() {
+        profileService.createWallet(opts, function(err, secret) {
+          self.loading = false;
+          if (err) {
+            $log.debug(err);
+            self.error = 'Could not create wallet: ' + err;
+          }
+          else {
+            go.walletHome();
+          }
+        });
+      }, 100);
     };
 
     $scope.$on("$destroy", function() {

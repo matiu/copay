@@ -12,7 +12,7 @@
       <div class="text-center">
         <qrcode size="220" error-correction-level="L" data="{{index.walletSecret}}"></qrcode>
         <div class="secret columns m10t m20b">
-          {{index.walletSecret}}
+          {{index.walletSecret || ('Loading...'|translate)}}
         </div>
       </div>
     </div>
