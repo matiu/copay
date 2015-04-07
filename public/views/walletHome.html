@@ -4,7 +4,7 @@
           <div class="size-36">
             <strong>
               <span ng-show="!index.hideBalance">
-                <span ng-class="{'animated pulse':!index.hideBalance}">{{index.totalBalanceStr || 0}}</span>
+                <span ng-class="{'animated pulse':!index.hideBalance}">{{index.totalBalanceStr}}</span>
               </span>
               <span ng-show="index.hideBalance">...</span>
             </strong>
@@ -14,7 +14,7 @@
             <span ng-if="!index.alternativeBalanceAvailable">N/A</span>
           </div>
           <div class="size-14" ng-show="index.hideBalance">
-&nbsp;
+            &nbsp;
           </div>
         </div>
         <div class="pr columns line-b">
