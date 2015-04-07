@@ -83,7 +83,7 @@ You can recreate it from the local information.
       <div class="large-12 columns">
         <div class="panel oh">
           <h2 class="line-b" translate>Unsent transactions</h2>
-          <div class="last-transactions pr" ng-repeat="tx in index.txps | orderBy:'-createdTs'"
+          <div class="last-transactions pr" ng-repeat="tx in index.txps"
             ng-include="'views/includes/transaction.html'">
           </div>
         </div>
