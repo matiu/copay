@@ -269,6 +269,11 @@ angular.module('copayApp.services')
       walletClient.createWalletFromOldCopay(username, password, blob, function(err, existed) {
         if (err) return cb('Error importing wallet: ' + err);
 
+        if (root.walletClients[walletClient.credentials.walletId]) {
+          $log.debug('Wallet:' + walletClient.credentials.walletName + ' already imported');
+          return cb('Wallet Already Imported: ' + walletClient.credentials.walletName);
+        };
+
         $log.debug('Creating Wallet:', walletClient.credentials.walletName);
         root.profile.credentials.push(JSON.parse(walletClient.export()));
         root.setWalletClients();
