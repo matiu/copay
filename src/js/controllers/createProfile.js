@@ -21,7 +21,8 @@ angular.module('copayApp.controllers').controller('createProfileController', fun
             go.reload();
           }, 3000);
         } else {
-          go.path('splash');
+          // go.path('splash');
+          go.walletHome();
         }
       });
      }, 100);
