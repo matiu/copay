@@ -318,6 +318,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   });
 
   $rootScope.$on('Local/WalletCompleted', function(event) {
+    self.setFocusedWallet();
     go.walletHome();
   });
 
