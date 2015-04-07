@@ -1,7 +1,7 @@
 <div ng-controller="copayersController as copayers" ng-init="copayers.init()" 
   ng-if="!index.isOffLine && !index.clientError">
 
-  <div ng-show="!index.anyOnGoingProcess && !index.notAuthorized">
+  <div ng-show="!index.notAuthorized">
     <div class="row m10t text-center">
       <div class="large-12 columns">
         <h1 translate>Share this secret with your copayers</h1> 
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="row" ng-show="!index.anyOnGoingProcess">
+  <div class="row">
     <div class="large-12 columns">
       <div class="m20tp text-center" ng-show="index.notAuthorized">
         <h1 translate>Wallet incomplete and broken</h1>
@@ -48,11 +48,6 @@
         <i class="fi-trash"></i> <span translate>Cancel</span>
       </button>
     </div>
-  </div>
-
-  <div class="text-gray text-center m10t animated infinite flash" ng-show="index.anyOnGoingProcess" > 
-    <span translate ng-show="index.onGoingProcessName == 'openingWallet'">Opening Wallet...</span>
-    <span translate ng-show="index.onGoingProcessName == 'updatingStatus'">Updating Status...</span>
   </div>
 
 </div>
