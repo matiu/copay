@@ -119,6 +119,7 @@ _:-ms-fullscreen, :root .main {
   line-height: 52px;
   left: -3px;
   height: 45px;
+  top: 0px;
 } 
 
 .tab-bar .text-back {

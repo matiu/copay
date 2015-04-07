@@ -1,5 +1,6 @@
-<div class="join" ng-controller="joinController as join">
-  <div class="row m20t">
+<div class="join m20t" ng-controller="joinController as join">
+  <div ng-show="join.loading" class="text-center text-gray animated infinite flash" translate>Joining shared wallet...</div>
+  <div class="row" ng-show="!join.loading">
     <div class="large-12 columns">
       <form name="joinForm" ng-submit="join.join(joinForm)" novalidate>
           <label><span translate>Your name</span>
@@ -37,15 +38,15 @@
             ng-include="'views/includes/scanner.html'">
           </div>
 
-            <a class="button outline light-gray tiny expand" ng-click="join.hideAdv=!join.hideAdv">
-              <i class="fi-widget m3r"></i>
-              <span translate ng-hide="!join.hideAdv">Show</span> 
-              <span translate ng-hide="join.hideAdv">Hide</span> 
-              <span translate>advanced options</span>
-              <i ng-if="join.hideAdv" class="icon-arrow-down4"></i>
-              <i ng-if="!join.hideAdv" class="icon-arrow-up4"></i>
-            </a>
-          <div ng-hide="join.hideAdv" class="row">
+          <a class="button outline light-gray tiny expand" ng-click="join.hideAdv=!join.hideAdv">
+            <i class="fi-widget m3r"></i>
+            <span translate ng-show="!join.hideAdv">Show</span> 
+            <span translate ng-show="join.hideAdv">Hide</span> 
+            <span translate>advanced options</span>
+            <i ng-show="!join.hideAdv" class="icon-arrow-down4"></i>
+            <i ng-show="join.hideAdv" class="icon-arrow-up4"></i>
+          </a>
+          <div ng-show="join.hideAdv" class="row">
             <div class="large-12 columns">
               <label for="ext-master">Master extended private key
                 <input id="ext-master" 

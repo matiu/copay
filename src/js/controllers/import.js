@@ -27,18 +27,23 @@ angular.module('copayApp.controllers').controller('importController',
         return;
       };
 
-      profileService.importWallet(str2, {
-        compressed: null,
-        password: null
-      }, function(err, walletId) {
-        if (err) {
-          self.error = err;
-          $scope.$apply();
-          return;
-        }
-        go.walletHome();
-        notification.success('Success', 'Your wallet has been imported correctly');
-      });
+      self.loading = true;
+
+      $timeout(function() {
+        profileService.importWallet(str2, {
+          compressed: null,
+          password: null
+        }, function(err, walletId) {
+          self.loading = false;
+          if (err) {
+            self.error = err;
+          }
+          else {
+            go.walletHome();
+            notification.success('Success', 'Your wallet has been imported correctly');
+          }
+        });
+      }, 100);
     };
 
     $scope.getFile = function() {
@@ -67,12 +72,10 @@ angular.module('copayApp.controllers').controller('importController',
         return;
       }
 
-      $timeout(function() {
-        if (backupFile) {
-          reader.readAsBinaryString(backupFile);
-        } else {
-          _import(backupText);
-        }
-      }, 100);
+      if (backupFile) {
+        reader.readAsBinaryString(backupFile);
+      } else {
+        _import(backupText);
+      }
     };
   });

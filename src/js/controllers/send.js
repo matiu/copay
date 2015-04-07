@@ -18,8 +18,6 @@ angular.module('copayApp.controllers').controller('sendController',
       this.showScanner = false;
       this.isMobile = isMobile.any();
 
-      this.setInputs();
-
       var paymentUri = $rootScope.$on('paymentUri', function(event, uri) {
         $timeout(function() {
           self.setForm(uri);
@@ -49,6 +47,8 @@ angular.module('copayApp.controllers').controller('sendController',
         openScannerCordova();
         paymentUri();
       });
+
+      this.setInputs();
     };
 
     this.formFocus = function(what) {
@@ -90,8 +90,6 @@ angular.module('copayApp.controllers').controller('sendController',
             $scope.__alternative = newValue;
             if (typeof(newValue) === 'number' && self.isRateAvailable) {
               $scope._amount = parseFloat((rateService.fromFiat(newValue, self.alternativeIsoCode) * satToUnit).toFixed(self.unitDecimals), 10);
-            } else {
-              $scope._amount = 0;
             }
           },
           enumerable: true,
