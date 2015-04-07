@@ -14,7 +14,6 @@ angular.module('copayApp.controllers').controller('copayersController',
       }
       self.loading = false;
       self.isCordova = isCordova;
-      self.updateList();
     };
 
     $rootScope.$on('Local/WalletUpdated', function() {
