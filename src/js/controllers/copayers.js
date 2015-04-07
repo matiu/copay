@@ -3,45 +3,27 @@
 angular.module('copayApp.controllers').controller('copayersController',
   function($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, isCordova) {
     var self = this;
-    var fc = profileService.focusedClient;
 
 
     self.init = function() {
-
-      console.log('[copayers.js.10]', fc.isComplete()); //TODO
+      var fc = profileService.focusedClient;
       if (fc.isComplete()) {
         $log.debug('Wallet Complete...redirecting')
         go.walletHome();
         return;
       }
-
-      $rootScope.title = 'Share this secret with your copayers';
       self.loading = false;
       self.isCordova = isCordova;
-      // TODO
-      // w.on('publicKeyRingUpdated', self.updateList);
-      // w.on('ready', self.updateList);
-      //
       self.updateList();
     };
 
-    self.updateList = function() {
-      return;
-
-      // TODO
-      var w = $rootScope.wallet;
-
-      self.copayers = $rootScope.wallet.getRegisteredPeerIds();
+    $rootScope.$on('Local/WalletUpdated', function() {
+      var fc = profileService.focusedClient;
       if (fc.isComplete()) {
-
-        w.removeListener('publicKeyRingUpdated', self.updateList);
-        w.removeListener('ready', self.updateList);
+        $log.debug('Wallet Completed...redirecting')
         go.walletHome();
       }
-      $timeout(function() {
-        $rootScope.$digest();
-      }, 1);
-    };
+    });
 
     var _modalDeleteWallet = function() {
       var ModalInstanceCtrl = function($scope, $modalInstance) {
@@ -71,6 +53,7 @@ angular.module('copayApp.controllers').controller('copayersController',
     };
 
     var _deleteWallet = function() {
+      var fc = profileService.focusedClient;
       $timeout(function() {
         var fc = profileService.focusedClient;
         var walletName = fc.credentials.walletName;
@@ -93,6 +76,7 @@ angular.module('copayApp.controllers').controller('copayersController',
     };
 
     self.deleteWallet = function() {
+      var fc = profileService.focusedClient;
       if (isCordova) {
         navigator.notification.confirm(
           'Are you sure you want to delete this wallet?',

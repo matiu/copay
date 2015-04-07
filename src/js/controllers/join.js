@@ -145,29 +145,10 @@ angular.module('copayApp.controllers').controller('joinController',
         extendedPrivateKey: form.privateKey.$modelValue,
       }, function(err) {
         if (err) {
-
-          // TODO -> parse errors
-          if (err === 'joinError')
-            notification.error('Fatal error connecting to Insight server');
-          else if (err === 'walletFull')
-            notification.error('The wallet is full');
-          else if (err === 'walletAlreadyExists')
-            notification.error('Wallet already exists', 'Cannot join again from the same profile');
-          else if (err === 'badNetwork')
-            notification.error('Network Error', 'Wallet network configuration missmatch');
-          else if (err === 'badSecret')
-            notification.error('Bad secret', 'The secret string you entered is invalid');
-          else {
-            notification.error('Error', err.message || err);
-          }
-        } else {
-          go.walletHome();
-        }
-
-
-        $timeout(function() {
-          $rootScope.$apply();
-        }, 1);
+          notification.error(err);
+          return;
+        } 
+        go.walletHome();
       });
     }
   });
