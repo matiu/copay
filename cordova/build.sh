@@ -121,7 +121,11 @@ if [ ! -d $PROJECT ]; then
   checkOK
 
   cordova plugin add org.apache.cordova.console
-  checkOK
+  checkok
+
+  cordova plugin add hu.dpal.phonegap.plugins.uniquedeviceid
+  checkok
+
 fi
 
 if $DBGJS

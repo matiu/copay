@@ -1,6 +1,6 @@
 'use strict';
 angular.module('copayApp.services')
-  .factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, pluginManager, balanceService, applicationService, storageService, bwcService, configService, notificationService) {
+  .factory('profileService', function profileServiceFactory($rootScope, $location, $timeout, $filter, $log, lodash, pluginManager, balanceService, applicationService, storageService, bwcService, configService, notificationService, notification) {
 
     var root = {};
 
@@ -60,18 +60,18 @@ angular.module('copayApp.services')
         root.walletClients[credentials.walletId] = client;
         client.removeAllListeners();
 
-        client.on('notification', function(notification) {
-          $log.debug('BWC Notification:', notification);
-          notificationService.newBWCNotification(notification,
+        client.on('notification', function(n) {
+          $log.debug('BWC Notification:', n);
+          notificationService.newBWCNotification(n,
             client.credentials.walletId, client.credentials.walletName);
 
           // Actions for both focuses and unfocuses wallets...
-          if (notification.type == 'ScanFinished') {
+          if (n.type == 'ScanFinished') {
             client.scanning = false;
           }
 
           if (root.focusedClient.credentials.walletId == client.credentials.walletId) {
-            $rootScope.$emit(notification.type);
+            $rootScope.$emit(n.type);
           } else {
             $rootScope.$apply();
           }
@@ -120,7 +120,10 @@ angular.module('copayApp.services')
 
     root.loadAndBindProfile = function(cb) {
       storageService.getProfile(function(err, profile) {
-        if (err) return cb(err);
+        if (err) {
+          notification.error('CRITICAL ERROR: ' + err);
+          return cb(err);
+        }
         if (!profile) return cb(new Error('NOPROFILE: No profile'));
 
         return root.bindProfile(profile, cb);
@@ -130,9 +133,8 @@ angular.module('copayApp.services')
     root._createNewProfile = function(pin, cb) {
       var walletClient = bwcService.getClient();
 
-      // TODO livenet
       walletClient.createWallet('Personal Wallet', 'me', 1, 1, {
-        network: 'testnet'
+        network: 'livenet'
       }, function(err) {
         if (err) return cb('Error creating wallet. Check your internet connection');
         var p = Profile.create({
