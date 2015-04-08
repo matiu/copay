@@ -21,7 +21,7 @@
             </label>
             <label><span translate>Your name</span>
               <div class="input">
-                <input type="text" placeholder="{{'John Doe'|translate}}" class="form-control" name="myName" ng-model="myName" ng-required="true" ng-disabled="totalCopayers == 1">
+                <input type="text" placeholder="{{'John'|translate}}" class="form-control" name="myName" ng-model="myName" ng-required="totalCopayers != 1" ng-disabled="totalCopayers == 1">
               </div>
             </label>
           </div>
