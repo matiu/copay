@@ -137,9 +137,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     if (err.code === 'NOTAUTHORIZED') {
       $scope.$emit('Local/NotAuthorized');
     } else if (err.code === 'NOTFOUND') {
-      $scope.$emit('Local/NotFound');
+      $scope.$emit('Local/BWSNotFound');
     } else if (err.code === 'ETIMEDOUT') {
-      $scope.$emit('Local/TimeOut');
+      $scope.$emit('Local/BWSTimeOut');
     } else {
       $scope.$emit('Local/ClientError', err);
     }
@@ -345,13 +345,13 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     $rootScope.$apply();
   });
 
-  $rootScope.$on('Local/NotFound', function(event) {
-    self.clientError = 'Check the Bitcore Wallet Service URL on Preferences';
+  $rootScope.$on('Local/BWSNotFound', function(event) {
+    self.clientError = 'Could not access to Bitcore Wallet Service: Service not found';
     $rootScope.$apply();
   });
 
-  $rootScope.$on('Local/TimeOut', function(event) {
-    self.clientError = 'The Bitcore Wallet Service is offline';
+  $rootScope.$on('Local/BWSTimeOut', function(event) {
+    self.clientError = 'Could not access to Bitcore Wallet Service: Timed out';
     $rootScope.$apply();
   });
 
