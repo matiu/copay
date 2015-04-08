@@ -3,7 +3,9 @@
  * Copay main CSS
  *
  */
-
+.panel h1, .panel h2, .panel h3, .panel h4, .panel h5, .panel h6, .panel p, .panel li, .panel dl {
+  color: #2C3E50;
+}
 
 body, div, .row {
   -webkit-overflow-scrolling: touch;
@@ -240,6 +242,7 @@ ul.tx-copayers {
 .last-transactions-content {
   padding: 1.5rem 1rem;
   cursor:pointer;
+  border-bottom: 1px solid #E4E8EC;
 }
 
 .sign-action {
@@ -1080,5 +1083,18 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
 .settings label {
   color: #A5B2BF;
   font-weight: normal;
+}
+
+.panel.splash {
+  position: absolute;
+  height: 93.8%;
+}
+
+.panel.splash button {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: 90.5%;
+  z-index: 9999;
 }
 
