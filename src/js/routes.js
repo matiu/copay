@@ -335,7 +335,25 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Bws Url';
+              $scope.titleSection = 'Preferences Bitcore Wallet Service Url';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
+      .state('delete', {
+        url: '/delete',
+        templateUrl: 'views/preferencesDeleteWallet.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesDeleteWallet.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Preferences Delete Wallet';
               $scope.goBackToState = 'preferences';
             }
           }
@@ -353,7 +371,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Backup';
+              $scope.titleSection = 'Preferences Backup Wallet';
               $scope.goBackToState = 'preferences';
             }
           }
