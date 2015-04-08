@@ -1,22 +1,20 @@
 <div class="send" ng-controller="sendController as send" ng-init="send.init()" ng-show="!index.isOffLine">
-  <div class="row m20t" ng-show="index.lockedBalance">
-    <div class="large-12 columns">
-      <div class="panel m0">
+  <div ng-show="index.lockedBalance">
+      <h4 class="title m0">
         <div class="left">
-          <i class="fi-info size-36 m20r"></i>
+          <i class="fi-info size-36 m10r lh"></i>
         </div>
-        <div>
-          <p class="m0 size-14 text-bold">
+        <div class="size-12">
+          <span class="db text-bold">
             <span translate>Available Balance</span>: 
             {{index.availableBalanceStr }}
-          </p>
-          <span class="size-12 text-gray">
+          </span>
+          <span class="text-gray">
             {{index.lockedBalanceStr}} 
             <span translate>in pending transactions</span>
           </span>
         </div>
-      </div>
-    </div>
+      </h4>
   </div>
   <div class="row m20t">
     <div class="large-12 large-centered columns"> 
