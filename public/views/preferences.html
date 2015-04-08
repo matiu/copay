@@ -18,34 +18,22 @@
     </li>
     
     <li class="line-b p20" ng-click="$root.go('preferencesBwsUrl')">
-      <span translate>BWS url</span>
+      <span translate>Bitcore Wallet Service url</span>
       <span class="text-gray db">
           <i class="icon-arrow-right3 size-24 right"></i>
           {{preferences.bwsurl}}
         </span>
     </li>
-
+    <h4 class="title m0" translate>Options</h4>
     <li class="line-b p20" ng-click="$root.go('backup')">
       <i class="icon-arrow-right3 size-24 right text-gray"></i>  
       <span translate>Backup wallet</span>
     </li>
+    <li class="line-b p20" ng-click="$root.go('delete')">
+      <i class="icon-arrow-right3 size-24 right text-gray"></i>  
+      <span translate>Remove wallet</span>
+    </li>
   </ul>
 
-
-      <h4 class="title text-center m0" translate> Warning! </h4>
-      <div class="box-notification" ng-show="preferences.error">
-        <div class="box-icon error">
-          <i class="fi-x size-24"></i>
-        </div>
-        <span class="text-warning size-14">
-          {{preferences.error|translate}}
-        </span>
-      </div>
-      <div class="columns text-center m10t">
-        <p translate class="size-12 text-gray">Permanently delete this wallet. WARNING: this action cannot be reversed.</p>
-        <button class="button expand warning" ng-click="preferences.deleteWallet()">
-          Delete wallet
-        </button>
-      </div>
 </div>
 <div class="extra-margin-bottom"></div>
