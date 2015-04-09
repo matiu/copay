@@ -80,15 +80,10 @@ angular.module('copayApp.services')
         client.on('walletCompleted', function() {
           $log.debug('Wallet completed');
 
-          var newCredentials = lodash.reject(root.profile.credentials, {
-            walletId: client.credentials.walletId
-          });
-          newCredentials.push(JSON.parse(client.export()));
-          root.profile.credentials = newCredentials;
-
-          storageService.storeProfile(root.profile, function(err) {
+          self.updateFocusedCredentials(function() {
             $rootScope.$emit('Local/WalletCompleted')
           });
+
         });
 
         root.walletClients[credentials.walletId].started = true;
@@ -288,14 +283,28 @@ angular.module('copayApp.services')
       });
     };
 
-    //
-    // Up to here was refectored.
-    // ===============================================================================
-    //
+    root.updateFocusedCredentials = function(cb) {
+      var fc = root.focusedClient;
 
-    root.signout = function() {
-      root.profile = null;
-      root.lastFocusedWallet = null;
+      var newCredentials = lodash.reject(root.profile.credentials, {
+        walletId: fc.credentials.walletId
+      });
+      newCredentials.push(JSON.parse(fc.export()));
+      root.profile.credentials = newCredentials;
+
+      storageService.storeProfile(root.profile, cb);
+    };
+
+
+    root.setPrivateKeyEncryption = function(password, cb) {
+      var fc = root.focusedClient;
+      $log.debug('Encrypting private key for', fc.credentials.walletName);
+
+      fc.setPrivateKeyEncryption(password);
+      fc.lock();
+      root.updateFocusedCredentials(function() {
+        $log.debug('Wallet encrypted');
+      });
     };
 
     return root;

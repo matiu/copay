@@ -1110,7 +1110,7 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
 .passModal {
   position: absolute;
   width: 80%;
-  height: 25%;
+  height: 40%;
   left: 10%;
   top: 15%;
   background: #FFF;
