@@ -423,10 +423,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   $rootScope.$on('Local/NeedsPassword', function(event, isSetup, cb) {
     self.askPassword = {
-      callback: cb,
       isSetup: isSetup,
+      callback: function (err, pass) {
+        self.askPassword = null;
+        return cb(err, pass);
+      },
     };
-    $rootScope.$apply();
   });
 
   lodash.each(['NewCopayer', 'CopayerUpdated'], function(eventName) {
