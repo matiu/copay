@@ -565,3 +565,46 @@ a.pin-button:active {
   -webkit-transform: none !important;
   transform: none !important;
 }
+
+.popup-txsent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #1ABC9C;
+}
+
+.popup-txsent i {
+  font-size: 5rem;
+  background-color: #fff;
+  color: #1ABC9C;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+  display: block;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.popup-txsigned i {
+  font-size: 5rem;
+  background-color: #1ABC9C;
+  color: #fff;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+  display: block;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.popup-txrejected i {
+  font-size: 5rem;
+  background-color: #CA5649;
+  color: #fff;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+  display: block;
+  text-align: center;
+  padding-top: 1rem;
+}
