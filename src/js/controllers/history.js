@@ -16,7 +16,9 @@ angular.module('copayApp.controllers').controller('historyController',
     this.alternativeIsoCode = config.alternativeIsoCode;
 
     this.skip = 0;
-    this.limit = 10;
+    this.limit = 5;
+    this.loadMore = false;
+    this.txHistory = [];
 
     this.getUnitName = function() {
       return this.unitName;
@@ -38,19 +40,32 @@ angular.module('copayApp.controllers').controller('historyController',
             $log.debug('Creating address ERROR:', err);
           }
           else {
+
             var now = new Date();
+            var c = 0;
             lodash.each(txs, function(tx) {
               tx.ts = tx.minedTs || tx.sentTs;
               tx.rateTs = Math.floor((tx.ts || now) / 1000);
               tx.amountStr = profileService.formatAmount(tx.amount); //$filter('noFractionNumber')(
+              if (c < self.limit) {
+                self.txHistory.push(tx);
+                c++;
+              }
             });
 
-            self.txHistory = txs;
             self.updatingTxHistory = false;
+            self.skip = self.skip + self.limit;
+            
+            if (txs[self.limit]) {
+              self.loadMore = true;
+            }
+            else {
+              self.loadMore = false;
+            }
           }
           $scope.$emit('Local/ClientError', err);
         });
-      }, 10);
+      }, 100);
     };
 
     this._addRates = function(txs, cb) {
