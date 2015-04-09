@@ -72,7 +72,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
     var fc = profileService.focusedClient;
     if (!fc) return;
-    self.updateColor();
 
     $timeout(function() {
       self.setOngoingProcess('updatingStatus', true);
@@ -147,6 +146,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   };
   self.openWallet = function() {
     var fc = profileService.focusedClient;
+    self.updateColor();
     $timeout(function() {
       self.setOngoingProcess('openingWallet', true);
       fc.openWallet(function(err, walletStatus) {

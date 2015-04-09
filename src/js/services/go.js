@@ -37,7 +37,7 @@ angular.module('copayApp.services').factory('go', function($window, $rootScope, 
   };
 
   root.path = function(path) {
-    $state.go(path);
+    $state.transitionTo(path);
     hideSidebars();
   };
 
