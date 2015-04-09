@@ -17,27 +17,27 @@ factory('notification', ['$timeout',
     var queue = [];
     var settings = {
       info: {
-        duration: 600000,
+        duration: 6000,
         enabled: true
       },
       funds: {
-        duration: 700000,
+        duration: 7000,
         enabled: true
       },
       version: {
-        duration: 6000000,
+        duration: 60000,
         enabled: true
       },
       warning: {
-        duration: 700000,
+        duration: 7000,
         enabled: true
       },
       error: {
-        duration: 700000,
+        duration: 7000,
         enabled: true
       },
       success: {
-        duration: 500000,
+        duration: 5000,
         enabled: true
       },
       progress: {
@@ -45,7 +45,7 @@ factory('notification', ['$timeout',
         enabled: true
       },
       custom: {
-        duration: 3500000,
+        duration: 35000,
         enabled: true
       },
       details: true,
