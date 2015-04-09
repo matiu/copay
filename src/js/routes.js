@@ -299,12 +299,31 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Unit';
+              $scope.titleSection = 'Unit';
               $scope.goBackToState = 'preferences';
             }
           }
         }
       })
+      .state('preferencesColor', {
+        url: '/preferencesColor',
+        templateUrl: 'views/preferencesColor.html',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/preferencesColor.html'
+          },
+          'topbar': {
+            templateUrl: 'views/includes/topbar.html',
+            controller: function($scope) {
+              $scope.titleSection = 'Color';
+              $scope.goBackToState = 'preferences';
+            }
+          }
+        }
+      })
+ 
       .state('preferencesAltCurrency', {
         url: '/preferencesAltCurrency',
         templateUrl: 'views/preferencesAltCurrency.html',
@@ -317,7 +336,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Alternative Currency';
+              $scope.titleSection = 'Alternative Currency';
               $scope.goBackToState = 'preferences';
             }
           }
@@ -335,7 +354,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Bitcore Wallet Service Url';
+              $scope.titleSection = 'Bitcore Wallet Service';
               $scope.goBackToState = 'preferences';
             }
           }
@@ -353,7 +372,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Delete Wallet';
+              $scope.titleSection = 'Delete';
               $scope.goBackToState = 'preferences';
             }
           }
@@ -371,7 +390,7 @@ angular
           'topbar': {
             templateUrl: 'views/includes/topbar.html',
             controller: function($scope) {
-              $scope.titleSection = 'Preferences Backup Wallet';
+              $scope.titleSection = 'Backup';
               $scope.goBackToState = 'preferences';
             }
           }

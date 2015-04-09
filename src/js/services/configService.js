@@ -101,9 +101,7 @@ angular.module('copayApp.services').factory('configService', function(localStora
       if (lodash.isString(newOpts)) {
         newOpts = JSON.parse(newOpts);
       }
-
       lodash.merge(config, oldOpts, newOpts);
-
       configCache = config;
 
       localStorageService.set('config', JSON.stringify(config), cb);

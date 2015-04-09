@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesAltCurrencyController',
-  function($scope, $rootScope, $filter, $timeout, $modal, balanceService, notification, backupService, profileService, configService, isMobile, isCordova, go, rateService, applicationService, bwcService, lodash) {
-    this.isSafari = isMobile.Safari();
-    this.isCordova = isCordova;
+  function($scope, $rootScope, configService, go, rateService, lodash) {
     this.hideAdv = true;
     this.hidePriv = true;
     this.hideSecret = true;
@@ -44,10 +42,13 @@ angular.module('copayApp.controllers').controller('preferencesAltCurrencyControl
           }
         }
       };
+      this.selectedAlternative = {
+        name: newAltCurrency.name,
+        isoCode: newAltCurrency.isoCode,
+      };
 
       configService.set(opts, function(err) {
         if (err) console.log(err);
-        go.preferences();
         $scope.$emit('Local/ConfigurationUpdated');
       });
     };

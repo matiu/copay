@@ -1,15 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesUnitController',
-  function($scope, $rootScope, $filter, $timeout, $modal, balanceService, notification, backupService, profileService, configService, isMobile, isCordova, go, rateService, applicationService, bwcService) {
-    this.isSafari = isMobile.Safari();
-    this.isCordova = isCordova;
-    this.hideAdv = true;
-    this.hidePriv = true;
-    this.hideSecret = true;
-    this.error = null;
-    this.success = null;
-
+  function($rootScope, $scope, configService, go) {
     var config = configService.getSync();
     this.unitName = config.wallet.settings.unitName;
     this.unitOpts = [
@@ -56,10 +48,10 @@ angular.module('copayApp.controllers').controller('preferencesUnitController',
           }
         }
       };
+      this.unitName = newUnit.shortName;
 
       configService.set(opts, function(err) {
         if (err) console.log(err);
-        go.preferences();
         $scope.$emit('Local/ConfigurationUpdated');
       });
 

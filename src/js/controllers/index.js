@@ -54,6 +54,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.totalBalanceStr = null;
       self.notAuthorized = false;
       self.clientError = null;
+
       storageService.getBackupFlag(self.walletId, function(err, val) {
         self.needsBackup = !val;
         self.openWallet();
@@ -62,7 +63,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   };
 
   self.updateAll = function(walletStatus) {
-
     var get = function(cb) {
       if (walletStatus)
         return cb(null, walletStatus);
@@ -72,6 +72,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
     var fc = profileService.focusedClient;
     if (!fc) return;
+    self.updateColor();
 
     $timeout(function() {
       self.setOngoingProcess('updatingStatus', true);
@@ -196,6 +197,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     return txps;
   };
 
+  self.updateColor = function() {
+    var config = configService.getSync();
+    config.colorFor = config.colorFor || {};
+    self.backgroundColor = config.colorFor[self.walletId] || '#1ABC9C';
+  };
+
   self.setBalance = function(balance) {
     if (!balance) return;
     var config = configService.getSync().wallet.settings;
@@ -316,7 +323,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   };
 
+
   // UX event handlers
+  $rootScope.$on('Local/ColorUpdated', function(event) {
+    self.updateColor();
+  });
+
   $rootScope.$on('Local/ConfigurationUpdated', function(event) {
     self.updateAll();
   });

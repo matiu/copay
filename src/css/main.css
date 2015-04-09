@@ -1098,3 +1098,7 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   z-index: 9999;
 }
 
+.preferences li {
+  cursor: pointer !important;
+}
+

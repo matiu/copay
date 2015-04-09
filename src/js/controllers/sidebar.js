@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('sidebarController',
-  function($rootScope, $timeout, lodash, profileService, isMobile, isCordova, go) {
+  function($rootScope, $timeout, lodash, profileService, isMobile, isCordova, configService, go) {
     var self = this;
 
     self.isMobile = isMobile.any();
     self.isCordova = isCordova;
-    self.username = 'TODO: username';
 
     self.init = function() {
       // wallet list change
@@ -56,12 +55,15 @@ angular.module('copayApp.controllers').controller('sidebarController',
 
     self.setWallets = function() {
       if (!profileService.profile) return;
+      var config = configService.getSync().wallet.settings;
+      config.colorFor = config.colorFor || {};
       var ret = lodash.map(profileService.profile.credentials, function(c) {
         return {
           m: c.m,
           n: c.n,
           name: c.walletName,
           id: c.walletId,
+          color: config.colorFor[self.walletId] ||  '#1ABC9C',
         };
       });
       self.wallets = lodash.sortBy(ret, 'walletName');
