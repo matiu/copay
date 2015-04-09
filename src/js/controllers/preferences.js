@@ -24,7 +24,7 @@ angular.module('copayApp.controllers').controller('preferencesController',
             $scope.encrypt = false;
             return;
           }
-          profileService.setPrivateKeyEncryption(password, function() {
+          profileService.setPrivateKeyEncryptionFC(password, function() {
             $scope.encrypt = true;
           });
         });
@@ -35,7 +35,7 @@ angular.module('copayApp.controllers').controller('preferencesController',
               $scope.encrypt = true;
               return;
             }
-            profileService.disablePrivateKeyEncryption(function(err) {
+            profileService.disablePrivateKeyEncryptionFC(function(err) {
               if (err) {
                 $scope.encrypt = true;
                 $log.error(err);

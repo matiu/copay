@@ -80,7 +80,7 @@ angular.module('copayApp.services')
         client.on('walletCompleted', function() {
           $log.debug('Wallet completed');
 
-          self.updateFocusedCredentials(function() {
+          self.updateCredentialsFC(function() {
             $rootScope.$emit('Local/WalletCompleted')
           });
 
@@ -193,7 +193,7 @@ angular.module('copayApp.services')
       })
     };
 
-    root.deleteWallet = function(opts, cb) {
+    root.deleteWalletFC = function(opts, cb) {
       var fc = root.focusedClient;
       $log.debug('Deleting Wallet:', fc.credentials.walletName);
 
@@ -283,7 +283,7 @@ angular.module('copayApp.services')
       });
     };
 
-    root.updateFocusedCredentials = function(cb) {
+    root.updateCredentialsFC = function(cb) {
       var fc = root.focusedClient;
 
       var newCredentials = lodash.reject(root.profile.credentials, {
@@ -296,20 +296,20 @@ angular.module('copayApp.services')
     };
 
 
-    root.setPrivateKeyEncryption = function(password, cb) {
+    root.setPrivateKeyEncryptionFC = function(password, cb) {
       var fc = root.focusedClient;
       $log.debug('Encrypting private key for', fc.credentials.walletName);
 
       fc.setPrivateKeyEncryption(password);
       fc.lock();
-      root.updateFocusedCredentials(function() {
+      root.updateCredentialsFC(function() {
         $log.debug('Wallet encrypted');
         return cb();
       });
     };
 
 
-    root.disablePrivateKeyEncryption = function(cb) {
+    root.disablePrivateKeyEncryptionFC = function(cb) {
       var fc = root.focusedClient;
       $log.debug('Disabling private key encryption for', fc.credentials.walletName);
 
@@ -318,8 +318,38 @@ angular.module('copayApp.services')
       } catch (e) {
         return cb(e);
       }
-      root.updateFocusedCredentials(function() {
+      root.updateCredentialsFC(function() {
         $log.debug('Wallet encryption disabled');
+        return cb();
+      });
+    };
+
+    root.lockFC = function() {
+      var fc = root.focusedClient;
+      try {
+        fc.lock();
+      } catch (e) {};
+    };
+
+    root.unlockFC = function(cb) {
+      var fc = root.focusedClient;
+      $log.debug('Wallet is encrypted');
+      $rootScope.$emit('Local/NeedsPassword', false, function(err2, password) {
+        if (err2 || !password) {
+          return cb(err2 || 'Password needed');
+        }
+        try {
+          fc.unlock(password);
+        } catch (e) {
+          $log.debug(e);
+          return cb('Wrong password');
+        }
+        $timeout(function() {
+          if( fc.isPrivKeyEncrypted()) {
+            $log.debug('Locking wallet automatically');
+            root.lockFC();
+          };
+        },2000);
         return cb();
       });
     };

@@ -1121,5 +1121,5 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   top: 15%;
   background: #FFF;
   border: 2px solid black;
-  z-index: 100;
+  z-index: 1100;
 }

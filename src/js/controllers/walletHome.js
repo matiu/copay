@@ -7,7 +7,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
 
   $scope.openCopayersModal = function(copayers, copayerId) {
     var ModalInstanceCtrl = function($scope, $modalInstance) {
-      $scope.copayers= copayers;
+      $scope.copayers = copayers;
       $scope.copayerId = copayerId;
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
@@ -74,6 +74,19 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
       };
 
       $scope.sign = function(txp) {
+        var fc = profileService.focusedClient;
+        if (fc.isPrivKeyEncrypted()) {
+          profileService.unlockFC(function(err) {
+            if (err) {
+              $scope.error = err;
+              return;
+            } 
+
+console.log('[walletHome.js.84]'); //TODO
+            return $scope.sign(txp);
+          });
+          return;
+        };
 
         if (isCordova) {
           window.plugins.spinnerDialog.show(null, 'Signing transaction...', true);
@@ -82,6 +95,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
         $scope.error = null;
         $timeout(function() {
           fc.signTxProposal(txp, function(err, txpsi) {
+            profileService.lockFC();
             if (isCordova) {
               window.plugins.spinnerDialog.hide();
             }

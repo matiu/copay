@@ -155,6 +155,15 @@ angular.module('copayApp.controllers').controller('sendController',
         this.error = 'Unable to send transaction proposal';
         return;
       }
+
+      if (fc.isPrivKeyEncrypted()) {
+        profileService.unlockFC(function(err) {
+          if (err) return self.setError(err);
+          return self.submitForm(form);
+        });
+        return;
+      };
+
       self.blockUx = true;
       self.setOngoingProcess('Sending');
 
@@ -177,7 +186,8 @@ angular.module('copayApp.controllers').controller('sendController',
           payProUrl: paypro ? paypro.url : null,
         }, function(err, txp) {
           self.setOngoingProcess();
-          if (err) { 
+          if (err) {
+            profileService.lockFC();
             if (isCordova) {
               window.plugins.spinnerDialog.hide();
             }
@@ -191,17 +201,23 @@ angular.module('copayApp.controllers').controller('sendController',
               window.plugins.spinnerDialog.hide();
             }
             self.blockUx = false;
-            if (err) return self.setError(err);
+            if (err) {
+              profileService.lockFC();
+              return self.setError(err);
+            }
             self.resetForm(form);
           });
         });
       }, 100);
     };
 
+
     this.signAndBroadcast = function(txp, cb) {
       self.setOngoingProcess('Signing');
       fc.signTxProposal(txp, function(err, signedTx) {
+        profileService.lockFC();
         self.setOngoingProcess();
+
         if (err) return cb(err);
 
         if (signedTx.status == 'accepted') {
