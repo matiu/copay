@@ -91,14 +91,14 @@
     ng-init="hideSign = false; hideReject = false"
     ng-show="tx.pendingForUs && !txBroadcasted && !txRejected">
     <div class="large-5 medium-5 small-6 columns">
-      <button class="button warning m0 expand" ng-click="hideTxInfo = true; hideSign = true; reject(_cache);" 
+      <button class="button gray m0 expand" ng-click="hideTxInfo = true; hideSign = true; reject(_cache);" 
         ng-disabled="loading" ng-show="!hideReject">
         <i class="fi-x icon-sign x"></i>  
         <span translate>Reject</span>
       </button>
     </div>
     <div class="large-5 medium-5 small-6 columns text-right">
-      <button class="button primary m0 expand" ng-click="hideTxInfo = true; hideReject = true; sign(_cache)" 
+      <button class="button primary m0 expand" ng-click="hideTxInfo = true; hideReject = true; sign(_cache)"  style="background-color:{{color}}"  
         ng-disabled="loading" ng-show="!hideSign">
         <i class="fi-check icon-sign check"></i>  
         <span translate>Sign</span>

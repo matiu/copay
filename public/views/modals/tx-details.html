@@ -13,10 +13,7 @@
 
 <div class="p45t">
   <div class="header-modal text-center">
-    <div class="size-42"  ng-class="{
-      'text-primary' : btx.action == 'received',
-      'text-warning': btx.action == 'sent', 
-      'text-gray': btx.action == 'moved'}">
+    <div class="size-42">
       <span ng-if="btx.action == 'received'">+</span><span ng-if="btx.action == 'sent'">-</span>{{btx.amountStr}} {{settings.unitName}}
     </div>
     <div class="size-18 m5t text-gray" ng-show="btx.alternativeAmount">
