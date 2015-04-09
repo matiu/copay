@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('historyController',
-  function($scope, $rootScope, $filter, $timeout, $modal, $log, profileService, notification, go, configService, rateService, lodash) {
+  function($scope, $rootScope, $filter, $timeout, $modal, $log, profileService, notification, go, configService, rateService, lodash, storageService) {
 
     function strip(number) {
       return (parseFloat(number.toPrecision(12)));
@@ -16,7 +16,7 @@ angular.module('copayApp.controllers').controller('historyController',
     this.alternativeIsoCode = config.alternativeIsoCode;
 
     this.skip = 0;
-    this.limit = 10;
+    this.limit = 5;
     this.loadMore = false;
     this.txHistory = [];
 
@@ -28,9 +28,30 @@ angular.module('copayApp.controllers').controller('historyController',
       return this.alternativeIsoCode;
     };
 
-    this.getTxHistory = function() {
+    this.checkCacheTxHistory = function() {
       var self = this;
+      storageService.getLastTransactions(fc.credentials.walletId, function(err, data) {
+        if (err) {
+          $log.debug('Error: ', err);
+          return;
+        }
+        self.txHistory = JSON.parse(data);
+      })
+    };
+
+    this.storeCacheTxHistory = function(txps) { 
+      storageService.storeLastTransactions(fc.credentials.walletId, txps, function(err) {
+        if (err) $log.debug('Error: ', err);
+      });
+    };
+
+    this.getTxHistory = function(firstTime) {
+      var self = this;
+      if (firstTime) {
+        self.checkCacheTxHistory();
+      }
       self.updatingTxHistory = true;
+      self.loadMore = false;
       $timeout(function() {
         fc.getTxHistory({
           skip: self.skip,
@@ -38,9 +59,13 @@ angular.module('copayApp.controllers').controller('historyController',
         }, function(err, txs) {
           if (err) {
             $log.debug('Creating address ERROR:', err);
+            $scope.$emit('Local/ClientError', err);
           }
           else {
 
+            if (firstTime) {
+              self.txHistory = [];
+            }
             var now = new Date();
             var c = 0;
             lodash.each(txs, function(tx) {
@@ -53,17 +78,18 @@ angular.module('copayApp.controllers').controller('historyController',
               }
             });
 
+            if (firstTime) {
+              self.storeCacheTxHistory(JSON.stringify(self.txHistory));
+            }
+
             self.updatingTxHistory = false;
             self.skip = self.skip + self.limit;
             
             if (txs[self.limit]) {
               self.loadMore = true;
             }
-            else {
-              self.loadMore = false;
-            }
+            $scope.$apply();
           }
-          $scope.$emit('Local/ClientError', err);
         });
       }, 100);
     };
