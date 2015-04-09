@@ -203,13 +203,12 @@ ul.copayer-list img {
   color: #7A8C9E;
   padding: 0.5rem 0;
   display: block;
-  border-bottom: 3px solid transparent;
+  border-top: 3px solid #213140;
 }
 
 .bottombar-item a.active {
   color: #E4E8EC;
   background-color: #213140;
-  border-bottom: 3px solid #1ABC9C;
 }
 
 .box-founds {
