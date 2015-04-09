@@ -10,7 +10,6 @@
   <div ng-show="history.txHistory[0]" class="scroll">
     <div ng-repeat="btx in history.txHistory" 
       ng-click="history.openTxModal(btx)" 
-      ng-class="{'line-b':!$last}" 
       class="row last-transactions-content">
       <div class="large-3 medium-3 small-3 columns">
         <span class="label tu success" ng-show="btx.action == 'received'">Received</span>
@@ -42,7 +41,7 @@
     </div>
     <div class="m20t row">
       <div class="columns">
-        <button class="black expand radius" ng-disabled="history.updatingTxHistory"
+        <button class="outline light-gray small expand" ng-disabled="history.updatingTxHistory"
           ng-click="history.getTxHistory()" 
           ng-show="history.loadMore">
           <span ng-show="!history.updatingTxHistory">

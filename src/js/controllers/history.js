@@ -82,12 +82,12 @@ angular.module('copayApp.controllers').controller('historyController',
               self.storeCacheTxHistory(JSON.stringify(self.txHistory));
             }
 
-            self.updatingTxHistory = false;
             self.skip = self.skip + self.limit;
             
             if (txs[self.limit]) {
               self.loadMore = true;
             }
+            self.updatingTxHistory = false;
             $scope.$apply();
           }
         });
