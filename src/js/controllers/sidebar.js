@@ -1,41 +1,19 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('sidebarController',
-  function($rootScope, $timeout, lodash, profileService, isMobile, isCordova, configService, go) {
+  function($rootScope, $timeout, lodash, profileService, configService, go) {
     var self = this;
+    self.walletSelection = false;
 
-    self.isMobile = isMobile.any();
-    self.isCordova = isCordova;
+    // wallet list change
+    $rootScope.$on('Local/WalletListUpdated', function(event) {
+      self.walletSelection = false;
+      self.setWallets();
+    });
 
-    self.init = function() {
-      // wallet list change
-      $rootScope.$on('updateWalletList', function(event) {
-        console.log('E: updateWalletList'); //TODO
-        self.walletSelection = false;
-        self.setWallets();
-      });
-
-      $rootScope.$on('walletDelete', function(event, wid) {
-        // TODO
-        if (wid == $rootScope.wallet.id) {
-          copay.logger.debug('Deleted focused wallet:', wid);
-
-          // new focus
-          var newWid = $rootScope.iden.getLastFocusedWalletId();
-          if (newWid && $rootScope.iden.getWalletById(newWid)) {
-            profileService.setFocusedWallet(newWid);
-          } else {
-            copay.logger.debug('No wallets');
-            profileService.noFocusedWallet(newWid);
-          }
-        }
-        self.walletSelection = false;
-        self.setWallets();
-      });
-
-      // Fire up update on init
-      $rootScope.$emit('updateWalletList');
-    };
+    $rootScope.$on('Local/ColorUpdated', function(event) {
+      self.setWallets();
+    });
 
     self.signout = function() {
       profileService.signout();
@@ -63,9 +41,12 @@ angular.module('copayApp.controllers').controller('sidebarController',
           n: c.n,
           name: c.walletName,
           id: c.walletId,
-          color: config.colorFor[c.walletId] ||  '#1ABC9C',
+          color: config.colorFor[c.walletId] || '#1ABC9C',
         };
       });
       self.wallets = lodash.sortBy(ret, 'walletName');
     };
+
+    self.setWallets();
+
   });

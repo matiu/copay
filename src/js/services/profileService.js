@@ -100,7 +100,7 @@ angular.module('copayApp.services')
           }
         });
       });
-      $rootScope.$emit('updateWalletList');
+      $rootScope.$emit('Local/WalletListUpdated');
     };
 
 
