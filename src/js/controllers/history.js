@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('historyController',
-  function($scope, $rootScope, $filter, $timeout, $modal, $log, profileService, notification, go, configService, rateService, lodash, storageService) {
+  function($scope, $rootScope, $filter, $timeout, $modal, $log, profileService, notification, go, configService, rateService, lodash) {
 
     function strip(number) {
       return (parseFloat(number.toPrecision(12)));
@@ -14,11 +14,6 @@ angular.module('copayApp.controllers').controller('historyController',
     this.satToUnit = 1 / this.unitToSatoshi;
     this.unitName = config.unitName;
     this.alternativeIsoCode = config.alternativeIsoCode;
-
-    this.skip = 0;
-    this.limit = 5;
-    this.loadMore = false;
-    this.txHistory = [];
 
     this.getUnitName = function() {
       return this.unitName;
