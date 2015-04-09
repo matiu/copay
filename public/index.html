@@ -32,6 +32,12 @@
         <div ng-include="'views/includes/clientError.html'" 
           ng-if="index.hasProfile && !index.isOffLine && index.clientError"></div>
 
+        <div ng-include="'views/includes/password.html'" ng-if="index.askPassword"
+></div>
+
+          <!-- ng&#45;class="{'animated fadeInDown':!index.askPassword.isSetup}" -->
+
+
         <section ng-class="{'main': index.hasProfile}" ui-view="main"></section>
         <div ui-view="menu"></div>
         <a class="close-menu" ng-click="index.closeMenu()"></a>

@@ -4,7 +4,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   var self = this;
   self.isCordova = isCordova;
   self.onGoingProcess = {};
-
   function strip(number) {
     return (parseFloat(number.toPrecision(12)));
   };
@@ -420,6 +419,14 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   $rootScope.$on('Local/NewFocusedWallet', function() {
     self.setFocusedWallet();
+  });
+
+  $rootScope.$on('Local/NeedsPassword', function(event, isSetup, cb) {
+    self.askPassword = {
+      callback: cb,
+      isSetup: isSetup,
+    };
+    $rootScope.$apply();
   });
 
   lodash.each(['NewCopayer', 'CopayerUpdated'], function(eventName) {

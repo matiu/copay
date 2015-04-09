@@ -1107,3 +1107,13 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   cursor: pointer !important;
 }
 
+.passModal {
+  position: absolute;
+  width: 80%;
+  height: 25%;
+  left: 10%;
+  top: 15%;
+  background: #FFF;
+  border: 2px solid black;
+  z-index: 100;
+}
