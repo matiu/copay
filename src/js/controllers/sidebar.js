@@ -55,7 +55,7 @@ angular.module('copayApp.controllers').controller('sidebarController',
 
     self.setWallets = function() {
       if (!profileService.profile) return;
-      var config = configService.getSync().wallet.settings;
+      var config = configService.getSync();
       config.colorFor = config.colorFor || {};
       var ret = lodash.map(profileService.profile.credentials, function(c) {
         return {
@@ -63,7 +63,7 @@ angular.module('copayApp.controllers').controller('sidebarController',
           n: c.n,
           name: c.walletName,
           id: c.walletId,
-          color: config.colorFor[self.walletId] ||  '#1ABC9C',
+          color: config.colorFor[c.walletId] ||  '#1ABC9C',
         };
       });
       self.wallets = lodash.sortBy(ret, 'walletName');
