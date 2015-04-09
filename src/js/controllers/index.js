@@ -160,7 +160,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         }
         $rootScope.$apply();
       });
-    }, 100);
+    });
   };
 
   self.handleError = function(err) {

@@ -28,38 +28,6 @@ angular.module('copayApp.controllers').controller('historyController',
       return this.alternativeIsoCode;
     };
 
-    this.getTxHistory = function(skip, limit, txHistory) {
-      var self = this;
-      self.updatingTxHistory = true;
-      $timeout(function() {
-        fc.getTxHistory({
-          skip: skip,
-          limit: limit + 1
-        }, function(err, txs) {
-          if (err) {
-            $log.debug('Transaction History ERROR:', err);
-            $scope.$emit('Local/ClientError', err);
-          }
-          else {
-            var now = new Date();
-            var c = 0;
-            lodash.each(txs, function(tx) {
-              tx.ts = tx.minedTs || tx.sentTs;
-              tx.rateTs = Math.floor((tx.ts || now) / 1000);
-              tx.amountStr = profileService.formatAmount(tx.amount); //$filter('noFractionNumber')(
-              if (c < self.limit) {
-                txHistory.push(tx);
-                c++;
-              }
-            });
-            self.updatingTxHistory = false;
-            self.txHistory = txHistory;
-            $scope.$apply();
-          }
-        });
-      }, 100);
-    };
-
     this._addRates = function(txs, cb) {
       if (!txs || txs.length == 0) return cb();
       var index = lodash.groupBy(txs, 'rateTs');
