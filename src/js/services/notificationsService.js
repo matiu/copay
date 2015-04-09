@@ -1,6 +1,6 @@
 'use strict';
 angular.module('copayApp.services')
-  .factory('notificationService', function profileServiceFactory($filter, notification, lodash) {
+  .factory('notificationService', function profileServiceFactory($filter, notification, lodash, configService) {
 
     var root = {};
 
@@ -50,34 +50,38 @@ angular.module('copayApp.services')
       if (root.shouldSkip(notificationData, last))
         return;
 
+      var config = configService.getSync();
+      config.colorFor = config.colorFor || {};
+      var color = config.colorFor[walletId] || '#1ABC9C';
+
       switch (notificationData.type) {
         case 'NewTxProposal':
           notification.new('New Transaction',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'TxProposalAcceptedBy':
           notification.success('Transaction Signed',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'TxProposalRejectedBy':
           notification.error('Transaction Rejected',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'TxProposalFinallyRejected':
           notification.error('A transaction was finally rejected',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'NewOutgoingTx':
           notification.sent('Transaction Sent',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'NewIncomingTx':
           notification.funds('Funds received',
-            walletName );
+            walletName, {color: color} );
           break;
         case 'ScanFinished':
           notification.success('Scan Finished',
-            walletName );;
+            walletName, {color: color} );;
           break;
 
         case 'NewCopayer':

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesController',
-  function($scope, $rootScope, $filter, $timeout, $modal, configService, profileService) {
+  function($scope, $rootScope, $filter, $timeout, $modal, $log, configService, profileService) {
     this.error = null;
     this.success = null;
 
@@ -15,10 +15,10 @@ angular.module('copayApp.controllers').controller('preferencesController',
     };
     var fc = profileService.focusedClient;
     $scope.encrypt = fc.hasPrivKeyEncrypted();
-    console.log('[preferences.js.17:encrypt:]', $scope.encrypt); //TODO
 
     var unwatch = $scope.$watch('encrypt', function(val) {
-      if (val) {
+      var fc = profileService.focusedClient;
+      if (val && !fc.hasPrivKeyEncrypted()) {
         $rootScope.$emit('Local/NeedsPassword', true, function(err, password) {
           if (err || !password) {
             $scope.encrypt = false;
@@ -28,6 +28,23 @@ angular.module('copayApp.controllers').controller('preferencesController',
             $scope.encrypt = true;
           });
         });
+      } else {
+        if (!val && fc.hasPrivKeyEncrypted())  {
+          $rootScope.$emit('Local/NeedsPassword', false, function(err, password) {
+            if (err || !password) {
+              $scope.encrypt = true;
+              return;
+            }
+            profileService.disablePrivateKeyEncryption(function(err) {
+              if (err) {
+                $scope.encrypt = true;
+                $log.error(err);
+                return;
+              }
+              $scope.encrypt = false;
+            });
+          });
+        }
       }
     });
 

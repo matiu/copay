@@ -304,8 +304,26 @@ angular.module('copayApp.services')
       fc.lock();
       root.updateFocusedCredentials(function() {
         $log.debug('Wallet encrypted');
+        return cb();
       });
     };
+
+
+    root.disablePrivateKeyEncryption = function(cb) {
+      var fc = root.focusedClient;
+      $log.debug('Disabling private key encryption for', fc.credentials.walletName);
+
+      try {
+        fc.disablePrivateKeyEncryption();
+      } catch (e) {
+        return cb(e);
+      }
+      root.updateFocusedCredentials(function() {
+        $log.debug('Wallet encryption disabled');
+        return cb();
+      });
+    };
+
 
     return root;
   });
