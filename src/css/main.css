@@ -523,14 +523,14 @@ input {
 }
 
 input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], textarea {
-  color: #333;
-  margin-bottom: 1.3rem;
-  height: 40px;
+  color: #2C3E50;
+  margin-bottom: 1.5rem;
+  height: 35px;
   background: transparent;
   -moz-box-shadow: none;
   box-shadow: none;
   border: none;
-  padding-left: 10px;
+  padding-left: 0.1rem;
   font-size: 13px;
   border-bottom: 1px solid #F1F3F5;
 }
@@ -539,6 +539,12 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
   color: #4B6178;
   border-color: #CED5DC;
   background: transparent;
+}
+
+input[type="text"][disabled], input[type="text"][readonly], fieldset[disabled] input[type="text"], input[type="password"][disabled], input[type="password"][readonly], fieldset[disabled] input[type="password"], input[type="date"][disabled], input[type="date"][readonly], fieldset[disabled] input[type="date"], input[type="datetime"][disabled], input[type="datetime"][readonly], fieldset[disabled] input[type="datetime"], input[type="datetime-local"][disabled], input[type="datetime-local"][readonly], fieldset[disabled] input[type="datetime-local"], input[type="month"][disabled], input[type="month"][readonly], fieldset[disabled] input[type="month"], input[type="week"][disabled], input[type="week"][readonly], fieldset[disabled] input[type="week"], input[type="email"][disabled], input[type="email"][readonly], fieldset[disabled] input[type="email"], input[type="number"][disabled], input[type="number"][readonly], fieldset[disabled] input[type="number"], input[type="search"][disabled], input[type="search"][readonly], fieldset[disabled] input[type="search"], input[type="tel"][disabled], input[type="tel"][readonly], fieldset[disabled] input[type="tel"], input[type="time"][disabled], input[type="time"][readonly], fieldset[disabled] input[type="time"], input[type="url"][disabled], input[type="url"][readonly], fieldset[disabled] input[type="url"], input[type="color"][disabled], input[type="color"][readonly], fieldset[disabled] input[type="color"], textarea[disabled], textarea[readonly], fieldset[disabled] textarea {
+  background-color: #E4E8EC;
+  color: #2C3E50;
+  padding-left: 0.5rem;
 }
 
 select {
@@ -552,7 +558,6 @@ label {
   font-weight: 700;
   font-size: 11px;
   color: #34495E;
-  padding: 0 0.2rem 0.3rem;
 }
 
 button.radius, .button.radius {
