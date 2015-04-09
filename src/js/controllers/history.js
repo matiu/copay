@@ -16,7 +16,7 @@ angular.module('copayApp.controllers').controller('historyController',
     this.alternativeIsoCode = config.alternativeIsoCode;
 
     this.skip = 0;
-    this.limit = 5;
+    this.limit = 10;
     this.loadMore = false;
     this.txHistory = [];
 
