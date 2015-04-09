@@ -5,11 +5,12 @@ angular.module('copayApp.controllers').controller('preferencesColorController',
     var config = configService.getSync();
     this.colorOpts = [
       '#1ABC9C',
-      '#4A1ABC',
-      '#BC1A3B',
-      '#8CBC1A',
-      '#666666',
-      '#000000',
+      '#4A90E2',
+      '#F39C12',
+      '#FF3366',
+      '#9B59B6',
+      '#C0392A',
+      '#213140',
     ];
 
     var fc = profileService.focusedClient;

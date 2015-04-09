@@ -140,27 +140,35 @@ factory('notification', ['$timeout',
       /* ============== NOTIFICATION METHODS ==============*/
 
       info: function(title, content, userData) {
-        return this.awesomeNotify('info', 'info', title, content, userData);
+        return this.awesomeNotify('info', 'fi-info', title, content, userData);
       },
 
       funds: function(title, content, userData) {
-        return this.awesomeNotify('funds', 'bitcoin-circle', title, content, userData);
+        return this.awesomeNotify('funds', 'icon-receive', title, content, userData);
       },
 
       version: function(title, content, severe) {
-        return this.awesomeNotify('version', severe ? 'alert' : 'flag', title, content);
+        return this.awesomeNotify('version', severe ? 'fi-alert' : 'fi-flag', title, content);
       },
 
       error: function(title, content, userData) {
-        return this.awesomeNotify('error', 'x', title, content, userData);
+        return this.awesomeNotify('error', 'fi-x', title, content, userData);
       },
 
       success: function(title, content, userData) {
-        return this.awesomeNotify('success', 'check', title, content, userData);
+        return this.awesomeNotify('success', 'fi-check', title, content, userData);
       },
 
       warning: function(title, content, userData) {
-        return this.awesomeNotify('warning', 'alert', title, content, userData);
+        return this.awesomeNotify('warning', 'fi-alert', title, content, userData);
+      },
+
+      new: function(title, content, userData) {
+        return this.awesomeNotify('warning', 'fi-plus', title, content, userData);
+      },
+
+      sent: function(title, content, userData) {
+        return this.awesomeNotify('warning', 'icon-paperplane', title, content, userData);
       },
 
       awesomeNotify: function(type, icon, title, content, userData) {
