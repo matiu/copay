@@ -99,14 +99,6 @@ angular.module('copayApp.services')
       localStorageService.remove('lastAddress-' + walletId, cb);
     };
 
-    root.getLastTransactions = function(walletId, cb) {
-      localStorageService.get('lastTransactions-' + walletId, cb);
-    };
-
-    root.storeLastTransactions = function(walletId, transactions, cb) {
-      localStorageService.set('lastTransactions-' + walletId, transactions, cb);
-    };
-
     root.setBackupFlag = function(walletId, cb) {
       localStorageService.set('backup-' + walletId, Date.now(), cb);
     };

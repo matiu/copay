@@ -4,6 +4,8 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   var self = this;
   self.isCordova = isCordova;
   self.onGoingProcess = {};
+  self.limitHistory = 5;
+
   function strip(number) {
     return (parseFloat(number.toPrecision(12)));
   };
@@ -53,6 +55,8 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.totalBalanceStr = null;
       self.notAuthorized = false;
       self.clientError = null;
+      self.txHistory = [];
+      self.txHistoryPaging = false;
 
       storageService.getBackupFlag(self.walletId, function(err, val) {
         self.needsBackup = !val;
@@ -131,6 +135,34 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   };
 
+  self.updateTxHistory = function(skip) {
+    var fc = profileService.focusedClient;
+    if (!skip) {
+      self.txHistory = [];
+    }
+    self.skipHistory = skip || 0;
+    $timeout(function() {
+      self.setOngoingProcess('updatingTxHistory', true);
+      $log.debug('Updating Transaction History');
+      fc.getTxHistory({
+        skip: self.skipHistory,
+        limit: self.limitHistory + 1
+      }, function(err, txs) {
+        self.setOngoingProcess('updatingTxHistory', false);
+        if (err) {
+          $log.debug('TxHistory ERROR:', err);
+          $scope.$emit('Local/ClientError', err);
+        }
+        else {
+          $log.debug('Wallet Transaction History:', txs);
+          self.skipHistory = self.skipHistory + self.limitHistory;
+          self.setTxHistory(txs);
+        }
+        $rootScope.$apply();
+      });
+    }, 100);
+  };
+
   self.handleError = function(err) {
     $log.debug('ERROR:', err);
     if (err.code === 'NOTAUTHORIZED') {
@@ -194,6 +226,21 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       }
     });
     return txps;
+  };
+
+  self.setTxHistory = function(txs) {
+    var now = new Date();
+    var c = 0;
+    self.txHistoryPaging = txs[self.limitHistory] ? true : false;
+    lodash.each(txs, function(tx) {
+      tx.ts = tx.minedTs || tx.sentTs;
+      tx.rateTs = Math.floor((tx.ts || now) / 1000);
+      tx.amountStr = profileService.formatAmount(tx.amount); //$filter('noFractionNumber')(
+      if (c < self.limitHistory) {
+        self.txHistory.push(tx);
+        c++;
+      }
+    });
   };
 
   self.updateColor = function() {
@@ -340,6 +387,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   $rootScope.$on('Local/OnLine', function(event) {
     self.isOffLine = false;
     self.updateAll();
+    self.updateTxHistory();
   });
 
   $rootScope.$on('Local/OffLine', function(event) {
@@ -381,6 +429,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
         self.setOngoingProcess('scanning', false);
       }
       self.updateBalance();
+      $timeout(function() {
+        self.updateTxHistory();
+      }, 5000);
     });
   });
 
@@ -390,6 +441,9 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   ], function(eventName) {
     $rootScope.$on(eventName, function() {
       self.updateAll();
+      $timeout(function() {
+        self.updateTxHistory();
+      }, 5000);
     });
   });
 
@@ -419,6 +473,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   $rootScope.$on('Local/NewFocusedWallet', function() {
     self.setFocusedWallet();
+    self.updateTxHistory();
   });
 
   $rootScope.$on('Local/NeedsPassword', function(event, isSetup, cb) {

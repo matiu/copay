@@ -28,44 +28,19 @@ angular.module('copayApp.controllers').controller('historyController',
       return this.alternativeIsoCode;
     };
 
-    this.checkCacheTxHistory = function() {
+    this.getTxHistory = function(skip, limit, txHistory) {
       var self = this;
-      storageService.getLastTransactions(fc.credentials.walletId, function(err, data) {
-        if (err) {
-          $log.debug('Error: ', err);
-          return;
-        }
-        self.txHistory = JSON.parse(data);
-      })
-    };
-
-    this.storeCacheTxHistory = function(txps) { 
-      storageService.storeLastTransactions(fc.credentials.walletId, txps, function(err) {
-        if (err) $log.debug('Error: ', err);
-      });
-    };
-
-    this.getTxHistory = function(firstTime) {
-      var self = this;
-      if (firstTime) {
-        self.checkCacheTxHistory();
-      }
       self.updatingTxHistory = true;
-      self.loadMore = false;
       $timeout(function() {
         fc.getTxHistory({
-          skip: self.skip,
-          limit: self.limit + 1
+          skip: skip,
+          limit: limit + 1
         }, function(err, txs) {
           if (err) {
-            $log.debug('Creating address ERROR:', err);
+            $log.debug('Transaction History ERROR:', err);
             $scope.$emit('Local/ClientError', err);
           }
           else {
-
-            if (firstTime) {
-              self.txHistory = [];
-            }
             var now = new Date();
             var c = 0;
             lodash.each(txs, function(tx) {
@@ -73,21 +48,12 @@ angular.module('copayApp.controllers').controller('historyController',
               tx.rateTs = Math.floor((tx.ts || now) / 1000);
               tx.amountStr = profileService.formatAmount(tx.amount); //$filter('noFractionNumber')(
               if (c < self.limit) {
-                self.txHistory.push(tx);
+                txHistory.push(tx);
                 c++;
               }
             });
-
-            if (firstTime) {
-              self.storeCacheTxHistory(JSON.stringify(self.txHistory));
-            }
-
-            self.skip = self.skip + self.limit;
-            
-            if (txs[self.limit]) {
-              self.loadMore = true;
-            }
             self.updatingTxHistory = false;
+            self.txHistory = txHistory;
             $scope.$apply();
           }
         });
