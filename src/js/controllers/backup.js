@@ -8,6 +8,9 @@ angular.module('copayApp.controllers').controller('backupController',
     this.error = null;
     this.success = null;
 
+    var fc = profileService.focusedClient;
+    this.isEncrypted = fc.isPrivKeyEncrypted();
+
     this.copyText = function(text) {
       if (isCordova) {
         window.cordova.plugins.clipboard.copy(text);

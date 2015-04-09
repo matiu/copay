@@ -2,6 +2,12 @@
 <div class="backup" ng-controller="backupController as backup">
   <div class="columns m20t" ng-show="!backup.backupWalletPlainText && !backup.error">
 
+    <div class="text-warning size-14 m10v" ng-show="backup.isEncrypted">
+      <i class="fi-alert size-12"></i>
+      <span translate> This wallet have its private key encrypted. Exporting a backup will keep the private key encrypted on the backup.</span>
+
+    </div>
+
     <label for="password"><span translate>Set up a Password for your backup</span>
     </label>
     <div class="input">

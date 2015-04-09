@@ -30,6 +30,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
       $scope.tx = tx;
       $scope.copayers = copayers
       $scope.loading = null;
+      $scope.color = fc.backgroundColor;
 
       $scope.getShortNetworkName = function() {
         return fc.credentials.networkName.substring(0, 4);
@@ -81,8 +82,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
               $scope.error = err;
               return;
             } 
-
-console.log('[walletHome.js.84]'); //TODO
             return $scope.sign(txp);
           });
           return;

@@ -200,6 +200,8 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     var config = configService.getSync();
     config.colorFor = config.colorFor || {};
     self.backgroundColor = config.colorFor[self.walletId] || '#1ABC9C';
+    var fc = profileService.focusedClient;
+    fc.backgroundColor = self.backgroundColor;
   };
 
   self.setBalance = function(balance) {
