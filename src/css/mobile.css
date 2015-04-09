@@ -114,17 +114,18 @@ _:-ms-fullscreen, :root .main {
 }
 
 .tab-bar .icon-back {
-  font-size: 32px;
+  font-size: 2.5rem;
   position: absolute;
   line-height: 52px;
-  left: -3px;
+  left: -5px;
   height: 45px;
   top: 0px;
 } 
 
 .tab-bar .text-back {
-  margin-left: 22px;
-  font-size: 14px;
+  margin-left: 26px;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .bottom-bar {
@@ -165,7 +166,7 @@ _:-ms-fullscreen, :root .main {
 }
 
 .home-wallet .avatar-wallet {
-  padding: 1.5rem;
+  padding: 1.7rem 1rem;
   width: 75px;
   height: 75px;
   position: absolute;
