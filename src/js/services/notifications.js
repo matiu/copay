@@ -17,27 +17,27 @@ factory('notification', ['$timeout',
     var queue = [];
     var settings = {
       info: {
-        duration: 6000,
+        duration: 600000,
         enabled: true
       },
       funds: {
-        duration: 7000,
+        duration: 700000,
         enabled: true
       },
       version: {
-        duration: 60000,
+        duration: 6000000,
         enabled: true
       },
       warning: {
-        duration: 7000,
+        duration: 700000,
         enabled: true
       },
       error: {
-        duration: 7000,
+        duration: 700000,
         enabled: true
       },
       success: {
-        duration: 5000,
+        duration: 500000,
         enabled: true
       },
       progress: {
@@ -45,7 +45,7 @@ factory('notification', ['$timeout',
         enabled: true
       },
       custom: {
-        duration: 35000,
+        duration: 3500000,
         enabled: true
       },
       details: true,
@@ -140,27 +140,35 @@ factory('notification', ['$timeout',
       /* ============== NOTIFICATION METHODS ==============*/
 
       info: function(title, content, userData) {
-        return this.awesomeNotify('info', 'info', title, content, userData);
+        return this.awesomeNotify('info', 'fi-info', title, content, userData);
       },
 
       funds: function(title, content, userData) {
-        return this.awesomeNotify('funds', 'bitcoin-circle', title, content, userData);
+        return this.awesomeNotify('funds', 'icon-receive', title, content, userData);
       },
 
       version: function(title, content, severe) {
-        return this.awesomeNotify('version', severe ? 'alert' : 'flag', title, content);
+        return this.awesomeNotify('version', severe ? 'fi-alert' : 'fi-flag', title, content);
       },
 
       error: function(title, content, userData) {
-        return this.awesomeNotify('error', 'x', title, content, userData);
+        return this.awesomeNotify('error', 'fi-x', title, content, userData);
       },
 
       success: function(title, content, userData) {
-        return this.awesomeNotify('success', 'check', title, content, userData);
+        return this.awesomeNotify('success', 'fi-check', title, content, userData);
       },
 
       warning: function(title, content, userData) {
-        return this.awesomeNotify('warning', 'alert', title, content, userData);
+        return this.awesomeNotify('warning', 'fi-alert', title, content, userData);
+      },
+
+      new: function(title, content, userData) {
+        return this.awesomeNotify('warning', 'fi-plus', title, content, userData);
+      },
+
+      sent: function(title, content, userData) {
+        return this.awesomeNotify('warning', 'icon-paperplane', title, content, userData);
       },
 
       awesomeNotify: function(type, icon, title, content, userData) {
