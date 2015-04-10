@@ -465,10 +465,6 @@ angular
       uriHandler.register();
     }
 
-    $rootScope.$on('$stateChangeSuccess', function() {
-      $rootScope.$emit('Animation/Disable');
-    });
-
     var pageWeight = {
       walletHome: 10,
       receive: 20,
@@ -489,6 +485,7 @@ angular
     };
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.$emit('Animation/Disable');
 
       if (pageWeight[fromState.name] > pageWeight[toState.name]) {
         $rootScope.$emit('Animation/SwipeRight');
