@@ -80,7 +80,7 @@ angular.module('copayApp.services')
         client.on('walletCompleted', function() {
           $log.debug('Wallet completed');
 
-          self.updateCredentialsFC(function() {
+          root.updateCredentialsFC(function() {
             $rootScope.$emit('Local/WalletCompleted')
           });
 
