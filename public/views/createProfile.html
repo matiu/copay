@@ -1,7 +1,7 @@
 <div 
   ng-controller="createProfileController as cp">
 
-  <div class="text-center logo-setup">
+  <div class="text-center logo-setup m20t">
     <img src="img/logo-negative-beta.svg" alt="Copay" width="100">
     <div ng-include="'views/includes/version.html'"></div>
   </div>
@@ -14,7 +14,7 @@
     </div>
   </div>
   <!-- <div ng&#45;if="!index.isOffLine &#38;&#38; !cp.creatingProfile" ng&#45;include="'views/includes/pin.html'" ng&#45;init="confirmPin=true"></div> -->
-  <div class="m20t text-white text-center  animated infinite flash" ng-if="!index.isOffLine && cp.creatingProfile">
+  <div class="m20tp text-white text-center  animated infinite flash" ng-if="!index.isOffLine && cp.creatingProfile">
     <span translate>Creating wallet...</span>
   </div>
 </div>
