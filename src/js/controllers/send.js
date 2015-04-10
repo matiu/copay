@@ -311,6 +311,7 @@ angular.module('copayApp.controllers').controller('sendController',
         $scope.isRateAvailable = self.isRateAvailable;
         $scope.unitTotal = (paypro.amount * satToUnit).toFixed(self.unitDecimals);
         $scope.unitName = self.unitName;
+        $scope.color = fc.backgroundColor;
 
         $scope.cancel = function() {
           $modalInstance.dismiss('cancel');

@@ -71,7 +71,6 @@ body, html{
   width:100%;
   color: #2C3E50;
   -webkit-user-select: text;
-  background-color: #2C3E50;
 }
 
 .alt-currency {
@@ -138,11 +137,16 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill, inpu
   font-size: 16px;
 }
 
+.main-dark {
+  background-color: #2C3E50;
+  height: 100%;
+}
+
 .page, .main {
   height:100%;
   overflow-y: auto;
   overflow-x: none;
-  background-color: #2C3E50;
+  background-color: #fff;
 }
 
 .button.small.side-bar {

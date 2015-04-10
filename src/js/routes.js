@@ -445,7 +445,7 @@ angular
         needProfile: false
       });
   })
-  .run(function($rootScope, $state, $log, gettextCatalog, uriHandler, isCordova, amMoment, profileService) {
+  .run(function($rootScope, $state, $log, gettextCatalog, uriHandler, isCordova, amMoment, profileService, lodash) {
 
     var userLang, androidLang;
 
@@ -465,7 +465,37 @@ angular
       uriHandler.register();
     }
 
+    $rootScope.$on('$stateChangeSuccess', function() {
+      $rootScope.$emit('Animation/Disable');
+    });
+
+    var pageWeight = {
+      walletHome: 10,
+      receive: 20,
+      send: 30,
+      history: 40,
+      preferences: 11,
+      preferencesColor: 12,
+      backup: 12,
+      delete: 12,
+      preferencesUnit: 12,
+      preferencesAltCurrency: 12,
+      preferencesBwsUrl: 12,
+      add: 11,
+      create: 12,
+      join: 12,
+      import: 12,
+      importLegacy: 12
+    };
+
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+
+      if (pageWeight[fromState.name] > pageWeight[toState.name]) {
+        $rootScope.$emit('Animation/SwipeRight');
+      }
+      else if (pageWeight[fromState.name] < pageWeight[toState.name]) {
+        $rootScope.$emit('Animation/SwipeLeft');
+      }
 
       if (unsupported) {
         $state.transitionTo('unsupported');

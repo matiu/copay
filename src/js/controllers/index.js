@@ -425,6 +425,21 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.startScan(walletId);
   });
 
+  $rootScope.$on('Animation/Disable', function(event) {
+    $timeout(function() {
+      self.swipeLeft = false;
+      self.swipeRight = false;
+    }, 201);
+  });
+
+  $rootScope.$on('Animation/SwipeLeft', function(event) {
+    self.swipeLeft = true;
+  });
+
+  $rootScope.$on('Animation/SwipeRight', function(event) {
+    self.swipeRight = true;
+  });
+
   lodash.each(['NewIncomingTx', 'ScanFinished'], function(eventName) {
     $rootScope.$on(eventName, function() {
       if (eventName == 'ScanFinished') {
