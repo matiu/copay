@@ -9,7 +9,6 @@ angular.module('copayApp.controllers').controller('preferencesColorController',
       '#F39C12',
       '#FF3366',
       '#9B59B6',
-      '#C0392A',
       '#213140',
     ];
 
