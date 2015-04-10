@@ -479,7 +479,7 @@ angular
           if (err) {
             if (err.message.match('NOPROFILE')) {
               $log.debug('No profile... redirecting');
-              $state.transitionTo('createProfile');
+              $state.transitionTo('splash');
               event.preventDefault();
             } else {
               throw new Error(err); // TODO
