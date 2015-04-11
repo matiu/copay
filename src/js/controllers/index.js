@@ -386,10 +386,12 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     go.walletHome();
   });
 
-  $rootScope.$on('Local/OnLine', function(event) {
-    self.isOffLine = false;
-    self.updateAll();
-    self.updateTxHistory();
+  lodash.each(['Local/OnLine', 'Local/Awake'], function(eventName) {
+    $rootScope.$on(eventName, function() {
+      self.isOffLine = false;
+      self.updateAll();
+      self.updateTxHistory();
+    });
   });
 
   $rootScope.$on('Local/OffLine', function(event) {

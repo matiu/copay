@@ -25,6 +25,7 @@ angular.element(document).ready(function() {
       }, false);
       
       document.addEventListener('resume', function() {
+        window.location = '#/network/awake';
         setTimeout(function() {
           window.ignoreMobilePause = false;
         }, 100);

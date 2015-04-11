@@ -437,6 +437,9 @@ angular
                 case 'offline':
                   $scope.$emit('Local/OffLine');
                   break;
+                case 'awake':
+                  $scope.$emit('Local/Awake');
+                  break;
               };
               go.walletHome();
             }
