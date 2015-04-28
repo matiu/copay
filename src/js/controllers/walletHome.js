@@ -523,12 +523,11 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
         message: comment,
         payProUrl: paypro ? paypro.url : null,
       }, function(err, txp) {
+        self.setOngoingProcess();
         if (err) {
-          self.setOngoingProcess();
           profileService.lockFC();
           return self.setError(err);
         }
-        self.setOngoingProcess();
         self.signAndBroadcast(txp, function(err) {
           if (err) {
             return self.setError(err);
@@ -545,15 +544,13 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
     var fc = profileService.focusedClient;
     self.setOngoingProcess('Signing transaction');
     fc.signTxProposal(txp, function(err, signedTx) {
+      self.setOngoingProcess();
       profileService.lockFC();
-
       if (err) {
-        self.setOngoingProcess();
         return cb(err);
       }
 
       if (signedTx.status == 'accepted') {
-        self.setOngoingProcess();
         self.setOngoingProcess('Broadcasting transaction');
         fc.broadcastTxProposal(signedTx, function(err, btx) {
           self.setOngoingProcess();
@@ -568,7 +565,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
           });
         });
       } else {
-        self.setOngoingProcess();
         $scope.$emit('Local/TxProposalAction');
         txStatus.notify(signedTx, function() {
           return cb();
