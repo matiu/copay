@@ -531,7 +531,6 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
         self.setOngoingProcess();
         self.signAndBroadcast(txp, function(err) {
           if (err) {
-            self.setOngoingProcess();
             return self.setError(err);
           }
 
@@ -557,13 +556,12 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
         self.setOngoingProcess();
         self.setOngoingProcess('Broadcasting transaction');
         fc.broadcastTxProposal(signedTx, function(err, btx) {
+          self.setOngoingProcess();
           if (err) {
-            self.setOngoingProcess();
             $scope.error = 'Transaction not broadcasted. Please try again.';
             $scope.$digest();
             return;
           }
-          self.setOngoingProcess();
           $scope.$emit('Local/TxProposalAction');
           txStatus.notify(btx, function() {
             return cb();
