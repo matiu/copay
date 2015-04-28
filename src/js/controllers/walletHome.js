@@ -528,7 +528,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
           profileService.lockFC();
           return self.setError(err);
         }
-
+        self.setOngoingProcess();
         self.signAndBroadcast(txp, function(err) {
           if (err) {
             self.setOngoingProcess();
@@ -554,6 +554,7 @@ angular.module('copayApp.controllers').controller('walletHomeController', functi
       }
 
       if (signedTx.status == 'accepted') {
+        self.setOngoingProcess();
         self.setOngoingProcess('Broadcasting transaction');
         fc.broadcastTxProposal(signedTx, function(err, btx) {
           if (err) {
