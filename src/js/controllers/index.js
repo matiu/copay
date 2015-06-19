@@ -199,8 +199,8 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.setOngoingProcess('updatingStatus', true);
       $log.debug('Updating Status:', fc, tries);
       get(function(err, walletStatus) {
-        var currentStatusHash = _walletStatusHash(walletStatus); 
-        $log.debug('Status update. hash:' + currentStatusHash + ' Try:'+ tries); 
+        var currentStatusHash = _walletStatusHash(walletStatus);
+        $log.debug('Status update. hash:' + currentStatusHash + ' Try:' + tries);
         if (!err && untilItChanges && initStatusHash == currentStatusHash && tries < 7) {
           return $timeout(function() {
             $log.debug('Retrying update... Try:' + tries)
@@ -429,11 +429,15 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.availableBalanceBTC = strip(self.availableBalanceBTC / COIN);
 
     // KB to send max
-    self.feePerKbSat = config.feePerKbSat || 10000; 
-    var feeToSendMaxSat = balance.totalKbToSendMax * self.feePerKbSat;
+    self.feePerKbSat = config.feePerKbSat || 10000;
+    if (balance.totalKbToSendMax) {
+      var feeToSendMaxSat = balance.totalKbToSendMax * self.feePerKbSat;
 
-    self.availableMaxBalance = strip((self.availableBalanceSat - feeToSendMaxSat) * self.satToUnit);
-    self.feeToSendMaxStr = profileService.formatAmount(feeToSendMaxSat) + ' ' + self.unitName;
+      self.availableMaxBalance = strip((self.availableBalanceSat - feeToSendMaxSat) * self.satToUnit);
+      self.feeToSendMaxStr = profileService.formatAmount(feeToSendMaxSat) + ' ' + self.unitName;
+    } else {
+      self.feeToSendMaxStr = null;
+    }
 
     //STR
     self.totalBalanceStr = profileService.formatAmount(self.totalBalanceSat) + ' ' + self.unitName;
