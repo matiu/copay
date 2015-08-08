@@ -758,7 +758,6 @@ console.log('[index.js:395]',txps); //TODO
     $timeout(function() {
       $rootScope.$apply();
     });
-
   };
 
   self.recreate = function(cb) {
