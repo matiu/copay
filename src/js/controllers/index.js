@@ -795,6 +795,7 @@ console.log('[index.js:395]',txps); //TODO
 
   self.startScan = function(walletId) {
     var c = profileService.walletClients[walletId];
+    if (!c.isComplete()) return;
 
     if (self.walletId == walletId)
       self.setOngoingProcess('scanning', true);
