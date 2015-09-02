@@ -379,7 +379,7 @@ console.log('[index.js:395]',txps); //TODO
 
   self.updateTxHistory = function(skip) {
     var fc = profileService.focusedClient;
-    if (!fc.isComplete()) return;
+    if (!fc || !fc.isComplete()) return;
     if (!skip) {
       self.txHistory = [];
     }
