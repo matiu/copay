@@ -131,8 +131,7 @@
               </p>
               <div class="size-12 text-gray">
                 <span translate>Multisignature wallet</span> ({{index.m}} <span translate>of</span> {{index.n}})
-                <span ng-if="index.network != 'livenet'">- Testnet</span>
-                <span ng-if="!index.canSign"> - <span translate>No Private key</span></span>
+                <span ng-include="'views/includes/walletInfo.html'"></span>
               </div>
             </div>
             <div ng-show="!index.isShared">
@@ -140,8 +139,7 @@
               {{(index.alias || index.walletName)}}
               </p>
               <div class="size-12 text-gray">
-                <span ng-if="index.network != 'livenet'"> Testnet </span>
-                <span ng-if="!index.canSign" translate>No Private key</span>
+                <span ng-include="'views/includes/walletInfo.html'"></span>
               </div>
             </div>
           </div>
