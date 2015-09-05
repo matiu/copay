@@ -645,7 +645,7 @@ console.log('[index.js:395]',txps); //TODO
       skip = skip || 0;
       fc.getTxHistory({
         skip: skip,
-        limit: step, 
+        limit: step,
       }, function(err, txs) {
         if (err) return cb(err);
         if (txs && txs.length > 0) {
@@ -722,7 +722,7 @@ console.log('[index.js:395]',txps); //TODO
     });
   };
 
-  self.showErrorPopup = function (msg, cb) {
+  self.showErrorPopup = function(msg, cb) {
     $log.warn('Showing err popup:' + msg);
     self.showAlert = {
       msg: msg,
@@ -989,7 +989,9 @@ console.log('[index.js:395]',txps); //TODO
     self.needsBackup = false;
     storageService.setBackupFlag(walletId, function() {
       addressService.expireAddress(walletId, function(err) {
-        self.startScan(walletId);
+        $timeout(function() {
+          self.startScan(walletId);
+        }, 500);
       });
     });
   });
@@ -1082,7 +1084,7 @@ console.log('[index.js:395]',txps); //TODO
   });
 
   $rootScope.$on('Local/ShowAlert', function(event, msg, cb) {
-    self.showErrorPopup(msg,cb);
+    self.showErrorPopup(msg, cb);
   });
 
   $rootScope.$on('Local/NeedsPassword', function(event, isSetup, cb) {
