@@ -90,17 +90,10 @@ msgid "Add wallet"
 msgstr ""
 
 #: public/views/paymentUri.html
+#: public/views/preferencesGlidera.html
 #: public/views/modals/customized-amount.html
 #: public/views/modals/paypro.html
 msgid "Address"
-msgstr ""
-
-#: public/views/preferencesGlidera.html
-msgid "Address 1"
-msgstr ""
-
-#: public/views/preferencesGlidera.html
-msgid "Address 2"
 msgstr ""
 
 #: public/views/preferences.html
