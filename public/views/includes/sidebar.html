@@ -37,6 +37,16 @@
         </div>
       </a>
     </li>
+    <li ng-show="index.isComplete && index.amazonEnabled">
+      <a ng-click="sidebar.closeMenu(); $root.go('amazon')" class="oh">
+        <i class="icon-arrow-right3 size-18 right m10t vm"></i>
+        <i class="fi-social-amazon size-24 icon vm"></i>
+        <div class="tu text-bold">
+          <span class="size-12">Amazon Gift Card</span>
+        </div>
+        <div translate>Buy with bitcoin</div>
+      </a>
+    </li>
     <li>
       <a ng-click="sidebar.closeMenu(); $root.go('preferencesGlobal')" class="oh">
         <i class="icon-arrow-right3 size-18 right m10t vm"></i>

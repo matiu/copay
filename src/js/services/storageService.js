@@ -283,5 +283,17 @@ angular.module('copayApp.services')
       storage.remove('coinbaseTxs-' + network, cb);
     };
 
+    root.setAmazonGiftCards = function(network, gcs, cb) {
+      storage.set('amazonGiftCards-' + network, gcs, cb);
+    };
+
+    root.getAmazonGiftCards = function(network, cb) {
+      storage.get('amazonGiftCards-' + network, cb);
+    };
+
+    root.removeAmazonGiftCards = function(network, cb) {
+      storage.remove('amazonGiftCards-' + network, cb);
+    };
+
     return root;
   });

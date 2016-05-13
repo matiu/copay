@@ -148,6 +148,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
       self.initGlidera();
       self.initCoinbase();
+      self.initAmazon();
 
       self.setCustomBWSFlag();
 
@@ -1179,6 +1180,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
       self.defaultLanguageName = uxLanguage.getName(userLang);
       if (cb) return cb();
     });
+  };
+
+  self.initAmazon = function() {
+    self.amazonEnabled = configService.getSync().amazon.enabled;
   };
 
   self.initGlidera = function(accessToken) {
