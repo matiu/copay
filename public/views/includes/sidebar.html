@@ -31,20 +31,21 @@
     <li ng-show="!index.isWindowsPhoneApp && index.isComplete && (index.glideraEnabled || index.coinbaseEnabled)">
       <a ng-click="sidebar.closeMenu(); $root.go('buyandsell')" class="oh">
         <i class="icon-arrow-right3 size-18 right m10t vm"></i>
-        <i class="icon-bank size-24 icon vm"></i>
-        <div class="tu text-bold m5t">
+        <i class="icon-bank size-24 icon m5t vm"></i>
+        <div class="tu text-bold">
           <span class="size-12" translate>Buy &amp; Sell</span>
         </div>
+        <div>Bitcoin</div>
       </a>
     </li>
     <li ng-show="index.isComplete && index.amazonEnabled">
       <a ng-click="sidebar.closeMenu(); $root.go('amazon')" class="oh">
         <i class="icon-arrow-right3 size-18 right m10t vm"></i>
-        <i class="fi-social-amazon size-24 icon vm"></i>
+        <i class="fi-social-amazon size-28 icon vm"></i>
         <div class="tu text-bold">
-          <span class="size-12">Amazon Gift Card</span>
+          <span class="size-12">Amazon.com</span>
         </div>
-        <div translate>Buy with bitcoin</div>
+        <div translate>Buy gift card</div>
       </a>
     </li>
     <li>
