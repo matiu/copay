@@ -17,7 +17,7 @@ angular.module('copayApp.services')
 
     root.profile = null;
     root.focusedClient = null;
-    root.wallet = {};             // decorated version of client
+    root.wallet = {}; // decorated version of client
 
     root._setFocus = function(walletId, cb) {
       $log.debug('Set focus:', walletId);
@@ -539,7 +539,7 @@ angular.module('copayApp.services')
             var config = configService.getSync();
             if (config.pushNotifications.enabled)
               pushNotificationsService.enableNotifications(root.wallet);
-            return cb(err, walletClient);
+            return cb(err, client);
           });
         });
       });
