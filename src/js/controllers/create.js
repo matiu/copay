@@ -181,14 +181,13 @@ angular.module('copayApp.controllers').controller('createController',
             $log.debug('Remote preferences saved for:' + wallet.walletId)
           });
 
-
           if (self.seedSourceId == 'set') {
             $timeout(function() {
               $rootScope.$emit('Local/BackupDone');
             }, 1);
           }
 
-          go.walletHome();
+          go.path('tabs.home');
         });
       }, 100);
     }

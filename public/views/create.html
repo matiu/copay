@@ -1,24 +1,25 @@
-<ion-view view-title="Create new wallet" ng-controller="createController as create" ng-init="create.setTotalCopayers(1)">
-  <ion-nav-buttons side="primary">
-    <a href ui-sref="add" class="button icon-left ion-chevron-left button-clear button-dark">Add</a>
-  </ion-nav-buttons>
+<ion-view view-title="Create new wallet">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-buttons side="primary">
+      <a href ui-sref="add" class="button icon-left ion-chevron-left button-clear button-dark">Add</a>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
-  <ion-content>
-
+  <ion-content ng-controller="createController as create" ng-init="create.setTotalCopayers(1)">
     <div class="row" ng-hide="create.hideTabs">
       <div class="col">
         <button
-           ng-class="{'button-dark': totalCopayers == 1, 'button-stable': totalCopayers != 1}"
-           class="button button-full button-clear"
-           ng-click="create.setTotalCopayers(1)" translate>
+          ng-class="{'button-dark': totalCopayers == 1, 'button-stable': totalCopayers != 1}"
+          class="button button-full button-clear"
+          ng-click="create.setTotalCopayers(1)" translate>
           Personal Wallet
         </button>
       </div>
       <div class="col">
         <button
-           ng-class="{'button-stable': totalCopayers == 1, 'button-dark': totalCopayers != 1}"
-           class="button button-full button-clear"
-           ng-click="create.setTotalCopayers(3)" translate>
+          ng-class="{'button-stable': totalCopayers == 1, 'button-dark': totalCopayers != 1}"
+          class="button button-full button-clear"
+          ng-click="create.setTotalCopayers(3)" translate>
           Shared Wallet
         </button>
       </div>
@@ -82,7 +83,6 @@
         </ion-toggle>
 
         <div ng-show="showAdv">
-
           <label class="item item-input item-stacked-label">
             <span class="input-label">Wallet Service URL</span>
             <input type="text" id="bwsurl" name="bwsurl" ng-model="bwsurl">

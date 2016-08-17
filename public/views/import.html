@@ -1,13 +1,14 @@
-<ion-view view-title="Import wallet" ng-controller="importController" ng-init="type='12'">
-  <ion-nav-buttons side="primary">
-    <a href ui-sref="add" class="button icon-left ion-chevron-left button-clear button-dark">Add</a>
-  </ion-nav-buttons>
+<ion-view view-title="Import wallet">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-buttons side="primary">
+      <a href ui-sref="add" class="button icon-left ion-chevron-left button-clear button-dark">Add</a>
+    </ion-nav-buttons>
+  </ion-nav-bar>
   <ion-nav-buttons side="secondary">
     <qr-scanner class="button button-clear button-positive" on-scan="processWalletInfo(data)"></qr-scanner>
   </ion-nav-buttons>
 
-  <ion-content>
-
+  <ion-content ng-controller="importController" ng-init="type='12'">
     <div class="row">
       <div class="col">
         <button
