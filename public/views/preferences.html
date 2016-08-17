@@ -60,8 +60,8 @@
         <span translate>Backup</span>
         <i class="icon ion-ios-arrow-right"></i>
       </div>
-      <div ng-show="!index.noFocusedWallet && index.canSign">
-        <ion-toggle ng-model="encryptEnabled" toggle-class="toggle-balanced" ng-change="encryptChange()">
+      <div ng-show="canSign && isFc">
+        <ion-toggle ng-model="spendingPassword.enabled" toggle-class="toggle-balanced" ng-change="encryptChange()">
           <span class="toggle-label" translate>Request Spending Password</span>
         </ion-toggle>
       </div>

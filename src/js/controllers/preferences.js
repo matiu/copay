@@ -17,21 +17,22 @@ angular.module('copayApp.controllers').controller('preferencesController',
         $scope.alias = config.aliasFor[walletId] || wallet.credentials.walletName;
         $scope.color = config.colorFor[walletId] || '#4A90E2';
 
-        $scope.encryptEnabled = walletService.isEncrypted(wallet);
+        $scope.isFc = true;
+        $scope.canSign = fc.credentials.canSign();
+        $scope.spendingPassword = {
+          enabled: walletService.isEncrypted(fc)
+        }
         if (wallet.isPrivKeyExternal)
           $scope.externalSource = wallet.getPrivKeyExternalSourceName() == 'ledger' ? 'Ledger' : 'Trezor';
 
-        // TODO externalAccount
-        //this.externalIndex = wallet.getExternalIndex();
+        $scope.deleted = false;
+        if (wallet.credentials && !wallet.credentials.mnemonicEncrypted && !wallet.credentials.mnemonic) {
+          $scope.deleted = true;
+        }
       }
 
       $scope.touchidAvailable = fingerprintService.isAvailable();
       $scope.touchidEnabled = config.touchIdFor ? config.touchIdFor[walletId] : null;
-
-      $scope.deleted = false;
-      if (wallet.credentials && !wallet.credentials.mnemonicEncrypted && !wallet.credentials.mnemonic) {
-        $scope.deleted = true;
-      }
     };
 
     var handleEncryptedWallet = function(cb) {
@@ -43,7 +44,7 @@ angular.module('copayApp.controllers').controller('preferencesController',
 
     $scope.encryptChange = function() {
       if (!wallet) return;
-      var val = $scope.encryptEnabled;
+      var val = $scope.spendingPassword.enabled;
 
       var setPrivateKeyEncryption = function(password, cb) {
         $log.debug('Encrypting private key for', wallet.credentials.walletName);
@@ -73,29 +74,39 @@ angular.module('copayApp.controllers').controller('preferencesController',
       if (val && !walletService.isEncrypted(wallet)) {
         $rootScope.$emit('Local/NeedsPassword', true, function(err, password) {
           if (err || !password) {
-            $scope.encryptEnabled = false;
+            $scope.spendingPassword = {
+              enabled: false
+            };
             return;
           }
           setPrivateKeyEncryption(password, function() {
             $rootScope.$emit('Local/NewEncryptionSetting');
-            $scope.encryptEnabled = true;
+            $scope.spendingPassword = {
+              enabled: true
+            };
           });
         });
       } else {
         if (!val && walletService.isEncrypted(wallet)) {
           handleEncryptedWallet(function(err) {
             if (err) {
-              $scope.encryptEnabled = true;
+              $scope.spendingPassword = {
+                enabled: true
+              };
               return;
             }
             disablePrivateKeyEncryption(function(err) {
               $rootScope.$emit('Local/NewEncryptionSetting');
               if (err) {
-                $scope.encryptEnabled = true;
+                $scope.spendingPassword = {
+                  enabled: true
+                };
                 $log.error(err);
                 return;
               }
-              $scope.encryptEnabled = false;
+              $scope.spendingPassword = {
+                enabled: false
+              };
             });
           });
         }
