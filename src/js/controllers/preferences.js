@@ -19,12 +19,11 @@ angular.module('copayApp.controllers').controller('preferencesController',
 
         $scope.isFc = true;
         $scope.canSign = fc.credentials.canSign();
-        $scope.spendingPassword = {
-          enabled: walletService.isEncrypted(fc)
-        }
+
         if (wallet.isPrivKeyExternal)
           $scope.externalSource = wallet.getPrivKeyExternalSourceName() == 'ledger' ? 'Ledger' : 'Trezor';
 
+        $scope.spendingPassword = walletService.isEncrypted(fc);
         $scope.deleted = false;
         if (wallet.credentials && !wallet.credentials.mnemonicEncrypted && !wallet.credentials.mnemonic) {
           $scope.deleted = true;
@@ -74,39 +73,29 @@ angular.module('copayApp.controllers').controller('preferencesController',
       if (val && !walletService.isEncrypted(wallet)) {
         $rootScope.$emit('Local/NeedsPassword', true, function(err, password) {
           if (err || !password) {
-            $scope.spendingPassword = {
-              enabled: false
-            };
+            $scope.spendingPassword = false;
             return;
           }
           setPrivateKeyEncryption(password, function() {
             $rootScope.$emit('Local/NewEncryptionSetting');
-            $scope.spendingPassword = {
-              enabled: true
-            };
+            $scope.spendingPassword = true;
           });
         });
       } else {
         if (!val && walletService.isEncrypted(wallet)) {
           handleEncryptedWallet(function(err) {
             if (err) {
-              $scope.spendingPassword = {
-                enabled: true
-              };
+              $scope.spendingPassword = true;
               return;
             }
             disablePrivateKeyEncryption(function(err) {
               $rootScope.$emit('Local/NewEncryptionSetting');
               if (err) {
-                $scope.spendingPassword = {
-                  enabled: true
-                };
+                $scope.spendingPassword = true;
                 $log.error(err);
                 return;
               }
-              $scope.spendingPassword = {
-                enabled: false
-              };
+              $scope.spendingPassword = false;
             });
           });
         }

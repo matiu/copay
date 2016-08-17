@@ -1,6 +1,6 @@
 <ion-view>
   <ion-nav-bar class="bar-stable">
-  <ion-nav-title>Wallet Settings</ion-nav-title>
+    <ion-nav-title>Wallet Settings</ion-nav-title>
     <ion-nav-buttons side="primary">
        <button class="button" href ui-sref="wallet.details">
          <i class="ion-arrow-left-c"></i> Back
@@ -61,7 +61,7 @@
         <i class="icon ion-ios-arrow-right"></i>
       </div>
       <div ng-show="canSign && isFc">
-        <ion-toggle ng-model="spendingPassword.enabled" toggle-class="toggle-balanced" ng-change="encryptChange()">
+        <ion-toggle ng-model="spendingPassword" toggle-class="toggle-balanced" ng-change="spendingPasswordChange()">
           <span class="toggle-label" translate>Request Spending Password</span>
         </ion-toggle>
       </div>
