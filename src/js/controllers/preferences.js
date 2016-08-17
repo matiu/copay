@@ -18,12 +18,12 @@ angular.module('copayApp.controllers').controller('preferencesController',
         $scope.color = config.colorFor[walletId] || '#4A90E2';
 
         $scope.isFc = true;
-        $scope.canSign = fc.credentials.canSign();
+        $scope.canSign = wallet.credentials.canSign();
 
         if (wallet.isPrivKeyExternal)
           $scope.externalSource = wallet.getPrivKeyExternalSourceName() == 'ledger' ? 'Ledger' : 'Trezor';
 
-        $scope.spendingPassword = walletService.isEncrypted(fc);
+        $scope.spendingPassword = walletService.isEncrypted(wallet);
         $scope.deleted = false;
         if (wallet.credentials && !wallet.credentials.mnemonicEncrypted && !wallet.credentials.mnemonic) {
           $scope.deleted = true;
@@ -41,9 +41,9 @@ angular.module('copayApp.controllers').controller('preferencesController',
       });
     };
 
-    $scope.encryptChange = function() {
+    $scope.spendingPasswordChange = function() {
       if (!wallet) return;
-      var val = $scope.spendingPassword.enabled;
+      var val = $scope.spendingPassword;
 
       var setPrivateKeyEncryption = function(password, cb) {
         $log.debug('Encrypting private key for', wallet.credentials.walletName);

@@ -139,7 +139,7 @@ angular.module('copayApp.controllers').controller('joinController',
           }
 
           walletService.updateRemotePreferences(wallet, {}, function() {
-            $log.debug('Remote preferences saved for:' + wallet.walletId)
+            $log.debug('Remote preferences saved for: ' + wallet.id)
           });
 
           go.path('tabs.home');

@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('preferencesDeleteWalletController',
-  function($scope, $ionicPopup, notification, profileService, go, gettextCatalog, ongoingProcess) {
-    var fc = profileService.focusedClient;
-    var name = fc.credentials.walletName;
-    var walletName = (fc.alias || '') + ' [' + name + ']';
+  function($scope, $ionicPopup, $stateParams, notification, profileService, go, gettextCatalog, ongoingProcess) {
+    var wallet = profileService.getWallet($stateParams.walletId);
+    var name = wallet.credentials.walletName;
+    var walletName = (wallet.alias || '') + ' [' + name + ']';
     $scope.walletName = walletName;
     $scope.error = null;
 
@@ -33,7 +33,7 @@ angular.module('copayApp.controllers').controller('preferencesDeleteWalletContro
 
     var deleteWallet = function() {
       ongoingProcess.set('deletingWallet', true);
-      profileService.deleteWalletClient(fc, function(err) {
+      profileService.deleteWalletClient(wallet, function(err) {
         ongoingProcess.set('deletingWallet', false);
         if (err) {
           $scope.error = err.message || err;
