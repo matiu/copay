@@ -2,16 +2,9 @@
 
 angular.module('copayApp.controllers').controller('walletDetailsController', function($scope, $rootScope, $interval, $timeout, $filter, $log, $ionicModal, $ionicPopover, $ionicNavBarDelegate, $state, $stateParams, bwcError, profileService, lodash, configService, gettext, gettextCatalog, platformInfo, walletService, storageService, $ionicPopup) {
 
-  var isCordova = platformInfo.isCordova;
-  var isWP = platformInfo.isWP;
-  var isAndroid = platformInfo.isAndroid;
-  var isChromeApp = platformInfo.isChromeApp;
-
-  var errorPopup;
-
   var HISTORY_SHOW_LIMIT = 10;
   $scope.txps = [];
-
+  $scope.isCordova = platformInfo.isCordova;
 
   var setPendingTxps = function(txps) {
     if (!txps) {
@@ -20,7 +13,6 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     }
     $scope.txps = lodash.sortBy(txps, 'createdOn').reverse();
   };
-
 
   $scope.updateStatus = function(force) {
     $scope.updatingStatus = true;
@@ -117,8 +109,8 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     walletService.recreate();
   };
 
-  $scope.updateTxHistory = function(cb) {
-
+  $scope.updateTxHistory = function(force, cb) {
+    if (!cb) cb = function() {};
     if ($scope.updatingTxHistory) return;
 
     $scope.updatingTxHistory = true;
@@ -137,6 +129,7 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
 
     $timeout(function() {
       walletService.getTxHistory(wallet, {
+        force: force,
         progressFn: progressFn,
       }, function(err, txHistory) {
         $scope.updatingTxHistory = false;
@@ -148,7 +141,7 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
         $scope.completeTxHistory = txHistory;
 
         $scope.showHistory();
-
+        $scope.$broadcast('scroll.refreshComplete');
         $timeout(function() {
           $scope.$apply();
         }, 1);
@@ -170,9 +163,9 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     $scope.$broadcast('scroll.infiniteScrollComplete');
   };
 
-  $scope.updateAll = function(cb)  {
-    $scope.updateStatus(false);
-    $scope.updateTxHistory(cb);
+  $scope.updateAll = function(force, cb) {
+    $scope.updateStatus(force);
+    $scope.updateTxHistory(force, cb);
   }
 
   var hideBalance = function() {
@@ -207,7 +200,7 @@ angular.module('copayApp.controllers').controller('walletDetailsController', fun
     hideBalance();
     $ionicNavBarDelegate.title(wallet.name);
 
-    $scope.updateAll(function() {
+    $scope.updateAll(false, function() {
       if ($stateParams.txid) {
         var tx = lodash.find($scope.completeTxHistory, {
           txid: $stateParams.txid

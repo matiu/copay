@@ -5,6 +5,12 @@
   </ion-nav-bar>
 
   <ion-content class="padding" ng-controller="tabHomeController" ng-init="updateAllWallets(); nextStep()">
+    <ion-refresher
+      ng-if="isCordova"
+      pulling-icon="ion-ios-refresh-empty"
+      spinner="none"
+      on-refresh="updateAllWallets()">
+    </ion-refresher>
 
     <div class="card">
       <div class="item item-divider">

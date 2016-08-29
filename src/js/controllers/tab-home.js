@@ -3,6 +3,8 @@
 angular.module('copayApp.controllers').controller('tabHomeController',
   function($rootScope, $timeout, $scope, $state, lodash, profileService, walletService, configService, txFormatService, $ionicModal, $log, platformInfo, storageService) {
 
+    $scope.isCordova = platformInfo.isCordova;
+
     var setNotifications = function(notifications) {
       var n = walletService.processNotifications(notifications, 5);
       $scope.notifications = n;
@@ -37,7 +39,7 @@ angular.module('copayApp.controllers').controller('tabHomeController',
           walletService.getNotifications(wallet, {
             timeSpan: timeSpan
           }, function(err, n) {
-console.log('[tab-home.js.39]', wallet.name, n); //TODO
+            console.log('[tab-home.js.39]', wallet.name, n); //TODO
             if (err) {
               console.log('[tab-home.js.35:err:]', $log.error(err)); //TODO
               return;
@@ -50,6 +52,7 @@ console.log('[tab-home.js.39]', wallet.name, n); //TODO
           });
 
         });
+        $scope.$broadcast('scroll.refreshComplete');
         $scope.$digest();
       }, 100);
     };
