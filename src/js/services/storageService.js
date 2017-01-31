@@ -367,12 +367,14 @@ angular.module('copayApp.services')
       root.getBitpayAccounts(network, function(err, allAccounts) {
         if (err) return cb(err);
 
+        if (lodash.isEmpty(allAccounts)) return cb();
+
         if (!allAccounts[email]) {
           return cb('Cannot set cards for unknown account ' + email);
         }
 
         allAccounts[email].cards = cards;
-        storage.set('bitpayAccounts-v2-' + network, allAccounts, cb);
+        storage.set('bitpayAccounts-v3-' + network, allAccounts, cb);
       });
     };
 
@@ -422,7 +424,7 @@ angular.module('copayApp.services')
           });
         });
 
-        storage.set('bitpayAccounts-v2-' + network, allAccounts, cb);
+        storage.set('bitpayAccounts-v3-' + network, allAccounts, cb);
       });
     };
 
@@ -444,7 +446,7 @@ angular.module('copayApp.services')
     // }
     //
     root.getBitpayAccounts = function(network, cb) {
-      storage.get('bitpayAccounts-v2-' + network, function(err, allAccountsStr) {
+      storage.get('bitpayAccounts-v3-' + network, function(err, allAccountsStr) {
         if (err) return cb(err);
 
         var allAccounts = {};
@@ -500,13 +502,15 @@ angular.module('copayApp.services')
       root.getBitpayAccounts(network, function(err, allAccounts) {
         if (err) return cb(err);
 
+        if (!allAccounts) allAccounts = {};
+
         var account = allAccounts[email] || {};
         account.token = token;
 
         allAccounts[email] = account;
 
         $log.info('Storing BitPay accounts with new account:' + email);
-        storage.set('bitpayAccounts-v2-' + network, allAccounts, cb);
+        storage.set('bitpayAccounts-v3-' + network, allAccounts, cb);
       });
     };
 
