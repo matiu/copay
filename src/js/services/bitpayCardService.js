@@ -226,7 +226,7 @@ angular.module('copayApp.services').factory('bitpayCardService', function($log, 
 
   root.get = function(opts, cb) {
     root.getCards(function(err, cards) {
-      if (err) return;
+      if (err) return cb();
 
       if (lodash.isEmpty(cards)) {
         return cb();
@@ -234,6 +234,7 @@ angular.module('copayApp.services').factory('bitpayCardService', function($log, 
 
       // Async, no problem
       lodash.each(cards, function(x){
+        if (lodash.isEmpty(x)) return;
 
         if (opts.cardId) {
           if (opts.cardId != x.eid) return;
