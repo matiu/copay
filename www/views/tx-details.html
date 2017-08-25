@@ -53,7 +53,7 @@
           <span class="label" ng-if="btx.action !== 'sent'" translate>To</span>
           <div class="wallet">
             <i class="icon big-icon-svg">
-              <img src="img/icon-wallet.svg" ng-class="{'wallet-background-color-default': !wallet.color}" ng-style="{'background-color': wallet.color}" class="bg"/>
+              <img src="img/{{wallet.network == 'testnet' ? 'icon-wallet-testnet' : (wallet.chain == 'BTC' ? 'icon-btc' : 'icon-bch')}}.svg" ng-class="{'wallet-background-color-default': !wallet.color}" ng-style="{'background-color': wallet.color}" class="bg"/>
             </i>
             <div>{{wallet.name}}</div>
           </div>
@@ -93,7 +93,7 @@
           <span translate>
 This transaction amount is too small compared to current Bitcoin network fees. Spending these funds will need a Bitcoin network fee cost comparable to the funds itself. </span>
         </div>
- 
+
         <div class="item single-line">
           <span class="label" translate>Confirmations</span>
           <span class="item-note">
