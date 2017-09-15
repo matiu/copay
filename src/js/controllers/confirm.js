@@ -120,15 +120,27 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       });
     };
 
-    // Setup $scope
-    //
     var B = data.stateParams.coin == 'bch' ? bitcoreCash : bitcore;
+    var addrObj;
+    var toAddress = data.stateParams.toAddress;
+    try {
+       addrObj = new B.Address(toAddress);
+    } catch(e) {
+      // Translate address
+      if (data.stateParams.coin == 'bch') {
+        var a = bitcore.Address(toAddress).toObject();
+        addrObj = bitcoreCash.Address.fromObject(a);
+        $log.warn('Translate bitcoin address from ' + toAddress + ' to ' + addrObj.toString());
+        toAddress = addrObj.toString();
+      }
+    };
+    var networkName = addrObj.network.name;
 
     // Grab stateParams
     tx = {
       toAmount: parseInt(data.stateParams.toAmount),
       sendMax: data.stateParams.useSendMax == 'true' ? true : false,
-      toAddress: data.stateParams.toAddress,
+      toAddress: toAddress,
       description: data.stateParams.description,
       paypro: data.stateParams.paypro,
 
@@ -140,7 +152,7 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       toName: data.stateParams.toName,
       toEmail: data.stateParams.toEmail,
       toColor: data.stateParams.toColor,
-      network: (new B.Address(data.stateParams.toAddress)).network.name,
+      network: networkName,
       coin: data.stateParams.coin,
       txp: {},
     };
