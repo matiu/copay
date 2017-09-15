@@ -68,26 +68,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     });
   };
 
-  var processCashTx = function(tx) {
-    var B = tx.coin == 'bch' ? bitcoreCash : bitcore;
-    var addrObj;
-    try {
-       addrObj = new B.Address(tx.toAddress);
-    } catch(e) {
-      // Translate address
-      if (tx.coin == 'bch') {
-        var a = bitcore.Address(tx.toAddress).toObject();
-        addrObj = bitcoreCash.Address.fromObject(a);
-      } else {
-        var a = bitcoreCash.Address(tx.toAddress).toObject();
-        addrObj = bitcore.Address.fromObject(a);
-      }
-      $log.warn('Translate bitcoin address from ' + tx.toAddress + ' to ' + addrObj.toString());
-    };
-    tx.toAddress = addrObj.toString();
-    tx.network = (new B.Address(tx.toAddress)).network.name;
-  }
-
   $scope.$on("$ionicView.beforeEnter", function(event, data) {
 
     function setWalletSelector(coin, network, minAmount, cb) {
@@ -140,11 +120,27 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       });
     };
 
+    var B = data.stateParams.coin == 'bch' ? bitcoreCash : bitcore;
+    var addrObj;
+    var toAddress = data.stateParams.toAddress;
+    try {
+       addrObj = new B.Address(toAddress);
+    } catch(e) {
+      // Translate address
+      if (data.stateParams.coin == 'bch') {
+        var a = bitcore.Address(toAddress).toObject();
+        addrObj = bitcoreCash.Address.fromObject(a);
+        $log.warn('Translate bitcoin address from ' + toAddress + ' to ' + addrObj.toString());
+        toAddress = addrObj.toString();
+      }
+    };
+    var networkName = addrObj.network.name;
+
     // Grab stateParams
     tx = {
       toAmount: parseInt(data.stateParams.toAmount),
       sendMax: data.stateParams.useSendMax == 'true' ? true : false,
-      toAddress: data.stateParams.toAddress,
+      toAddress: toAddress,
       description: data.stateParams.description,
       paypro: data.stateParams.paypro,
 
@@ -156,13 +152,10 @@ angular.module('copayApp.controllers').controller('confirmController', function(
       toName: data.stateParams.toName,
       toEmail: data.stateParams.toEmail,
       toColor: data.stateParams.toColor,
+      network: networkName,
       coin: data.stateParams.coin,
       txp: {},
     };
-
-    // - Convert addresses if necessary
-    // - Set network
-    processCashTx(tx);
 
     if (tx.coin && tx.coin == 'bch') tx.feeLevel = 'normal';
 
@@ -473,8 +466,6 @@ angular.module('copayApp.controllers').controller('confirmController', function(
     tx.coin = wallet.coin;
     tx.feeLevel = wallet.coin == 'bch' ? 'normal' : configFeeLevel;
     usingCustomFee = null;
-
-    processCashTx(tx);
 
     setButtonText(wallet.credentials.m > 1, !!tx.paypro);
 
