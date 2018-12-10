@@ -68,7 +68,7 @@ export class AddressProvider {
       origCoin,
       origAddress: address,
       resultCoin,
-      resultAddress: resultAddress.toString()
+      resultAddress: resultCoin == 'bch' ? resultAddress.toLegacyAddress() : resultAddress.toString()
     };
   }
 
