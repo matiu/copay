@@ -156,9 +156,9 @@ export class MultiSendPage extends WalletTabsChild {
   public addRecipient(recipient): void {
     let amountToShow = +recipient.amount
       ? this.decimalPipe.transform(
-          +recipient.amount / this.coinOpts[this.wallet.coin].unitToSatoshi,
-          '1.2-6'
-        )
+        +recipient.amount / this.coinOpts[this.wallet.coin].unitToSatoshi,
+        '1.2-6'
+      )
       : null;
 
     let altAmountStr = this.txFormatProvider.formatAlternativeStr(
@@ -264,15 +264,15 @@ export class MultiSendPage extends WalletTabsChild {
   }
 
   private checkCoinAndNetwork(data): boolean {
-    const addrData = this.addressProvider.getCoinAndNetwork(data);
+    const addrData = this.addressProvider.getCoinAndNetwork(data, this.wallet.network);
     const isValid =
       this.wallet.coin == addrData.coin &&
-      (addrData.network == 'any' || addrData.network == this.wallet.network);
+      addrData.network == this.wallet.network;
 
     if (isValid) {
       this.invalidAddress = false;
       return true;
-    } else {network
+    } else {
       this.invalidAddress = true;
       const network = addrData.network;
 

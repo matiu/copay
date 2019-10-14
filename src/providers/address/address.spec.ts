@@ -62,8 +62,8 @@ describe('AddressProvider', () => {
         'testnet'
       ],
       ['BCHTEST:qqycye950l689c98l7z5j43n4484ssnp4y3uu4ramr', 'bch', 'testnet'],
-      ['0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'any'],
-      ['etherum:0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'any'],
+      ['0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'livenet'],
+      ['etherum:0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'livenet'],
       [
         'BCHTEST:qqycye950l689c98l7z5j43n4484ssnp4y3uu4ramr?amount=0.00090000',
         'bch',
@@ -71,9 +71,22 @@ describe('AddressProvider', () => {
       ]
     ];
 
+    const ethTestVectors: any[] = [
+      ['0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'testnet'],
+      ['etherum:0x1CD7b5A3294c8714DB5c48e56DD11a6d7EAeaB4C', 'eth', 'testnet'],
+    ]
+
     testVectors.forEach(v => {
       it('address ' + v[0] + ' should be ' + v[1] + ' / ' + v[2], () => {
         let addrData = addressProvider.getCoinAndNetwork(v[0]);
+        expect(addrData.coin).toEqual(v[1]);
+        expect(addrData.network).toEqual(v[2]);
+      });
+    });
+
+    ethTestVectors.forEach(v => {
+      it('address ' + v[0] + ' should be ' + v[1] + ' / ' + v[2], () => {
+        let addrData = addressProvider.getCoinAndNetwork(v[0], 'testnet');
         expect(addrData.coin).toEqual(v[1]);
         expect(addrData.network).toEqual(v[2]);
       });

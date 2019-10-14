@@ -20,9 +20,8 @@ export class AddressProvider {
     return extractedAddress;
   }
 
-  public getCoinAndNetwork(str: string): any {
+  public getCoinAndNetwork(str: string, network: string = 'livenet'): any {
     const address = this.extractAddress(str);
-    let network = null;
     try {
       network = this.bitcore.Address(address).network.name;
       return { coin: 'btc', network };
@@ -34,11 +33,11 @@ export class AddressProvider {
         try {
           const isValidEthAddress = this.core.Validation.validateAddress(
             'ETH',
-            'livenet',
+            network,
             address
           );
           if (isValidEthAddress) {
-            return { coin: 'eth', network: 'any' };
+            return { coin: 'eth', network };
           } else {
             return null;
           }
