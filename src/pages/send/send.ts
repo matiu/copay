@@ -124,13 +124,19 @@ export class SendPage extends WalletTabsChild {
   private checkCoinAndNetwork(data, isPayPro?): boolean {
     let isValid, addrData;
     if (isPayPro) {
-      isValid =
-        data.coin == this.wallet.coin && data.network == this.wallet.network;
+      isValid = this.addressProvider.checkCoinAndNetworkFromPayPro(
+        this.wallet.coin,
+        this.wallet.network,
+        data
+      );
     } else {
-      addrData = this.addressProvider.getCoinAndNetwork(data);
+      addrData = this.addressProvider.getCoinAndNetwork(
+        data,
+        this.wallet.network
+      );
       isValid =
         this.wallet.coin == addrData.coin &&
-        (addrData.network == 'any' || addrData.network == this.wallet.network);
+        addrData.network == this.wallet.network;
     }
 
     if (isValid) {
@@ -139,7 +145,6 @@ export class SendPage extends WalletTabsChild {
     } else {
       this.invalidAddress = true;
       let network = isPayPro ? data.network : addrData.network;
-
       if (this.wallet.coin === 'bch' && this.wallet.network === network) {
         const isLegacy = this.checkIfLegacy();
         isLegacy ? this.showLegacyAddrMessage() : this.showErrorMessage();

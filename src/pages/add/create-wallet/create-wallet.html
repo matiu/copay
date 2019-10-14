@@ -59,15 +59,17 @@
         <ion-input type="text" formControlName="recoveryPhrase"></ion-input>
       </ion-item>
 
-      <ion-item [ngClass]="{'with-label': createForm.value.testnetEnabled}" *ngIf="checkIfUtxoCoin() && createForm.value.selectedSeed == 'new'">
-        <ion-label>Testnet</ion-label>
+      <ion-item [ngClass]="{'with-label': createForm.value.testnetEnabled}" *ngIf="createForm.value.selectedSeed == 'new'">
+        <ion-label *ngIf="checkIfUtxoCoin()">Testnet</ion-label>
+        <ion-label *ngIf="coin == 'eth'">Kovan Testnet</ion-label>
         <ion-toggle formControlName="testnetEnabled" (ionChange)="setDerivationPath()"></ion-toggle>
       </ion-item>
 
       <label-tip *ngIf="createForm.value.testnetEnabled && createForm.value.selectedSeed == 'new'" type="warn">
-        <span label-tip-title translate>Testnet Wallet</span>
+        <span label-tip-title translate *ngIf="checkIfUtxoCoin()">Testnet Wallet</span>
+        <span label-tip-title translate *ngIf="coin == 'eth'">Kovan Testnet Wallet</span>
         <div label-tip-body translate>
-          The testnet is an alternative Bitcoin block chain, to be used for testing. Testnet coins are separate and distinct from actual bitcoins, and do not have any value. This allows application developers or bitcoin testers to experiment, without having to use real bitcoins.
+          The testnet is an alternative {{ coin.toUpperCase() }} block chain, to be used for testing. Testnet coins are separate and distinct from actual {{ coin.toUpperCase() }}, and do not have any value. This allows application developers or testers to experiment, without having to use real {{ coin.toUpperCase() }}.
         </div>
       </label-tip>
 
