@@ -119,9 +119,6 @@ export class AddressBookProvider {
         return reject(msg);
       }
 
-      // assumes livenet for `any` addr
-      if (addrData.network == 'any') addrData.network = 'livenet';
-
       this.persistenceProvider
         .getAddressBook(addrData.network)
         .then(ab => {

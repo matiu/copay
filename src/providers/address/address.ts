@@ -58,23 +58,6 @@ export class AddressProvider {
       : false;
   }
 
-  public checkCoinAndNetworkFromAddr(
-    coin: string,
-    network: string,
-    str: string
-  ): boolean {
-    if (this.isValid(str)) {
-      const address = this.extractAddress(str);
-      return this.core.Validation.validateAddress(
-        coin.toUpperCase(),
-        network,
-        address
-      );
-    } else {
-      return false;
-    }
-  }
-
   public isValid(str: string): boolean {
     // Check if the input is a valid uri or address
     const URI = this.bitcore.URI;
