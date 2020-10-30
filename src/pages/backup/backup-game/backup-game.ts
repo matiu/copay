@@ -154,7 +154,7 @@ export class BackupGamePage {
       try {
         key = new keyClient({
           seedType: 'mnemonic',
-          seedData: customSentence, 
+          seedData: customSentence,
           useLegacyCoinType: false,
           useLegacyPurpose: false,
           passphrase: password

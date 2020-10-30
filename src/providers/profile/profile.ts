@@ -1031,9 +1031,9 @@ export class ProfileProvider {
               opts.keyId = null;
               data.credentials.keyId = key.id;
             } else {
-              key = new Key({ 
+              key = new Key({
                 seedType: 'object',
-                seedData: data.key,
+                seedData: data.key
               });
             }
           }
@@ -1360,8 +1360,8 @@ export class ProfileProvider {
       if (opts.mnemonic) {
         try {
           opts.mnemonic = this.normalizeMnemonic(opts.mnemonic);
-          key = new Key({ 
-            seedType: 'memonic', 
+          key = new Key({
+            seedType: 'memonic',
             seedData: opts.mnemonic,
             useLegacyCoinType: opts.useLegacyCoinType,
             useLegacyPurpose: opts.useLegacyPurpose,
@@ -1388,7 +1388,7 @@ export class ProfileProvider {
         try {
           key = new Key({
             seedType: 'extendedPrivateKey',
-            seedData: opts.extendedPrivateKey, 
+            seedData: opts.extendedPrivateKey,
             useLegacyCoinType: opts.useLegacyCoinType,
             useLegacyPurpose: opts.useLegacyPurpose
           });
@@ -1424,7 +1424,7 @@ export class ProfileProvider {
           if (!opts.key && !opts.keyId) {
             key = new Key({
               seedType: 'new',
-              language: lang,
+              language: lang
             });
           } else if (opts.key) {
             key = opts.key;
@@ -1457,7 +1457,7 @@ export class ProfileProvider {
           }
         }
       }
-      return resolve({ walletClient, key});
+      return resolve({ walletClient, key });
     });
   }
 
