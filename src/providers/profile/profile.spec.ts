@@ -257,7 +257,7 @@ describe('Profile Provider', () => {
 
   let genericKey = {
     id: 'keyId',
-//    xPrivKey: 'xPrivKey',  // xxPrivKey is no longer available directly as for BWC 9.4
+    //    xPrivKey: 'xPrivKey',  // xxPrivKey is no longer available directly as for BWC 9.4
     encrypt: () => {
       return true;
     },
@@ -312,16 +312,16 @@ describe('Profile Provider', () => {
         match(_key1, _key2) {
           return false;
         }
-        encrypt()  {
+        encrypt() {
           return true;
         }
-        createCredentials (_, _opts)  {
+        createCredentials(_, _opts) {
           return true;
         }
-        isPrivKeyEncrypted () {
+        isPrivKeyEncrypted() {
           return false;
         }
-        toObj ()  {
+        toObj() {
           return keysArrayFromStorage[0];
         }
       }

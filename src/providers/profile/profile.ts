@@ -1358,7 +1358,6 @@ export class ProfileProvider {
       const Key = this.bwcProvider.getKey();
       let key;
       if (opts.mnemonic) {
-
         try {
           opts.mnemonic = this.normalizeMnemonic(opts.mnemonic);
           key = new Key({
@@ -1377,7 +1376,7 @@ export class ProfileProvider {
               n: opts.n || 1
             })
           );
-       } catch (ex) {
+        } catch (ex) {
           this.logger.info('Invalid wallet recovery phrase: ' + ex);
           return reject(
             this.translate.instant(
