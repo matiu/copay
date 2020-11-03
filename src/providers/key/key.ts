@@ -283,7 +283,7 @@ export class KeyProvider {
 
   public mnemonicHasPassphrase(keyId: string): boolean {
     if (!keyId) return false;
-    const key = this.getKey(keyId);
+    const key = this.getKey(keyId).get();
     return key.mnemonicHasPassphrase;
   }
 
