@@ -1361,7 +1361,7 @@ export class ProfileProvider {
         try {
           opts.mnemonic = this.normalizeMnemonic(opts.mnemonic);
           key = new Key({
-            seedType: 'memonic',
+            seedType: 'mnemonic',
             seedData: opts.mnemonic,
             useLegacyCoinType: opts.useLegacyCoinType,
             useLegacyPurpose: opts.useLegacyPurpose,
