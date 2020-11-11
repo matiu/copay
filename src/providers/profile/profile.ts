@@ -1360,6 +1360,7 @@ export class ProfileProvider {
       if (opts.mnemonic) {
         try {
           opts.mnemonic = this.normalizeMnemonic(opts.mnemonic);
+          // new BWC 8.23 api
           key = new Key({
             seedType: 'mnemonic',
             seedData: opts.mnemonic,
